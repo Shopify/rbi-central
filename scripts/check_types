@@ -1,0 +1,37 @@
+#! /usr/bin/env ruby
+
+require "pathname"
+require "open3"
+
+success = true
+files_with_errors = []
+
+files = Dir.glob("./rbi/**/*").sort if ARGV.empty?
+files.each do |file|
+  next unless File.file?(file)
+
+  file = Pathname.new(file).cleanpath.to_s
+  $stderr.puts("Typechecking `#{file}`...")
+
+  out, status = Open3.capture2e(
+    "bundle exec srb tc #{file} --no-error-count " \
+      "--suppress-error-code=5002,5020,5035,5067"
+  )
+  $stderr.puts("\n#{out}\n") unless out.empty?
+  unless status.success?
+    files_with_errors << file
+    success = false
+  end
+end
+
+$stderr.puts("\n")
+
+if success
+  $stderr.puts("No errors, good job!")
+else
+  files_with_errors.each do |file|
+    $stderr.puts("`#{file}` contains type errors")
+  end
+end
+
+exit(success)
