@@ -8,3 +8,6 @@ up:
 
 commands:
   test:      "scripts/check_types"
+  style:     "bundle exec rubocop"
+  style-fix: "bundle exec rubocop -a"
+  sanity:    "scripts/check_types && bundle exec rubocop"
