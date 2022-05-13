@@ -1,0 +1,44 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ast (2.4.2)
+    parallel (1.22.1)
+    parser (3.1.2.0)
+      ast (~> 2.4.1)
+    rainbow (3.1.1)
+    regexp_parser (2.4.0)
+    rexml (3.2.5)
+    rubocop (1.29.1)
+      parallel (~> 1.10)
+      parser (>= 3.1.0.0)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8, < 3.0)
+      rexml (>= 3.2.5, < 4.0)
+      rubocop-ast (>= 1.17.0, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 3.0)
+    rubocop-ast (1.17.0)
+      parser (>= 3.1.1.0)
+    rubocop-shopify (2.5.0)
+      rubocop (~> 1.25)
+    rubocop-sorbet (0.6.8)
+      rubocop (>= 0.90.0)
+    ruby-progressbar (1.11.0)
+    sorbet (0.5.10001)
+      sorbet-static (= 0.5.10001)
+    sorbet-static (0.5.10001-universal-darwin-21)
+    sorbet-static (0.5.10001-x86_64-linux)
+    unicode-display_width (2.1.0)
+
+PLATFORMS
+  arm64-darwin-21
+  x86_64-linux
+
+DEPENDENCIES
+  rubocop
+  rubocop-shopify
+  rubocop-sorbet
+  sorbet
+
+BUNDLED WITH
+   2.3.7

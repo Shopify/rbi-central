@@ -1,0 +1,26 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+  GIT_DEFAULT_BRANCH: ${{github.event.repository.default_branch}}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          bundler-cache: true
+      - name: Lint RBI files
+        run: scripts/run_on_changed_rbis "bundle exec rubocop"
+      - name: Typecheck RBI files
+        run: scripts/run_on_changed_rbis scripts/check_types
