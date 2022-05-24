@@ -6,7 +6,8 @@ require "open3"
 success = true
 files_with_errors = []
 
-files = Dir.glob("./rbi/**/*").sort if ARGV.empty?
+files = ARGV.empty? ? Dir.glob("./rbi/**/*") : ARGV
+
 files.each do |file|
   next unless File.file?(file)
 
