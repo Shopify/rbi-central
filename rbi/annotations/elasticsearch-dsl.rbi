@@ -1,8 +1,8 @@
 # typed: true
 
 module Elasticsearch::DSL::Search
-  sig { params(args: T.untyped, block: T.proc.bind(Elasticsearch::DSL::Search::Search).void).void }
-  def self.search(*args, &block); end
+  sig { params(block: T.proc.bind(Elasticsearch::DSL::Search::Search).void).void }
+  def self.search(&block); end
 end
 
 class Elasticsearch::DSL::Search::Search
@@ -44,7 +44,7 @@ class Elasticsearch::DSL::Search::Filters::Bool
 end
 
 class Elasticsearch::DSL::Search::Filter
-  sig { params(value: T.nilable(T.any(String, Symbol)), block: T.proc.bind(Elasticsearch::DSL::Search::Queries::QueryString).void).void }
+  sig { params(value: T.nilable(T.any(String, Symbol)), block: T.proc.bind(Elasticsearch::DSL::Search::Queries::QueryString).void) }
   def query_string(value = nil, &block); end
 
   sig { params(value: T.any(String, Symbol), block: T.nilable(T.proc.bind(Elasticsearch::DSL::Search::Queries::Prefix).void)).void }
