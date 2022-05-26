@@ -1,0 +1,35 @@
+#! /usr/bin/env ruby
+
+require "pathname"
+require "open3"
+require "json"
+require "fileutils"
+
+index_path = "./index.json"
+index_json = File.read(index_path)
+
+begin
+  index = JSON.parse(index_json)
+rescue => e
+  error = e.message.sub(/^[0-9]+: /, "")
+  $stderr.puts("Invalid JSON for index: #{error}")
+  exit(1)
+end
+
+sorted = Hash[index.sort]
+expected_json = JSON.pretty_generate(sorted) << "\n"
+expected_path = "index.expected.json"
+File.write(expected_path, expected_json)
+
+out, status = Open3.capture2e("diff -u #{index_path} #{expected_path}")
+if status.success?
+  $stderr.puts("No errors, good job!")
+  FileUtils.rm(expected_path)
+  exit(0)
+end
+
+$stderr.puts("Formatting errors found in index.json:")
+$stderr.puts("\n#{out}\n")
+
+FileUtils.rm(expected_path)
+exit(1)
