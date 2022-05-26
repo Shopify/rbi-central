@@ -24,3 +24,5 @@ jobs:
         run: scripts/run_on_changed_rbis "bundle exec rubocop"
       - name: Typecheck RBI files
         run: scripts/run_on_changed_rbis scripts/check_types
+      - name: Lint index.json
+        run: scripts/lint_index_json
