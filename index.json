@@ -1,6 +1,4 @@
 {
-  "activesupport": {
-  },
-  "elasticsearch-dsl": {
-  }
+  "activesupport": {},
+  "elasticsearch-dsl": {}
 }
