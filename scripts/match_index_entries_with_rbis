@@ -1,0 +1,36 @@
+#! /usr/bin/env ruby
+
+require "fileutils"
+require "json"
+require "pathname"
+
+$stderr.puts("Checking index validity...\n\n")
+
+index = JSON.parse(File.read("./index.json"))
+
+rbis_path = "rbi/annotations"
+rbis = Dir.glob("#{rbis_path}/*.rbi").sort
+success = true
+
+index.each do |gem_name, _|
+  file = "#{rbis_path}/#{gem_name}.rbi"
+  rbis.delete(file)
+
+  unless File.file?(file)
+    $stderr.puts("Missing RBI file matching index entry `#{gem_name}` (`#{file}` was expected but not found)")
+    success = false
+    next
+  end
+end
+
+unless rbis.empty?
+  rbis.each do |path|
+    next unless File.file?(path)
+    $stderr.puts("Missing index entry matching RBI file `#{path}`")
+    success = false
+  end
+end
+
+$stderr.puts("No errors, good job!") if success
+
+exit(success)
