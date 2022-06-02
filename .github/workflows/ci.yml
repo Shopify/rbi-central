@@ -26,3 +26,5 @@ jobs:
         run: scripts/run_on_changed_rbis scripts/check_types
       - name: Lint index.json
         run: scripts/lint_index_json
+      - name: Check index.json entries match rbi/annotations/*.rbi files
+        run: scripts/match_index_entries_with_rbis
