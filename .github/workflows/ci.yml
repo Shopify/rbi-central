@@ -28,3 +28,5 @@ jobs:
         run: scripts/lint_index_json
       - name: Check index.json entries match rbi/annotations/*.rbi files
         run: scripts/match_index_entries_with_rbis
+      - name: Ensure all RBI files in the repo use the sigil "strict"
+        run: bundle exec rubocop
