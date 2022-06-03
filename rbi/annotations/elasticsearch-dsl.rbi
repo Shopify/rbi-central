@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 
 module Elasticsearch::DSL::Search
   sig { params(args: T.untyped, block: T.proc.bind(Elasticsearch::DSL::Search::Search).void).void }
