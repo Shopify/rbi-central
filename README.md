@@ -23,13 +23,14 @@ $ bin/tapioca annotations
 
 The CI for this repository is written using GitHub Actions. Here is a list of currently available CI checks:
 
-| CLI Command                                         | Description                                                    |
-| --------------------------------------------------- | -------------------------------------------------------------- |
-| `scripts/run_on_changed_rbis "bundle exec rubocop"` | Lint RBI files                                                 |
-| `scripts/run_on_changed_rbis scripts/check_types`   | Typecheck RBI files                                            |
-| `scripts/lint_index_json`                           | Lint `index.json`                                              |
-| `scripts/match_index_entries_with_rbis`             | Check `index.json` entries match `rbi/annotations/*.rbi` files |
-| `bundle exec rubocop`                               | Ensure all RBI files in the repo use the sigil `strict`        |
+| CLI Command                                                 | Description                                                    |
+| ----------------------------------------------------------- | -------------------------------------------------------------- |
+| `scripts/run_on_changed_rbis "bundle exec rubocop"`         | Lint RBI files                                                 |
+| `scripts/run_on_changed_rbis scripts/check_types`           | Typecheck RBI files                                            |
+| `scripts/run_on_changed_rbis scripts/check_gems_are_public` | Check new gems are public                                      |
+| `scripts/lint_index_json`                                   | Lint `index.json`                                              |
+| `scripts/match_index_entries_with_rbis`                     | Check `index.json` entries match `rbi/annotations/*.rbi` files |
+| `bundle exec rubocop`                                       | Ensure all RBI files in the repo use the sigil `strict`        |
 
 All scripts used in the CI checks are located in the `scripts` folder.
 
