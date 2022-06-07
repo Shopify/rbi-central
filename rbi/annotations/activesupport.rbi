@@ -6,6 +6,9 @@ class ActiveSupport::TestCase
 
   sig { params(args: T.untyped, block: T.proc.bind(T.attached_class).void).void }
   def self.teardown(*args, &block); end
+
+  sig { params(name: String, block: T.proc.bind(T.attached_class).void).void }
+  def self.test(name, &block); end
 end
 
 class String
