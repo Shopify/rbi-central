@@ -2,5 +2,7 @@
   "activesupport": {
   },
   "elasticsearch-dsl": {
+  },
+  "shopify-adt": {
   }
 }
