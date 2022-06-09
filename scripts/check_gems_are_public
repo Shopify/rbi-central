@@ -18,7 +18,7 @@ files.each do |file|
 
   if version === "9001.0" || version === "unknown"
     $stderr.puts("  Error: `#{gem}` doesn't seem to be a public")
-    $strerr.puts("  Make sure your gem is available at https://rubygems.org/gems/#{gem}")
+    $stderr.puts("  Make sure your gem is available at https://rubygems.org/gems/#{gem}")
     success = false
   end
 end

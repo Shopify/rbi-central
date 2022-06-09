@@ -34,6 +34,14 @@ The CI for this repository is written using GitHub Actions. Here is a list of cu
 
 All scripts used in the CI checks are located in the `scripts` folder.
 
+To avoid pushing a PR with errors, configure the `pre-push` git hook by running:
+
+```shell
+$ git config core.hooksPath .githooks
+```
+
+This git hook will run most of the CI checks and block the push if you don't pass all the tests.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/Shopify/rbi-central.
