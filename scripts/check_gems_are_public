@@ -1,0 +1,32 @@
+#! /usr/bin/env ruby
+
+require "net/http"
+require "json"
+
+success = true
+
+files = ARGV.empty? ? Dir.glob("./rbi/**/*") : ARGV
+
+files.each do |file|
+  next unless File.file?(file)
+
+  gem = File.basename(file, File.extname(file))
+  $stderr.puts("Checking if gem `#{gem}` is public...")
+  uri = URI("https://rubygems.org/api/v1/versions/#{gem}/latest.json")
+  content = Net::HTTP.get(uri)
+  version = JSON.parse(content)["version"]
+
+  if version === "9001.0" || version === "unknown"
+    $stderr.puts("  Error: `#{gem}` doesn't seem to be a public")
+    $strerr.puts("  Make sure your gem is available at https://rubygems.org/gems/#{gem}")
+    success = false
+  end
+end
+
+$stderr.puts("\n")
+
+if success
+  $stderr.puts("All gems are public, good job!")
+end
+
+exit(success)
