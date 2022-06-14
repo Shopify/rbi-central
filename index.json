@@ -9,6 +9,8 @@
   },
   "elasticsearch-dsl": {
   },
+  "faraday": {
+  },
   "grape": {
   },
   "mocha": {
