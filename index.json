@@ -1,4 +1,6 @@
 {
+  "activerecord": {
+  },
   "activesupport": {
   },
   "colorize": {
