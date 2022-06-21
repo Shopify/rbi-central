@@ -15,8 +15,7 @@ files.each do |file|
   $stderr.puts("Typechecking `#{file}`...")
 
   out, status = Open3.capture2e(
-    "bundle exec srb tc #{file} --no-error-count " \
-      "--suppress-error-code=5002,5020,5035,5067"
+    "bundle exec srb tc #{file} --no-config --no-error-count --suppress-error-code=5002,5020,5035,5067"
   )
   $stderr.puts("\n#{out}\n") unless out.empty?
   unless status.success?
