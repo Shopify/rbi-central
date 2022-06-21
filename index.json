@@ -1,4 +1,6 @@
 {
+  "actionpack": {
+  },
   "activerecord": {
   },
   "activesupport": {
