@@ -9,6 +9,8 @@
   },
   "elasticsearch-dsl": {
   },
+  "grape": {
+  },
   "mocha": {
   },
   "rails": {
