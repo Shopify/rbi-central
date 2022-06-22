@@ -30,3 +30,5 @@ jobs:
         run: scripts/run_on_changed_rbis scripts/check_gems_are_public
       - name: Check RBI definitions against runtime execution
         run: scripts/run_on_changed_rbis "scripts/check_runtime"
+      - name: Check RBI definitions against Tapioca generated RBIs and Sorbet
+        run: scripts/run_on_changed_rbis "scripts/check_static"

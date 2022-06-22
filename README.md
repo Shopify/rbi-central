@@ -50,6 +50,7 @@ The CI for this repository is written using GitHub Actions. Here is a list of cu
 | `scripts/run_on_changed_rbis "bundle exec rubocop"`         | Lint RBI files                                                          |
 | `scripts/run_on_changed_rbis scripts/check_types`           | Typecheck RBI files                                                     |
 | `scripts/run_on_changed_rbis scripts/check_runtime`         | Check RBI annotations against runtime behavior                          |
+| `scripts/run_on_changed_rbis scripts/check_static`          | Check RBI annotations against Tapioca generated RBIs and Sorbet         |
 | `scripts/run_on_changed_rbis scripts/check_gems_are_public` | Check new RBI files belong to public gems                               |
 
 All scripts used in the CI checks are located in the `scripts` folder.
@@ -79,6 +80,18 @@ It is possible to allow necessary shims for non-existing runtime definitions by 
 
 * `@missing_method` to indicate that a method is delegated to another receiver using `method_missing`
 * `@shim` to indicate that a definition doesn't actually exist at runtime but is needed to allow type checking
+
+### Static checks
+
+Ensure the constants (constants, classes, modules) and properties (methods, attribute accessors) exist are not duplicated from Tapioca generated RBIs and do not create type errors when running Sorbet.
+
+For each gem the test works as follows:
+
+1. Create a temporary directory
+2. Add a Gemfile pointing to the gem (and possible dependencies, listed in index key `dependencies`)
+3. Generate the RBIs for gems using `tapioca gems`
+4. Check duplication with RBIs from gems using `tapioca check-shims`
+5. Check for type errors using `srb tc`
 
 ## Contributing
 

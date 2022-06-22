@@ -31,6 +31,11 @@ unless rbis.empty?
   unless system("scripts/check_runtime #{rbis.join(" ")}")
     success = false
   end
+
+  $stderr.puts("Checking RBI files against Tapioca and Sorbet...")
+  unless system("scripts/check_static #{rbis.join(" ")}")
+    success = false
+  end
 end
 
 $stderr.puts("Checking index.json...")
