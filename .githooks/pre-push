@@ -29,12 +29,8 @@ unless rbis.empty?
   end
 end
 
-$stderr.puts("Linting index.json...")
-unless system("scripts/lint_index_json")
-  success = false
-end
-$stderr.puts("Checking that index.json entries match rbi/annotations/*.rbi files...")
-unless system("scripts/match_index_entries_with_rbis")
+$stderr.puts("Checking index.json...")
+unless system("bundle exec scripts/check_index")
   success = false
 end
 

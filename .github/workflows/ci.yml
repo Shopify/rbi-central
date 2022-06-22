@@ -20,13 +20,11 @@ jobs:
         with:
           ruby-version: '2.7'
           bundler-cache: true
+      - name: Check index.json
+        run: bundle exec scripts/check_index
       - name: Lint RBI files
         run: scripts/run_on_changed_rbis "bundle exec rubocop"
       - name: Typecheck RBI files
         run: scripts/run_on_changed_rbis scripts/check_types
       - name: Check new RBI files belong to public gems
         run: scripts/run_on_changed_rbis scripts/check_gems_are_public
-      - name: Lint index.json
-        run: scripts/lint_index_json
-      - name: Check index.json entries match rbi/annotations/*.rbi files
-        run: scripts/match_index_entries_with_rbis
