@@ -32,6 +32,8 @@
   },
   "rails": {
     "requires": [
+      "rake",
+      "rake/tasklib",
       "rails/all"
     ]
   },
