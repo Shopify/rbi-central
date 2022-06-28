@@ -29,4 +29,4 @@ jobs:
       - name: Check new RBI files belong to public gems
         run: scripts/run_on_changed_rbis scripts/check_gems_are_public
       - name: Check RBI definitions against runtime execution
-        run: scripts/run_on_changed_rbis "bundle exec scripts/check_runtime"
+        run: scripts/run_on_changed_rbis "scripts/check_runtime"

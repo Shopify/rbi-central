@@ -28,7 +28,7 @@ unless rbis.empty?
     success = false
   end
   $stderr.puts("Checking RBI files against runtime execution...")
-  unless system("bundle exec scripts/check_runtime #{rbis.join(" ")}")
+  unless system("scripts/check_runtime #{rbis.join(" ")}")
     success = false
   end
 end

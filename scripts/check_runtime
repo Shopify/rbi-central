@@ -1,5 +1,6 @@
 #! /usr/bin/env ruby
 
+require "bundler/setup"
 require "rbi"
 
 require_relative "utils/rbi_validator"
