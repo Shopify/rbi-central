@@ -4,18 +4,20 @@ require "bundler/setup"
 require "json-schema"
 require "open3"
 
+require_relative "utils/cli"
+
 INDEX_PATH = "index.json"
 SCHEMA_PATH = "schema.json"
 RBIS_PATH = "rbi/annotations"
 
 class IndexValidator
   def self.validate!(index_path: INDEX_PATH, schema_path: SCHEMA_PATH, rbis_path: RBIS_PATH)
-    $stderr.puts("Checking index...\n\n")
+    log("Checking `index`...\n")
 
     validator = new(index_path: index_path, schema_path: schema_path, rbis_path: rbis_path)
     exit(1) unless validator.validate!
 
-    $stderr.puts("No errors, good job!")
+    success("No errors, good job!")
   end
 
   def initialize(index_path:, schema_path:, rbis_path:)
@@ -41,7 +43,7 @@ class IndexValidator
   def check_against_schema!
     JSON::Validator.validate!(@schema_json, @index_json)
   rescue JSON::Schema::ValidationError => e
-    $stderr.puts(" * #{e.message}\n")
+    error("#{e.message.gsub("'", "`")}")
   end
 
   def check_missing_annotations!
@@ -50,7 +52,7 @@ class IndexValidator
       file = "#{@rbis_path}/#{gem_name}.rbi"
       next if File.file?(file)
 
-      $stderr.puts(" * Missing RBI file matching index entry `#{gem_name}` (annotation `#{file}` not found)")
+      error("Missing RBI file matching index entry `#{gem_name}` (annotation `#{file}` not found)")
       success = false
     end
     success
@@ -63,7 +65,7 @@ class IndexValidator
       name = File.basename(path, ".rbi")
       next if @index_json.key?(name)
 
-      $stderr.puts(" * Missing index entry matching RBI file `#{path}` (key `#{name}` not found in `#{@index_path}`)")
+      error("Missing index entry matching RBI file `#{path}` (key `#{name}` not found in `#{@index_path}`)")
       success = false
     end
     success
@@ -77,7 +79,7 @@ class IndexValidator
 
     out, status = Open3.capture2e("diff -u #{@index_path} #{expected_path}")
     unless status.success?
-      $stderr.puts(" * Formatting errors found in `#{@index_path}`:")
+      error("Formatting errors found in `#{@index_path}`:")
       $stderr.puts("\n#{out}\n")
       return false
     end
@@ -91,7 +93,7 @@ class IndexValidator
     JSON.parse(File.read(path))
   rescue JSON::ParserError => e
     error = e.message.sub(/^[0-9]+: /, "")
-    $stderr.puts(" * Invalid JSON in `#{path}``:")
+    error("Invalid JSON in #{path.yellow}:")
     $stderr.puts("\n#{error}\n")
     exit(1)
   end
