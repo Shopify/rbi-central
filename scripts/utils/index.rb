@@ -1,10 +1,12 @@
 require "json"
+require_relative "cli"
 
 INDEX_PATH = "index.json"
 
 def load_index
   JSON.parse(File.read(INDEX_PATH))
 rescue => e
-  $stderr.puts("Error: Can't load index `#{index_file}`: #{e.message}")
+  error("Can't load index `#{INDEX_PATH}`")
+  $stderr.puts("\n#{e.message}\n")
   exit(1)
 end
