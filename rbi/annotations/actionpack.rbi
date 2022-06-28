@@ -6,11 +6,11 @@ class ActionDispatch::Routing::RouteSet
 end
 
 module ActionDispatch::Integration::Runner
-  # Delegated to ActionDispatch::Integration::Session using `method_missing`
+  # @method_missing: delegated to ActionDispatch::Integration::Session
   sig { params(host: String).returns(String) }
   def host!(host); end
 
-  # Delegated to ActionDispatch::Integration::Session using `method_missing`
+  # @method_missing: delegated to ActionDispatch::Integration::Session
   sig { params(flag: T::Boolean).returns(T::Boolean) }
   def https!(flag = true); end
 end
@@ -18,6 +18,7 @@ end
 class ActionDispatch::IntegrationTest
   private
 
+  # @method_missing: delegated to ActionDispatch::Integration::Session
   sig { returns(ActionDispatch::TestResponse) }
   attr_reader :response
 end

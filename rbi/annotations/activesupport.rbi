@@ -15,6 +15,7 @@ class ActiveSupport::EnvironmentInquirer
   sig { returns(T::Boolean) }
   def test?; end
 
+  # @method_missing: delegated to String through ActiveSupport::StringInquirer
   sig { returns(T::Boolean) }
   def staging?; end
 end
