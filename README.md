@@ -48,7 +48,6 @@ The CI for this repository is written using GitHub Actions. Here is a list of cu
 | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
 | `scripts/check_index`                                       | Lint `index.json` and check entries match `rbi/annotations/*.rbi` files |
 | `scripts/run_on_changed_rbis "bundle exec rubocop"`         | Lint RBI files                                                          |
-| `scripts/run_on_changed_rbis scripts/check_types`           | Typecheck RBI files                                                     |
 | `scripts/run_on_changed_rbis scripts/check_runtime`         | Check RBI annotations against runtime behavior                          |
 | `scripts/run_on_changed_rbis scripts/check_static`          | Check RBI annotations against Tapioca generated RBIs and Sorbet         |
 | `scripts/run_on_changed_rbis scripts/check_gems_are_public` | Check new RBI files belong to public gems                               |

@@ -24,8 +24,6 @@ jobs:
         run: scripts/check_index
       - name: Lint RBI files
         run: scripts/run_on_changed_rbis "bundle exec rubocop"
-      - name: Typecheck RBI files
-        run: scripts/run_on_changed_rbis scripts/check_types
       - name: Check new RBI files belong to public gems
         run: scripts/run_on_changed_rbis scripts/check_gems_are_public
       - name: Check RBI definitions against runtime execution
