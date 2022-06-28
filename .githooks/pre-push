@@ -30,7 +30,7 @@ unless rbis.empty?
 end
 
 $stderr.puts("Checking index.json...")
-unless system("bundle exec scripts/check_index")
+unless system("scripts/check_index")
   success = false
 end
 

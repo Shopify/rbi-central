@@ -21,7 +21,7 @@ jobs:
           ruby-version: '2.7'
           bundler-cache: true
       - name: Check index.json
-        run: bundle exec scripts/check_index
+        run: scripts/check_index
       - name: Lint RBI files
         run: scripts/run_on_changed_rbis "bundle exec rubocop"
       - name: Typecheck RBI files
