@@ -18,7 +18,7 @@ class Context
 
     out, status = bundle_install!
     unless status.success?
-      $stderr.puts(" * Can't install gem `#{@gem_name}` (#{out.gsub(/\n/, "")})")
+      error("Can't install gem `#{@gem_name}` (#{out.gsub(/\n/, "")})")
       return false
     end
 
