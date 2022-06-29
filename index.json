@@ -18,6 +18,8 @@
   },
   "colorize": {
   },
+  "configs": {
+  },
   "elasticsearch-dsl": {
     "requires": [
       "elasticsearch/dsl"
