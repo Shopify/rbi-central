@@ -53,7 +53,7 @@ class StaticValidator < RBIValidator
 
       write_annotation_file!
 
-      succes = true
+      success = true
       out, status = exec!("bundle exec tapioca check-shims --no-payload " \
                             "--gem-rbi-dir=#{@workdir}/sorbet/rbi/gems " \
                             "--shim-rbi-dir=#{@workdir}/rbi/annotations " \
