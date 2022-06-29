@@ -1,0 +1,27 @@
+#! /usr/bin/env ruby
+
+require "bundler/setup"
+
+require_relative "utils/rbi_validator"
+
+success = true
+
+$stderr.puts("### Checking index...\n\n")
+success &= system("scripts/check_index")
+
+files = rbi_files.join(" ")
+unless files.empty?
+  $stderr.puts("\n### Linting RBI files...\n\n")
+  success &= system("bundle exec rubocop #{files}")
+
+  $stderr.puts("\n### Checking that all RBI files belong to public gems...\n\n")
+  success &= system("scripts/check_gems_are_public #{files}")
+
+  $stderr.puts("\n### Checking RBI files against runtime execution...\n\n")
+  success &= system("scripts/check_runtime #{files}")
+
+  $stderr.puts("\n### Checking RBI files against Tapioca and Sorbet...\n\n")
+  success &= system("scripts/check_static #{files}")
+end
+
+exit(success)

@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 
-$stderr.puts("Running pre-push validation...")
+$stderr.puts("Running pre-push validation...\n\n")
 
 lines = `git fetch origin main 2> /dev/null && git diff --name-only origin/main | grep -E "\.rbi$|index.json"`.lines
 files = lines.map(&:strip).select { |file| File.file?(file) }
@@ -12,35 +12,8 @@ if lines.empty?
   exit(0)
 end
 
-success = true
-
-unless rbis.empty?
-  $stderr.puts("Linting RBI files...")
-  unless system("bundle exec rubocop #{rbis.join(" ")}")
-    success = false
-  end
-  $stderr.puts("Checking that new RBI files belong to public gems...")
-  unless system("scripts/check_gems_are_public #{rbis.join(" ")}")
-    success = false
-  end
-  $stderr.puts("Checking RBI files against runtime execution...")
-  unless system("scripts/check_runtime #{rbis.join(" ")}")
-    success = false
-  end
-
-  $stderr.puts("Checking RBI files against Tapioca and Sorbet...")
-  unless system("scripts/check_static #{rbis.join(" ")}")
-    success = false
-  end
-end
-
-$stderr.puts("Checking index.json...")
-unless system("scripts/check_index")
-  success = false
-end
-
-unless success
-  $stderr.puts("Cancelling the push as the code fails at least one check (see above)")
+unless system("scripts/check_all #{rbis.join(" ")}")
+  $stderr.puts("\nSome checks have failed, cancelling the push (see above)")
   exit(1)
 end
 
