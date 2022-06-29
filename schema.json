@@ -1,6 +1,27 @@
 {
   "type": "object",
   "patternProperties": {
-    "^.*$": { "type": "object" }
+    "^.*$": {
+      "type": "object",
+      "properties": {
+        "dependencies": {
+          "description": "List of other gems that need to be installed to test the RBI contents",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "uniqueItems": true
+          }
+        },
+        "requires": {
+          "description": "List of files to require to test the RBI contents",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "uniqueItems": true
+          }
+        }
+      },
+      "additionalProperties": false
+    }
   }
 }

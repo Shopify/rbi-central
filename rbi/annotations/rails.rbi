@@ -18,15 +18,4 @@ end
 class Rails::Engine
   sig { params(block: T.untyped).returns(ActionDispatch::Routing::RouteSet) }
   def routes(&block); end
-
-  class << self
-    sig { params(block: T.untyped).returns(ActionDispatch::Routing::RouteSet) }
-    def routes(&block); end
-
-    sig { returns(Rails::Paths::Root) }
-    def paths; end
-
-    sig { returns(Module) }
-    def helpers; end
-  end
 end

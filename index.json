@@ -1,20 +1,46 @@
 {
   "actionpack": {
+    "requires": [
+      "action_controller",
+      "action_dispatch/testing/integration"
+    ]
   },
   "activerecord": {
+    "requires": [
+      "active_record"
+    ]
   },
   "activesupport": {
+    "requires": [
+      "active_support",
+      "active_support/test_case"
+    ]
   },
   "colorize": {
   },
   "elasticsearch-dsl": {
+    "requires": [
+      "elasticsearch/dsl"
+    ]
   },
   "faraday": {
   },
   "mocha": {
+    "requires": [
+      "mocha/api"
+    ]
   },
   "rails": {
+    "requires": [
+      "rails/all"
+    ]
   },
   "webmock": {
+    "dependencies": [
+      "minitest"
+    ],
+    "requires": [
+      "minitest/test"
+    ]
   }
 }

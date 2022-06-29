@@ -12,6 +12,27 @@ Annotations are hand-written RBI files for commonly used gems that tell Sorbet i
 
 In this repository, annotations are placed in the `rbi/annotations` folder.
 
+### Index
+
+Each annotation from the `rbi/annotations` folder must be defined in the `index.json` file at the root of this repository:
+
+```json
+{
+    "gemA": { // gem name
+        "dependencies": [ // optional: list of gems that need to be installed to test gemA RBI
+            "gemB",
+            "gemC"
+        ],
+        "requires": [ // optional: list of files that need to be required to test gemA RBI
+            "file1",
+            "file2",
+        ]
+    }
+}
+```
+
+See the index [validation schema](schema.json) for more details.
+
 ### Pulling annotations
 
 To pull relevant gem annotations into your project, run Tapioca's [`annotations` command](https://github.com/Shopify/tapioca#pulling-rbi-annotations-from-remote-sources) inside your project:
@@ -23,14 +44,13 @@ $ bin/tapioca annotations
 
 The CI for this repository is written using GitHub Actions. Here is a list of currently available CI checks:
 
-| CLI Command                                                 | Description                                                    |
-| ----------------------------------------------------------- | -------------------------------------------------------------- |
-| `scripts/run_on_changed_rbis "bundle exec rubocop"`         | Lint RBI files                                                 |
-| `scripts/run_on_changed_rbis scripts/check_types`           | Typecheck RBI files                                            |
-| `scripts/run_on_changed_rbis scripts/check_gems_are_public` | Check new RBI files belong to public gems                      |
-| `scripts/lint_index_json`                                   | Lint `index.json`                                              |
-| `scripts/match_index_entries_with_rbis`                     | Check `index.json` entries match `rbi/annotations/*.rbi` files |
-| `bundle exec rubocop`                                       | Ensure all RBI files in the repo use the sigil `strict`        |
+| CLI Command                                                 | Description                                                             |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `scripts/check_index`                                       | Lint `index.json` and check entries match `rbi/annotations/*.rbi` files |
+| `scripts/run_on_changed_rbis "bundle exec rubocop"`         | Lint RBI files                                                          |
+| `scripts/run_on_changed_rbis scripts/check_types`           | Typecheck RBI files                                                     |
+| `scripts/run_on_changed_rbis scripts/check_runtime`         | Check RBI annotations against runtime behavior                          |
+| `scripts/run_on_changed_rbis scripts/check_gems_are_public` | Check new RBI files belong to public gems                               |
 
 All scripts used in the CI checks are located in the `scripts` folder.
 
@@ -41,6 +61,24 @@ $ git config core.hooksPath .githooks
 ```
 
 This git hook will run most of the CI checks and block the push if you don't pass all the tests.
+
+### Runtime checks
+
+Ensure the constants (constants, classes, modules) and properties (methods, attribute accessors) exist at runtime.
+
+For each gem the test works as follows:
+
+1. Create a temporary directory
+2. Add a Gemfile pointing to the gem (and possible dependencies, listed in index key `dependencies`)
+3. Add a Ruby script that:
+   1. Requires the gem (and possible other requirements, listed in index key `requires`)
+   2. Tries to `const_get` each constant defined in the RBI file
+   3. Tries to call `instance_method` for each method and attribute accessor (or `method` for singleton methods) in the RBI file
+
+It is possible to allow necessary shims for non-existing runtime definitions by using comment tags:
+
+* `@missing_method` to indicate that a method is delegated to another receiver using `method_missing`
+* `@shim` to indicate that a definition doesn't actually exist at runtime but is needed to allow type checking
 
 ## Contributing
 

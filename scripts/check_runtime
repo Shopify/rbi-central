@@ -1,0 +1,235 @@
+#! /usr/bin/env ruby
+
+require "bundler/setup"
+require "rbi"
+
+require_relative "utils/rbi_validator"
+
+class RuntimeValidator < RBIValidator
+  def validate_file!
+    $stderr.puts "Checking runtime for `#{@gem_name}`..."
+
+    @index_entry = @repo_index[@gem_name]
+    unless @index_entry
+      $stderr.puts(" * Error: No index entry for `#{@gem_name}`")
+      return false
+    end
+
+    rbi_tree = RBI::Parser.parse_file(@rbi_file)
+    context = RuntimeContext.new(@rbi_file, @gem_name)
+
+    deps = @index_entry["dependencies"]
+    deps&.each do |dep_name|
+      context.add_gem_dependency(dep_name)
+    end
+
+    requires = @index_entry["requires"] || [@gem_name]
+    requires.each do |require_name|
+      context.add_require(require_name)
+    end
+
+    visitor = Visitor.new(context)
+    visitor.visit(rbi_tree)
+    context.run!
+  rescue RBI::ParseError => e
+    $stderr.puts(" * Error parsing `#{@file}`: #{e.message}")
+    false
+  end
+
+  class Visitor < RBI::Visitor
+    def initialize(context)
+      @context = context
+    end
+
+    def visit(node)
+      return unless node
+
+      annotations = validate_annotations!(node)
+
+      # Do not test definitions tagged `@shim`
+      if annotations.include?("shim")
+        node.visit_children(node) if node.is_a?(RBI::Scope)
+        return
+      end
+
+      case node
+      when RBI::Module, RBI::Class, RBI::Const
+        @context.add_constant(node.fully_qualified_name, node.loc)
+      when RBI::Method
+        scope = node.parent_scope
+        scope_name = scope_name(scope)
+        is_singleton = node.is_singleton || scope.is_a?(RBI::SingletonClass)
+        allow_missing = annotations.include?("method_missing")
+
+        @context.add_method(scope_name, node.name, node.loc, singleton: is_singleton, allow_missing: allow_missing)
+      when RBI::Attr
+        scope = node.parent_scope
+        scope_name = scope_name(scope)
+        allow_missing = annotations.include?("method_missing")
+
+        node.names.each do |name|
+          @context.add_method(scope_name, name, node.loc, allow_missing: allow_missing)
+          if node.is_a?(RBI::AttrWriter) || node.is_a?(RBI::AttrAccessor)
+            @context.add_method(scope_name, "#{name}=", node.loc, allow_missing: allow_missing)
+          end
+        end
+      end
+
+      visit_all(node.nodes) if node.is_a?(RBI::Tree)
+    end
+
+    def validate_annotations!(node)
+      annotations = []
+
+      node.comments.each do |comment|
+        text = comment.text
+        matches = /^@(?<tag>[a-z_]+)(: ?(?<desc>.*))?$/.match(text)
+
+        next unless matches
+
+        tag = matches[:tag]
+        next unless tag
+
+        case tag
+        when "method_missing", "shim"
+          unless matches[:desc]
+            $stderr.puts(" * Annotation `@#{tag}` requires a description (#{comment.loc})")
+          end
+        end
+
+        annotations << tag
+      end
+
+      annotations
+    end
+
+    def scope_name(scope)
+      scope_name = case scope
+      when RBI::Class, RBI::Module
+        scope_name = scope.fully_qualified_name
+      when RBI::SingletonClass
+        scope_name = scope.parent_scope&.fully_qualified_name
+      end
+
+      scope_name || "Object"
+    end
+  end
+
+  class RuntimeContext < Context
+    TEST_NAME = "test.rb"
+
+    def initialize(rbi_file, gem_name)
+      super
+      @requires = String.new
+      @body = String.new
+    end
+
+    def run!
+      add_gem_dependency(@gem_name)
+
+      return false unless super
+
+      write_test!
+
+      out, status = exec!("bundle exec ruby #{TEST_NAME}")
+      unless status.success?
+        $stderr.puts(out)
+        return false
+      end
+
+      true
+    ensure
+      destroy!
+    end
+
+    def add_require(name)
+      @requires << <<~RB
+        begin
+          require "#{name}"
+        rescue LoadError => e
+          $stderr.puts(" * Can't require `#{name}`")
+          $success = false
+        end
+      RB
+    end
+
+    def add_constant(const_name, loc)
+      @body << <<~RB
+        __rbi_repo_get_const("#{const_name}", "#{loc.to_s}")
+      RB
+    end
+
+    def add_method(recv_name, method_name, loc, allow_missing:, singleton: false)
+      @body << <<~RB
+        __rbi_repo_get_method(
+          "#{recv_name}",
+          "#{method_name}",
+          "#{loc.to_s}",
+          singleton: #{singleton},
+          allow_missing: #{allow_missing}
+        )
+      RB
+    end
+
+    private
+
+    def write_test!
+      File.write("#{@workdir}/#{TEST_NAME}", ruby_string)
+    end
+
+    def ruby_string
+      <<~RB
+        $success = true
+
+        def __rbi_repo_get_const(const_name, rbi_loc)
+          Kernel.const_get("\#{const_name}")
+        rescue NameError => e
+          $stderr.puts(" * Missing runtime constant `\#{const_name}` (defined at \#{rbi_loc})")
+          $success = false
+          nil
+        end
+
+        def __rbi_repo_get_method(recv_name, method_name, rbi_loc, singleton:, allow_missing:)
+          const = __rbi_repo_get_const(recv_name, rbi_loc)
+          return unless const
+
+          if singleton
+            const.method("\#{method_name}")
+          else
+            const.instance_method("\#{method_name}")
+          end
+        rescue NameError => e
+          if const && !singleton && __rbi_repo_respond_to_method_missing?(const)
+            return if allow_missing
+
+            $stderr.puts(" * Missing runtime method `\#{recv_name}\#{singleton ? "." : "#"}\#{method_name}` (defined at \#{rbi_loc})")
+            $stderr.puts("   Note: `\#{method_name}` could be delegated to :method_missing but the RBI definition isn't annotated with `@method_missing`.")
+            $success = false
+            return nil
+          end
+
+          $stderr.puts(" * Missing runtime method `\#{recv_name}\#{singleton ? "." : "#"}\#{method_name}` (defined at \#{rbi_loc})")
+          $success = false
+          nil
+        end
+
+        def __rbi_repo_respond_to_method_missing?(const)
+          method = const.instance_method(:method_missing)
+          !/\\(BasicObject\\)/.match?(method.to_s)
+        rescue NameError => e
+          false
+        end
+
+        #{@requires}
+
+        exit(1) unless $success
+
+        #{@body}
+
+        exit(1) unless $success
+      RB
+    end
+  end
+end
+
+RuntimeValidator.validate_files!(load_index, rbi_files)
