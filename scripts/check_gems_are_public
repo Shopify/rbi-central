@@ -1,32 +1,26 @@
 #! /usr/bin/env ruby
 
+require "bundler/setup"
 require "net/http"
-require "json"
 
-success = true
+require_relative "utils/rbi_validator"
 
-files = ARGV.empty? ? Dir.glob("./rbi/**/*") : ARGV
+class GemsValidator < RBIValidator
+  def validate_file!
+    $stderr.puts "Checking Rubygems for `#{@gem_name}`..."
 
-files.each do |file|
-  next unless File.file?(file)
+    uri = URI("https://rubygems.org/api/v1/versions/#{@gem_name}/latest.json")
+    content = Net::HTTP.get(uri)
+    version = JSON.parse(content)["version"]
 
-  gem = File.basename(file, File.extname(file))
-  $stderr.puts("Checking if gem `#{gem}` is public...")
-  uri = URI("https://rubygems.org/api/v1/versions/#{gem}/latest.json")
-  content = Net::HTTP.get(uri)
-  version = JSON.parse(content)["version"]
+    if version === "9001.0" || version === "unknown"
+      $stderr.puts(" * Error: `#{@gem_name}` doesn't seem to be a public")
+      $stderr.puts("   Make sure your gem is available at https://rubygems.org/gems/#{@gem_name}")
+      return false
+    end
 
-  if version === "9001.0" || version === "unknown"
-    $stderr.puts("  Error: `#{gem}` doesn't seem to be a public")
-    $stderr.puts("  Make sure your gem is available at https://rubygems.org/gems/#{gem}")
-    success = false
+    true
   end
 end
 
-$stderr.puts("\n")
-
-if success
-  $stderr.puts("All gems are public, good job!")
-end
-
-exit(success)
+GemsValidator.validate_files!(load_index, rbi_files)
