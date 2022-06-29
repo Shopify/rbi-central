@@ -47,6 +47,8 @@
   },
   "parse-cron": {
   },
+  "pundit": {
+  },
   "rails": {
     "requires": [
       "rake",
