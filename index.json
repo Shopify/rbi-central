@@ -22,6 +22,8 @@
   },
   "configs": {
   },
+  "delayed_job": {
+  },
   "elasticsearch-dsl": {
     "requires": [
       "elasticsearch/dsl"
