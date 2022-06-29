@@ -6,11 +6,11 @@ require_relative "utils/rbi_validator"
 
 class StaticValidator < RBIValidator
   def validate_file!
-    $stderr.puts "Checking static for `#{@gem_name}`..."
+    log("Checking static for `#{@gem_name}`...")
 
     index_entry = @repo_index[@gem_name]
     unless index_entry
-      $stderr.puts(" * Error: No index entry for `#{@gem_name}`")
+      error("No index entry for `#{@gem_name}`")
       return false
     end
 
@@ -60,12 +60,25 @@ class StaticValidator < RBIValidator
                             "--annotations-rbi-dir=#{@workdir}/sorbet/rbi/none")
       unless status.success?
         out.gsub!("#{@workdir}/", "")
-        out.gsub!("rbi/annotations and sorbet/rbi/todo.rbi", @rbi_file)
-        $stderr.puts("\n#{out}")
+        out.gsub!("rbi/annotations and sorbet/rbi/todo.rbi", @rbi_file.yellow)
+
+        out.lines do |line|
+          line.strip!
+          next if line.end_with?("...  Done")
+
+          if line.start_with?("Duplicated RBI")
+            error(line.strip)
+          elsif line.start_with?("* ")
+            $stderr.puts(line.strip.yellow)
+          else
+            $stderr.puts(line.strip)
+          end
+        end
+
         success = false
       end
 
-      out, status = exec!("bundle exec srb tc . --no-error-sections --ignore vendor/bundle --no-config --no-error-count")
+      out, status = exec!("bundle exec srb tc . --no-error-sections --color=always --ignore vendor/bundle --no-config --no-error-count")
       unless status.success?
         $stderr.puts("\n#{out}")
         success = false
