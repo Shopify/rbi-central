@@ -7,14 +7,14 @@ require_relative "utils/rbi_validator"
 
 class GemsValidator < RBIValidator
   def validate_file!
-    $stderr.puts "Checking Rubygems for `#{@gem_name}`..."
+    log("Checking Rubygems for `#{@gem_name}`...")
 
     uri = URI("https://rubygems.org/api/v1/versions/#{@gem_name}/latest.json")
     content = Net::HTTP.get(uri)
     version = JSON.parse(content)["version"]
 
     if version === "9001.0" || version === "unknown"
-      $stderr.puts(" * Error: `#{@gem_name}` doesn't seem to be a public")
+      error("`#{@gem_name}` doesn't seem to be a public")
       $stderr.puts("   Make sure your gem is available at https://rubygems.org/gems/#{@gem_name}")
       return false
     end

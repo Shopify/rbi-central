@@ -6,21 +6,30 @@ require_relative "utils/rbi_validator"
 
 success = true
 
-$stderr.puts("### Checking index...\n\n")
+$stderr.puts("### Checking index...".bold.blue)
+$stderr.puts
 success &= system("scripts/check_index")
 
 files = rbi_files.join(" ")
 unless files.empty?
-  $stderr.puts("\n### Linting RBI files...\n\n")
+  $stderr.puts
+  $stderr.puts("### Linting RBI files...".bold.blue)
+  $stderr.puts
   success &= system("bundle exec rubocop #{files}")
 
-  $stderr.puts("\n### Checking that all RBI files belong to public gems...\n\n")
+  $stderr.puts
+  $stderr.puts("### Checking that all RBI files belong to public gems...".bold.blue)
+  $stderr.puts
   success &= system("scripts/check_gems_are_public #{files}")
 
-  $stderr.puts("\n### Checking RBI files against runtime execution...\n\n")
+  $stderr.puts
+  $stderr.puts("### Checking RBI files against runtime execution...".bold.blue)
+  $stderr.puts
   success &= system("scripts/check_runtime #{files}")
 
-  $stderr.puts("\n### Checking RBI files against Tapioca and Sorbet...\n\n")
+  $stderr.puts
+  $stderr.puts("### Checking RBI files against Tapioca and Sorbet...".bold.blue)
+  $stderr.puts
   success &= system("scripts/check_static #{files}")
 end
 

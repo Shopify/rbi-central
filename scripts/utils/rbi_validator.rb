@@ -17,7 +17,7 @@ class RBIValidator
 
     exit(1) unless success
 
-    $stderr.puts("\nNo errors, good job!")
+    success("\nNo errors, good job!")
   end
 
   def initialize(repo_index, rbi_file)
