@@ -25,11 +25,12 @@ class Context
     true
   end
 
-  def add_gem_dependency(name, version: nil, github: nil, branch: nil)
+  def add_gem_dependency(name, version: nil, github: nil, branch: nil, ref: nil)
     @gemfile << "gem '#{name}'"
     @gemfile << ", '#{version}'" if version
     @gemfile << ", github: '#{github}'" if github
     @gemfile << ", branch: '#{branch}'" if branch
+    @gemfile << ", ref: '#{ref}'" if ref
     @gemfile << "\n"
   end
 

@@ -19,16 +19,17 @@ unless rbis.empty?
   unless system("bundle exec rubocop #{rbis.join(" ")}")
     success = false
   end
-  $stderr.puts("Type checking RBI files...")
-  unless system("scripts/check_types #{rbis.join(" ")}")
-    success = false
-  end
   $stderr.puts("Checking that new RBI files belong to public gems...")
   unless system("scripts/check_gems_are_public #{rbis.join(" ")}")
     success = false
   end
   $stderr.puts("Checking RBI files against runtime execution...")
   unless system("scripts/check_runtime #{rbis.join(" ")}")
+    success = false
+  end
+
+  $stderr.puts("Checking RBI files against Tapioca and Sorbet...")
+  unless system("scripts/check_static #{rbis.join(" ")}")
     success = false
   end
 end
