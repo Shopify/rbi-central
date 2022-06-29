@@ -7,11 +7,11 @@ require_relative "utils/rbi_validator"
 
 class RuntimeValidator < RBIValidator
   def validate_file!
-    $stderr.puts "Checking runtime for `#{@gem_name}`..."
+    log("Checking runtime for `#{@gem_name}`...")
 
     @index_entry = @repo_index[@gem_name]
     unless @index_entry
-      $stderr.puts(" * Error: No index entry for `#{@gem_name}`")
+      error("No index entry for `#{@gem_name}`")
       return false
     end
 
@@ -32,7 +32,7 @@ class RuntimeValidator < RBIValidator
     visitor.visit(rbi_tree)
     context.run!
   rescue RBI::ParseError => e
-    $stderr.puts(" * Error parsing `#{@file}`: #{e.message}")
+    error("Can't parse RBI file `#{@file}`: #{e.message}")
     false
   end
 
@@ -93,7 +93,7 @@ class RuntimeValidator < RBIValidator
         case tag
         when "method_missing", "shim"
           unless matches[:desc]
-            $stderr.puts(" * Annotation `@#{tag}` requires a description (#{comment.loc})")
+            error("Annotation `@#{tag}` requires a description (#{comment.loc})")
           end
         end
 
@@ -133,7 +133,13 @@ class RuntimeValidator < RBIValidator
 
       out, status = exec!("bundle exec ruby #{TEST_NAME}")
       unless status.success?
-        $stderr.puts(out)
+        out.lines do |line|
+          if line.start_with?("Note: ")
+            log(line.strip)
+          else
+            error(line.strip)
+          end
+        end
         return false
       end
 
@@ -147,7 +153,7 @@ class RuntimeValidator < RBIValidator
         begin
           require "#{name}"
         rescue LoadError => e
-          $stderr.puts(" * Can't require `#{name}`")
+          $stderr.puts("Can't require `#{name}`")
           $success = false
         end
       RB
@@ -184,7 +190,7 @@ class RuntimeValidator < RBIValidator
         def __rbi_repo_get_const(const_name, rbi_loc)
           Kernel.const_get("\#{const_name}")
         rescue NameError => e
-          $stderr.puts(" * Missing runtime constant `\#{const_name}` (defined at \#{rbi_loc})")
+          $stderr.puts("Missing runtime constant `\#{const_name}` (defined at `\#{rbi_loc}`)")
           $success = false
           nil
         end
@@ -202,13 +208,13 @@ class RuntimeValidator < RBIValidator
           if const && !singleton && __rbi_repo_respond_to_method_missing?(const)
             return if allow_missing
 
-            $stderr.puts(" * Missing runtime method `\#{recv_name}\#{singleton ? "." : "#"}\#{method_name}` (defined at \#{rbi_loc})")
-            $stderr.puts("   Note: `\#{method_name}` could be delegated to :method_missing but the RBI definition isn't annotated with `@method_missing`.")
+            $stderr.puts("Missing runtime method `\#{recv_name}\#{singleton ? "." : "#"}\#{method_name}` (defined at `\#{rbi_loc}`)")
+            $stderr.puts("Note: `\#{method_name}` could be delegated to :method_missing but the RBI definition isn't annotated with `@method_missing`.")
             $success = false
             return nil
           end
 
-          $stderr.puts(" * Missing runtime method `\#{recv_name}\#{singleton ? "." : "#"}\#{method_name}` (defined at \#{rbi_loc})")
+          $stderr.puts("Missing runtime method `\#{recv_name}\#{singleton ? "." : "#"}\#{method_name}` (defined at `\#{rbi_loc}`)")
           $success = false
           nil
         end
