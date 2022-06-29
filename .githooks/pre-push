@@ -1,5 +1,7 @@
 #! /usr/bin/env ruby
 
+require_relative "../scripts/utils/cli"
+
 $stderr.puts("Running pre-push validation...\n\n")
 
 lines = `git fetch origin main 2> /dev/null && git diff --name-only origin/main | grep -E "\.rbi$|index.json"`.lines
@@ -13,7 +15,7 @@ if lines.empty?
 end
 
 unless system("scripts/check_all #{rbis.join(" ")}")
-  $stderr.puts("\nSome checks have failed, cancelling the push (see above)")
+  $stderr.puts("\nSome checks have failed, cancelling the push (see above)".red)
   exit(1)
 end
 
