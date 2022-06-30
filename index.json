@@ -17,6 +17,8 @@
       "action_view"
     ]
   },
+  "active_flag": {
+  },
   "activerecord": {
     "requires": [
       "active_record"
