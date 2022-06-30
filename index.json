@@ -5,6 +5,11 @@
       "action_dispatch/testing/integration"
     ]
   },
+  "actionview": {
+    "requires": [
+      "action_view"
+    ]
+  },
   "activerecord": {
     "requires": [
       "active_record"
