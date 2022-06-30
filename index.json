@@ -23,6 +23,8 @@
       "active_support/test_case"
     ]
   },
+  "bencode": {
+  },
   "colorize": {
   },
   "configs": {
