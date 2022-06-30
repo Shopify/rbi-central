@@ -44,16 +44,21 @@ class RuntimeValidator < RBIValidator
     def visit(node)
       return unless node
 
+      validate_node!(node)
+      visit_all(node.nodes) if node.is_a?(RBI::Tree)
+    end
+
+    def validate_node!(node)
       annotations = validate_annotations!(node)
 
       # Do not test definitions tagged `@shim`
-      if annotations.include?("shim")
-        node.visit_children(node) if node.is_a?(RBI::Scope)
-        return
-      end
+      return if annotations.include?("shim")
 
       case node
-      when RBI::Module, RBI::Class, RBI::Const
+      when RBI::Module, RBI::Class
+        @context.add_constant(node.fully_qualified_name, node.loc)
+      when RBI::Const
+        return if node.value.start_with?("type_member") || node.value.start_with?("type_template")
         @context.add_constant(node.fully_qualified_name, node.loc)
       when RBI::Method
         scope = node.parent_scope
@@ -74,8 +79,6 @@ class RuntimeValidator < RBIValidator
           end
         end
       end
-
-      visit_all(node.nodes) if node.is_a?(RBI::Tree)
     end
 
     def validate_annotations!(node)
