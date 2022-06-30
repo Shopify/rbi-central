@@ -1,4 +1,6 @@
 {
+  "aasm": {
+  },
   "actionpack": {
     "requires": [
       "action_controller",
