@@ -45,6 +45,8 @@
       "mocha/api"
     ]
   },
+  "parse-cron": {
+  },
   "rails": {
     "requires": [
       "rake",
