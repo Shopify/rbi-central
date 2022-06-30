@@ -65,6 +65,12 @@
       "rails/all"
     ]
   },
+  "rainbow": {
+    "requires": [
+      "rainbow",
+      "rainbow/version"
+    ]
+  },
   "webmock": {
     "dependencies": [
       "minitest"
