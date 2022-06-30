@@ -1,6 +1,11 @@
 {
   "aasm": {
   },
+  "actionmailer": {
+    "requires": [
+      "action_mailer"
+    ]
+  },
   "actionpack": {
     "requires": [
       "action_controller",
