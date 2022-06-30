@@ -25,6 +25,8 @@
   },
   "faraday": {
   },
+  "lhm": {
+  },
   "mocha": {
     "requires": [
       "mocha/api"
