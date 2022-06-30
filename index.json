@@ -82,6 +82,8 @@
       "rainbow/version"
     ]
   },
+  "state_machines": {
+  },
   "webmock": {
     "dependencies": [
       "minitest"
