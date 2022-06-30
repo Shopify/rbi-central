@@ -65,6 +65,17 @@
       "rails/all"
     ]
   },
+  "railties": {
+    "requires": [
+      "rake",
+      "rake/tasklib",
+      "rails",
+      "rails/railtie",
+      "rails/generators",
+      "rails/generators/model_helpers",
+      "rails/generators/generated_attribute"
+    ]
+  },
   "rainbow": {
     "requires": [
       "rainbow",
