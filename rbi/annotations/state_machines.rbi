@@ -4,7 +4,7 @@ class StateMachines::Machine
   include StateMachines::MatcherHelpers
   include StateMachines::EvalHelpers
 
-  sig { params(name: T.any(Symbol, String), blk: T.proc.bind(T.untyped).void).void }
+  sig { params(name: T.any(Symbol, String), blk: T.nilable(T.proc.bind(T.untyped).void)).void }
   def state(*name, &blk); end
 end
 
