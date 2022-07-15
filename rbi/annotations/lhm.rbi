@@ -91,8 +91,8 @@ class Lhm::Printer::Dot < Lhm::Printer::Base
   sig { void }
   def end; end
 
-  sig { params(lowest: T.nilable(Numeric), highest: T.nilable(Numeric)).void }
-  def notify(lowest = nil, highest = nil); end
+  sig { params(_arg0: T.untyped).void }
+  def notify(*_arg0); end
 end
 
 class Lhm::Migrator
