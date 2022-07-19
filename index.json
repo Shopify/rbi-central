@@ -49,6 +49,8 @@
   },
   "lhm": {
   },
+  "lhm-shopify": {
+  },
   "mocha": {
     "requires": [
       "mocha/api"
