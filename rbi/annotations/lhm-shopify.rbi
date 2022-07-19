@@ -2,19 +2,18 @@
 
 module Lhm
   extend Lhm
-  extend Lhm::Throttler
 
   sig do
     params(
       table_name: T.any(String, Symbol),
       options: T::Hash[Symbol, T.untyped],
       block: T.proc.params(arg0: Lhm::Migrator).void
-    ).returns(TrueClass)
+    ).returns(T::Boolean)
   end
-  def change_table(table_name, options = nil, &block); end
+  def change_table(table_name, options = {}, &block); end
 
-  sig { params(run: T.nilable(T::Boolean), options: T.nilable(T::Hash[Symbol, T.untyped])).returns(T::Boolean) }
-  def cleanup(run = nil, options = nil); end
+  sig { params(run: T::Boolean, options: T.nilable(T::Hash[Symbol, T.untyped])).void }
+  def cleanup(run = false, options = {}); end
 
   sig { returns(Lhm::Connection) }
   def connection; end
@@ -25,31 +24,31 @@ module Lhm
   sig { params(new_logger: Logger).returns(Logger) }
   def self.logger=(new_logger); end
 
-  sig { params(adapter: Lhm::Connection).returns(Lhm::Connection) }
+  sig { params(adapter: Lhm::Connection).void }
   def setup(adapter); end
 end
 
 class Lhm::Table
-  sig { params(name: T.any(String, Symbol), pk: T.nilable(T.any(String, Symbol)), ddl: T.untyped).void }
-  def initialize(name, pk = nil, ddl = nil); end
-
   sig { returns(T::Hash[T.untyped, T.untyped]) }
-  def columns; end
+  attr_reader :columns
 
   sig { returns(T.untyped) }
-  def ddl; end
+  attr_reader :ddl
+
+  sig { returns(T::Hash[T.untyped, T.untyped]) }
+  attr_reader :indices
+
+  sig { returns(T.any(String, Symbol)) }
+  attr_reader :name
+
+  sig { returns(T.any(String, Symbol)) }
+  attr_reader :pk
+
+  sig { params(name: T.any(String, Symbol), pk: T.any(String, Symbol), ddl: T.untyped).void }
+  def initialize(name, pk = "id", ddl = nil); end
 
   sig { returns(String) }
   def destination_name; end
-
-  sig { returns(T::Hash[T.untyped, T.untyped]) }
-  def indices; end
-
-  sig { returns(T.any(String, Symbol)) }
-  def name; end
-
-  sig { returns(T.any(String, Symbol)) }
-  def pk; end
 
   sig { params(table_name: T.any(Symbol, String), connection: Lhm::Connection).returns(Lhm::Table) }
   def self.parse(table_name, connection); end
@@ -72,9 +71,6 @@ end
 
 class Lhm::Printer::Percentage < Lhm::Printer::Base
   sig { void }
-  def initialize; end
-
-  sig { void }
   def end; end
 
   sig { params(lowest: Numeric, highest: T.nilable(Numeric)).void }
@@ -91,7 +87,24 @@ end
 
 class Lhm::Migrator
   include Lhm::Command
-  include Lhm::SqlHelper
+
+  sig { returns(String) }
+  attr_reader :name
+
+  sig { returns(T::Array[String]) }
+  attr_reader :statements
+
+  sig { returns(T.nilable(Lhm::Connection)) }
+  attr_reader :connection
+
+  sig { returns(T::Array[String]) }
+  attr_reader :conditions
+
+  sig { returns(T::Hash[T.untyped, T.untyped]) }
+  attr_reader :renames
+
+  sig { returns(Lhm::Table) }
+  attr_reader :origin
 
   sig { params(table: Lhm::Table, connection: T.nilable(Lhm::Connection)).void }
   def initialize(table, connection = nil); end
@@ -118,20 +131,11 @@ class Lhm::Migrator
   sig { params(name: T.any(String, Symbol), definition: T.any(String, Symbol)).void }
   def change_column(name, definition); end
 
-  sig { returns(T::Array[String]) }
-  def conditions; end
-
-  sig { returns(T.nilable(Lhm::Connection)) }
-  def connection; end
-
   sig { params(statement: String).void }
   def ddl(statement); end
 
   sig { params(sql: String).returns(String) }
   def filter(sql); end
-
-  sig { returns(String) }
-  def name; end
 
   sig { params(name: T.any(String, Symbol)).void }
   def remove_column(name); end
@@ -146,42 +150,30 @@ class Lhm::Migrator
 
   sig { params(old: T.any(String, Symbol), nu: T.any(String, Symbol)).void }
   def rename_column(old, nu); end
-
-  sig { returns(T::Hash[T.untyped, T.untyped]) }
-  def renames; end
-
-  sig { returns(T::Array[String]) }
-  def statements; end
 end
 
 module Lhm::Throttler
-  sig { params(type: T.any(Lhm::Command, Symbol, String, Class), options: T.nilable(T::Hash[T.untyped, T.untyped])).void }
-  def setup_throttler(type, options = nil); end
+  sig { params(type: T.any(Lhm::Command, Symbol, String, Class), options: T::Hash[T.untyped, T.untyped]).void }
+  def setup_throttler(type, options = {}); end
 
-  sig { returns(T.self_type) }
+  sig { returns(Lhm::Throttler) }
   def throttler; end
 end
 
 class Lhm::Throttler::Time
   include Lhm::Command
 
-  sig { params(options: T.nilable(T::Hash[T.untyped, T.untyped])).void }
-  def initialize(options = nil); end
+  sig { returns(Integer) }
+  attr_accessor :stride
+
+  sig { returns(Numeric) }
+  attr_accessor :timeout_seconds
+
+  sig { params(options: T::Hash[T.untyped, T.untyped]).void }
+  def initialize(options = {}); end
 
   sig { void }
   def execute; end
-
-  sig { returns(Integer) }
-  def stride; end
-
-  sig { params(arg0: Integer).returns(Integer) }
-  def stride=(arg0); end
-
-  sig { returns(Numeric) }
-  def timeout_seconds; end
-
-  sig { params(arg0: Numeric).returns(Numeric) }
-  def timeout_seconds=(arg0); end
 end
 
 class Lhm::Throttler::LegacyTime < Lhm::Throttler::Time
@@ -193,8 +185,8 @@ class Lhm::Throttler::Factory
   sig do
     params(
       type: T.any(Lhm::Command, Symbol, String, Class),
-      options: T.nilable(T::Hash[T.untyped, T.untyped])
-    ).returns(T.untyped)
+      options: T::Hash[T.untyped, T.untyped]
+    ).returns(Lhm::Throttler)
   end
-  def self.create_throttler(type, options = nil); end
+  def self.create_throttler(type, options = {}); end
 end
