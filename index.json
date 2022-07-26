@@ -30,6 +30,8 @@
       "active_support/test_case"
     ]
   },
+  "aws-sdk-acm": {
+  },
   "bencode": {
   },
   "colorize": {
