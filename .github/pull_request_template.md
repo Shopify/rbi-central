@@ -4,7 +4,7 @@
 
 - [ ] Add RBI for a new gem
 - [ ] Modify RBI for an existing gem
-- [ ] Other <!-- provide additional information -->
+- [ ] Other: <!-- Provide additional information -->
 
 ### Changes
 
