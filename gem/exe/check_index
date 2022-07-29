@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby
+# typed: strict
+# frozen_string_literal: true
 
 require "rbi-central"
 
@@ -6,9 +8,13 @@ module RBICentral
   SCHEMA_PATH = "schema.json"
 
   class IndexValidator
+    extend T::Sig
     extend CLI
     include CLI
 
+    EXPECTED_PATH = "expected"
+
+    sig { params(index_path: String, schema_path: String, rbis_path: String).void }
     def self.validate!(index_path: INDEX_PATH, schema_path: SCHEMA_PATH, rbis_path: RBIS_PATH)
       log("Checking `index`...\n")
 
@@ -18,15 +24,17 @@ module RBICentral
       success("No errors, good job!")
     end
 
+    sig { params(index_path: String, schema_path: String, rbis_path: String).void }
     def initialize(index_path:, schema_path:, rbis_path:)
       @index_path = index_path
       @schema_path = schema_path
       @rbis_path = rbis_path
 
-      @index_json = load_json(index_path)
-      @schema_json = load_json(schema_path)
+      @index_json = T.let(load_json(index_path), T::Hash[String, T.untyped])
+      @schema_json = T.let(load_json(schema_path), T::Hash[String, T.untyped])
     end
 
+    sig { returns(T::Boolean) }
     def validate!
       success = true
       success &= check_against_schema!
@@ -38,14 +46,16 @@ module RBICentral
 
     private
 
+    sig { returns(T::Boolean) }
     def check_against_schema!
       JSON::Validator.validate!(@schema_json, @index_json)
     rescue JSON::Schema::ValidationError => e
       error("#{e.message.gsub("'", "`")}")
     end
 
+    sig { returns(T::Boolean) }
     def check_missing_annotations!
-      success = true
+      success = T.let(true, T::Boolean)
       @index_json.each do |gem_name, _|
         file = "#{@rbis_path}/#{gem_name}.rbi"
         next if File.file?(file)
@@ -56,8 +66,9 @@ module RBICentral
       success
     end
 
+    sig { returns(T::Boolean) }
     def check_missing_index_entries!
-      success = true
+      success = T.let(true, T::Boolean)
       rbis = Dir.glob("#{@rbis_path}/*.rbi").sort
       rbis.each do |path|
         name = File.basename(path, ".rbi")
@@ -69,13 +80,13 @@ module RBICentral
       success
     end
 
+    sig { returns(T::Boolean) }
     def check_json_format!
       sorted = Hash[@index_json.sort]
       expected_json = JSON.pretty_generate(sorted) << "\n"
-      expected_path = "expected"
-      File.write(expected_path, expected_json)
+      File.write(EXPECTED_PATH, expected_json)
 
-      out, status = Open3.capture2e("diff -u #{@index_path} #{expected_path}")
+      out, status = Open3.capture2e("diff -u #{@index_path} #{EXPECTED_PATH}")
       unless status.success?
         error("Formatting errors found in `#{@index_path}`:")
         $stderr.puts("\n#{out}\n")
@@ -84,9 +95,10 @@ module RBICentral
 
       true
     ensure
-      FileUtils.rm(expected_path)
+      FileUtils.rm(EXPECTED_PATH)
     end
 
+    sig { params(path: String).returns(T::Hash[String, T.untyped]) }
     def load_json(path)
       JSON.parse(File.read(path))
     rescue JSON::ParserError => e
@@ -96,6 +108,7 @@ module RBICentral
       exit(1)
     end
 
+    sig { params(path: String).returns(T::Array[String]) }
     def load_annotations_names(path)
       Dir.glob("#{path}/*.rbi").sort.map { |path| File.basename(path, ".rbi") }
     end

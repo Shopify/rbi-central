@@ -1,4 +1,8 @@
 #! /usr/bin/env ruby
+# typed: strict
+# frozen_string_literal: true
+
+require "sorbet-runtime"
 
 unless ARGV.size == 1
   $stderr.puts("usage: #{$0} <command_to_run>")
@@ -8,12 +12,12 @@ end
 command = ARGV.first
 
 default_branch = ENV["GIT_DEFAULT_BRANCH"]
-current_branch = ENV["GITHUB_REF"].slice("refs/heads/")
+current_branch = T.must(ENV["GITHUB_REF"]).slice("refs/heads/")
 
 if current_branch == default_branch
   $stderr.puts(command)
   res = system(command)
-  exit(res)
+  exit(!!res)
 end
 
 lines = `git fetch origin #{default_branch} && git diff --name-only origin/#{default_branch} | grep "\.rbi$"`.lines
@@ -27,4 +31,4 @@ end
 shell = "#{command} #{files.join(" ")}"
 $stderr.puts(shell)
 res = system(shell)
-exit(res)
+exit(!!res)

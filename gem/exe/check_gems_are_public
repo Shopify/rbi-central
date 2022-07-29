@@ -1,9 +1,14 @@
 #! /usr/bin/env ruby
+# typed: strict
+# frozen_string_literal: true
 
 require "rbi-central"
 
 module RBICentral
   class GemsValidator < RBIValidator
+    extend T::Sig
+
+    sig { override.returns(T::Boolean) }
     def validate_file!
       log("Checking Rubygems for `#{@gem_name}`...")
 
