@@ -11,7 +11,7 @@ module Rails
     sig { returns(ActiveSupport::Cache::Store) }
     def cache; end
 
-    sig { returns(ActiveSupport::StringInquirer) }
+    sig { returns(ActiveSupport::EnvironmentInquirer) }
     def env; end
 
     sig { returns(ActiveSupport::Logger) }
