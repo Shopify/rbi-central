@@ -1,0 +1,30 @@
+#! /usr/bin/env ruby
+
+unless ARGV.size == 1
+  $stderr.puts("usage: #{$0} <command_to_run>")
+  exit(1)
+end
+
+command = ARGV.first
+
+default_branch = ENV["GIT_DEFAULT_BRANCH"]
+current_branch = ENV["GITHUB_REF"].slice("refs/heads/")
+
+if current_branch == default_branch
+  $stderr.puts(command)
+  res = system(command)
+  exit(res)
+end
+
+lines = `git fetch origin #{default_branch} && git diff --name-only origin/#{default_branch} | grep "\.rbi$"`.lines
+files = lines.map(&:strip).select { |file| File.file?(file) }
+
+if lines.empty?
+  $stderr.puts("Nothing to check")
+  exit(0)
+end
+
+shell = "#{command} #{files.join(" ")}"
+$stderr.puts(shell)
+res = system(shell)
+exit(res)
