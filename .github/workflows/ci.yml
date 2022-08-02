@@ -21,4 +21,6 @@ jobs:
           ruby-version: '2.7'
           bundler-cache: true
       - name: Check RBIs and index
-        run: bundle exec run_on_changed_rbis "bundle exec repo check all"
+        run: |
+          git fetch origin "$GIT_DEFAULT_BRANCH"
+          bundle exec repo check --gem --ref "origin/$GIT_DEFAULT_BRANCH"

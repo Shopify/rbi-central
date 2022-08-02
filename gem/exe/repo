@@ -3,7 +3,10 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
+
+require "thor"
 require_relative "../lib/rbi-central"
+require_relative "../lib/rbi-central/cli/helper"
 
 module RBICentral
   module CLI
@@ -11,164 +14,155 @@ module RBICentral
       include Helper
 
       class_option :color, type: :boolean, default: true, desc: "Use colors"
+      class_option :bundle_config, type: :hash, default: {}, desc: "Config to pass to bundle"
 
-      desc "all", "Run all checks"
-      def all(*files)
-        Helper.color = options[:color]
-        success = true
+      default_task :auto
 
-        begin
-          index
-          $stderr.puts
-        rescue Thor::Error
-          success = false
-        end
-        begin
-          T.unsafe(self).rubocop(*files)
-          $stderr.puts
-        rescue Thor::Error
-          success = false
-        end
-        begin
-          T.unsafe(self).rubygems(*files)
-          $stderr.puts
-        rescue Thor::Error
-          success = false
-        end
-        begin
-          T.unsafe(self).runtime(*files)
-          $stderr.puts
-        rescue Thor::Error
-          success = false
-        end
-        begin
-          T.unsafe(self).static(*files)
-          $stderr.puts
-        rescue Thor::Error
-          success = false
+      desc "auto", "Run checks depending on changes files"
+      option :all, type: :boolean, default: false, desc: "Check all checks"
+      option :index, type: :boolean, default: true, desc: "Check index"
+      option :rubocop, type: :boolean, default: true, desc: "Check rubocop"
+      option :rubygems, type: :boolean, default: true, desc: "Check rubygems"
+      option :runtime, type: :boolean, default: true, desc: "Check runtime"
+      option :static, type: :boolean, default: true, desc: "Check static"
+      option :gem, type: :boolean, default: true, desc: "Check repo gem"
+      option :ref, type: :string, default: "HEAD", desc: "Check against a Git ref"
+      option :source, type: :string, default: "https://rubygems.org", desc: "Source to install gems from"
+      def auto(*gem_names)
+        section("Checking changed files...")
+
+        checks = select_checks(gem_names, options)
+        if checks.changed_files.any?
+          $stderr.puts(<<~LOG)
+            Changed files:
+
+            #{checks.changed_files.map { |file| " * #{file}" }.join("\n")}
+
+          LOG
         end
 
-        raise Thor::Error, "#{"Error".red}: Some checks failed. See above for details." unless success
+        unless checks.any?
+          log("No change detected. Run with `--all` to run all checks.")
+          return
+        end
 
-        success("All checks passed without error, good job!")
+        log("The following checks will run:\n")
+        log("  `gem`      runs the test units of the embedded gem") if checks.gem_tests
+        log("  `index`    checks the index validity") if checks.index
+        log("  `rubocop`  checks the RBI files against RuboCop") if checks.rubocop
+        log("  `rubygems` checks the RBI files against Rubygems") if checks.rubygems
+        log("  `runtime`  checks the RBI files against runtime execution") if checks.runtime
+        log("  `static`   checks the RBI files against Tapioca and Sorbet") if checks.static
+
+        $stderr.puts("\n")
+
+        gem_names = checks.changed_annotations
+        success = T.let(true, T::Boolean)
+        if checks.gem_tests
+          success &= run_check! do
+            gem
+          end
+        end
+        if checks.index
+          success &= run_check! do
+            index
+          end
+        end
+        if checks.rubocop
+          success &= run_check! do
+            T.unsafe(self).rubocop(*gem_names)
+          end
+        end
+        if checks.rubygems
+          success &= run_check! do
+            T.unsafe(self).rubygems(*gem_names)
+          end
+        end
+        if checks.runtime
+          success &= run_check! do
+            T.unsafe(self).runtime(*gem_names)
+          end
+        end
+        if checks.static
+          success &= run_check! do
+            T.unsafe(self).static(*gem_names)
+          end
+        end
+        if success
+          success("All checks passed without error, good job!")
+        else
+          raise Thor::Error, red("Some checks failed. See above for details.")
+        end
+      end
+
+      desc "gem", "Runs the test units of the embedded gem"
+      def gem
+        section("Checking gem...")
+        Bundler.with_unbundled_env do
+          log("Installing gem dependencies...")
+          $stderr.puts
+          success = system("cd gem && bundle install --quiet")
+          if success
+            log("Running Sorbet on gem...")
+            $stderr.puts
+            success &= system("cd gem && bin/typecheck")
+            $stderr.puts
+            log("Running Rubocop on gem...")
+            $stderr.puts
+            success &= system("cd gem && bin/style")
+            $stderr.puts
+            log("Running gem tests...")
+            $stderr.puts
+            success &= system("cd gem && bin/test")
+            $stderr.puts
+          end
+          unless success
+            raise Thor::Error, red("Some checks failed. See above for details.")
+          end
+        end
       end
 
       desc "index", "Check repo index validity"
       def index
-        Helper.color = options[:color]
-        $stderr.puts("### Checking index...".bold.blue)
-        $stderr.puts
-        check_success! do
-          IndexValidator.new(index_path: INDEX_PATH, schema_path: SCHEMA_PATH, rbis_path: ANNOTATIONS_PATH).validate!
+        section("Checking index...")
+        check_errors! do
+          repo.check_index
         end
       end
 
       desc "rubocop", "Check RBI annotations with Rubocop"
-      def rubocop(*files)
-        Helper.color = options[:color]
-        $stderr.puts("### Linting RBI files...".bold.blue)
-        $stderr.puts
-        files = target_rbi_files(files)
-        check_success! do
-          res = !!system("bundle exec rubocop #{Helper.color? ? "--color" : "--no-color"} #{files.join(" ")} >&2")
-          $stderr.puts
-          res
+      def rubocop(*gem_names)
+        section("Linting RBI files...")
+        check_gems!(names: gem_names) do |repo, gem|
+          log("Linting `#{gem.name}`...")
+          repo.check_rubocop_for(gem, color: color?)
         end
       end
 
       desc "rubygems", "Check gems belong to rubygems"
-      def rubygems(*files)
-        Helper.color = options[:color]
-        $stderr.puts("### Checking that RBI files belong to public gems...".bold.blue)
-        $stderr.puts
-        check_success! do
-          check_gems(files: files) do |gem_name, _annotations_file|
-            log("Checking Rubygems for `#{gem_name}`...")
-
-            uri = URI("https://rubygems.org/api/v1/versions/#{gem_name}/latest.json")
-            content = Net::HTTP.get(uri)
-            version = JSON.parse(content)["version"]
-
-            if version == "9001.0" || version == "unknown"
-              error("`#{gem_name}` doesn't seem to be a public")
-              $stderr.puts("   Make sure your gem is available at https://rubygems.org/gems/#{gem_name}")
-              next false
-            end
-
-            true
-          end
+      def rubygems(*gem_names)
+        section("Checking that RBI files belong to public gems...")
+        check_gems!(names: gem_names) do |repo, gem|
+          log("Checking Rubygems for `#{gem.name}`...")
+          repo.check_rubygems_for(gem)
         end
       end
 
       desc "static", "Check RBI annotations against Tapioca generated RBIs and Sorbet"
-      def static(*files)
-        Helper.color = options[:color]
-        $stderr.puts("### Checking RBI files against Tapioca and Sorbet...".bold.blue)
-        $stderr.puts
-        index = load_index
-        check_success! do
-          check_gems(files: files) do |gem_name, annotations_file|
-            log("Checking static for `#{gem_name}`...")
-
-            index_entry = T.let(index[gem_name], T.nilable(T::Hash[String, T.untyped]))
-            unless index_entry
-              error("No index entry for `#{gem_name}`")
-              next false
-            end
-
-            context = Static::Context.new(gem_name, annotations_file)
-
-            deps = index_entry["dependencies"]
-            deps&.each do |dep_name|
-              context.add_gem_dependency(dep_name)
-            end
-
-            requires = index_entry["requires"] || [gem_name]
-            requires.each do |require_name|
-              context.add_require(require_name)
-            end
-
-            context.run!
-          end
+      def static(*gem_names)
+        section("Checking RBI files against Tapioca and Sorbet...")
+        check_gems!(names: gem_names) do |repo, gem|
+          log("Checking static for `#{gem.name}`...")
+          repo.check_static_for(gem, color: color?)
         end
       end
 
       desc "runtime", "Check RBI annotations against runtime behavior"
-      def runtime(*files)
-        Helper.color = options[:color]
-        $stderr.puts("### Checking RBI files against runtime execution...".bold.blue)
-        $stderr.puts
-        index = load_index
-        check_success! do
-          check_gems(files: files) do |gem_name, annotations_file|
-            log("Checking runtime for `#{gem_name}`...")
-
-            index_entry = T.let(index[gem_name], T.nilable(T::Hash[String, T.untyped]))
-            unless index_entry
-              error("No index entry for `#{gem_name}`")
-              next false
-            end
-
-            rbi_tree = RBI::Parser.parse_file(annotations_file)
-            context = Runtime::Context.new(gem_name, annotations_file)
-
-            deps = index_entry["dependencies"]
-            deps&.each do |dep_name|
-              context.add_gem_dependency(dep_name)
-            end
-
-            requires = index_entry["requires"] || [gem_name]
-            requires.each do |require_name|
-              context.add_require(require_name)
-            end
-
-            visitor = Runtime::Visitor.new(context)
-            visitor.visit(rbi_tree)
-            context.run!
-          rescue RBI::ParseError => e
-            error("Can't parse RBI file `#{annotations_file}`: #{e.message}")
-            false
-          end
+      def runtime(*gem_names)
+        section("Checking RBI files against runtime execution...")
+        check_gems!(names: gem_names) do |repo, gem|
+          log("Checking runtime for `#{gem.name}`...")
+          repo.check_runtime_for(gem)
         end
       end
     end

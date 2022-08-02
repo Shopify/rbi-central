@@ -2,38 +2,59 @@
 # frozen_string_literal: true
 
 module RBICentral
-  class Context
+  class Context < Spoom::Context
     extend T::Sig
     extend T::Helpers
-    include CLI::Helper
 
     abstract!
 
-    sig { params(gem_name: String, annotations_file: String).void }
-    def initialize(gem_name, annotations_file)
-      @workdir = T.let(Dir.mktmpdir, String)
-      @gem_name = gem_name
-      @annotations_file = annotations_file
-      @gemfile = T.let(String.new, String)
+    class Error < RBICentral::Error; end
+
+    sig { params(gem: Gem, annotations_file: String, bundle_config: T::Hash[String, String]).void }
+    def initialize(gem, annotations_file, bundle_config: {})
+      super(Dir.mktmpdir)
+
+      @gem = gem
+      @bundle_config = bundle_config
+      init!
     end
 
     sig { void }
-    def destroy!
-      FileUtils.rm_rf(@workdir)
-    end
+    def init!
+      write_gemfile!(<<~GEMFILE)
+        source "https://rubygems.org"
+      GEMFILE
 
-    sig { returns(T::Boolean) }
-    def run!
-      write_gemfile!
-
-      out, status = bundle_install!
-      unless status.success?
-        error("Can't install gem `#{@gem_name}` (#{out.gsub(/\n/, "")})")
-        return false
+      add_gem_dependency(@gem.name, path: @gem.path, source: @gem.source)
+      @gem.dependencies.sort.each do |dep_name|
+        add_gem_dependency(dep_name)
       end
 
-      true
+      if @gem.requires.empty?
+        add_require(@gem.name)
+      else
+        @gem.requires.each do |require_name|
+          add_require(require_name)
+        end
+      end
+
+      @bundle_config.each do |key, value|
+        bundle("config set --local #{key} #{value}")
+      end
     end
+
+    sig { returns(T::Array[Error]) }
+    def run!
+      res = bundle_install!
+      unless res.status
+        return [Error.new("Can't install gem `#{@gem.name}` (#{res.err.strip.gsub(/\n/, " ")})")]
+      end
+
+      []
+    end
+
+    sig { abstract.params(name: String).void }
+    def add_require(name); end
 
     sig do
       params(
@@ -41,40 +62,22 @@ module RBICentral
         version: T.nilable(String),
         github: T.nilable(String),
         branch: T.nilable(String),
-        ref: T.nilable(String)
+        ref: T.nilable(String),
+        path: T.nilable(String),
+        source: T.nilable(String),
       ).void
     end
-    def add_gem_dependency(name, version: nil, github: nil, branch: nil, ref: nil)
-      @gemfile << "gem '#{name}'"
-      @gemfile << ", '#{version}'" if version
-      @gemfile << ", github: '#{github}'" if github
-      @gemfile << ", branch: '#{branch}'" if branch
-      @gemfile << ", ref: '#{ref}'" if ref
-      @gemfile << "\n"
-    end
-
-    private
-
-    sig { void }
-    def write_gemfile!
-      File.write("#{@workdir}/Gemfile", <<~GEMFILE)
-        source "https://rubygems.org"
-
-        #{@gemfile}
-      GEMFILE
-    end
-
-    sig { returns([String, Process::Status]) }
-    def bundle_install!
-      exec!("bundle config set --local path 'vendor/bundle'")
-      exec!("bundle install --quiet")
-    end
-
-    sig { params(command: String).returns([String, Process::Status]) }
-    def exec!(command)
-      Bundler.with_unbundled_env do
-        T.unsafe(Open3).capture2e(command, chdir: @workdir)
-      end
+    def add_gem_dependency(name, version: nil, github: nil, branch: nil, ref: nil, path: nil, source: nil)
+      line = String.new
+      line << "gem '#{name}'"
+      line << ", '#{version}'" if version
+      line << ", github: '#{github}'" if github
+      line << ", branch: '#{branch}'" if branch
+      line << ", ref: '#{ref}'" if ref
+      line << ", path: '#{path}'" if path
+      line << ", source: '#{source}'" if source
+      line << "\n"
+      write_gemfile!(line, append: true)
     end
   end
 end

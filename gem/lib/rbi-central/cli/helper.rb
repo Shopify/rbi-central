@@ -8,30 +8,228 @@ module RBICentral
       extend T::Helpers
       include Spoom::Colorize
 
-      requires_ancestor { Kernel }
+      requires_ancestor { Thor }
 
-      @color = T.let(true, T::Boolean)
+      sig { returns(Repo) }
+      def repo
+        # TODO: pass paths options
+        @repo ||= T.let(Repo.new(".", bundle_config: options[:bundle_config]), T.nilable(Repo))
+      end
+
+      sig { params(gem_names: T::Array[String], options: T::Hash[Symbol, T.untyped]).returns(ChecksSelection) }
+      def select_checks(gem_names, options)
+        checks = ChecksSelection.from_options(options)
+
+        if options[:all]
+          checks.gem_tests &= true
+          checks.index &= true
+          checks.rubocop &= true
+          checks.rubygems &= true
+          checks.runtime &= true
+          checks.static &= true
+          return checks
+        end
+
+        if gem_names.any?
+          checks.index &= true
+          checks.rubocop &= true
+          checks.rubygems &= true
+          checks.runtime &= true
+          checks.static &= true
+          return checks
+        end
+
+        checks.changed_files = repo.changed_files(ref: options[:ref])
+
+        if checks.changed_files.empty?
+          checks.gem_tests = false
+          checks.index = false
+          checks.rubocop = false
+          checks.rubygems = false
+          checks.runtime = false
+          checks.static = false
+          return checks
+        end
+
+        if checks.changed_files.any? { |file| file.match?(%r{^gem/.*}) }
+          checks.gem_tests = true
+          checks.index &= true
+          checks.rubocop &= true
+          checks.rubygems &= true
+          checks.runtime &= true
+          checks.static &= true
+          return checks
+        end
+
+        if checks.changed_files.include?("Gemfile") || checks.changed_files.include?("Gemfile.lock")
+          checks.gem_tests = false
+          checks.index &= true
+          checks.rubocop &= true
+          checks.rubygems &= true
+          checks.runtime &= true
+          checks.static &= true
+          return checks
+        end
+
+        checks.gem_tests = false
+
+        if checks.changed_files.include?(repo.index_path)
+          checks.index &= true
+          index_changes = repo.index_changes(ref: options[:ref])
+          if index_changes
+            checks.changed_annotations += index_changes.added.map(&:name)
+            checks.changed_annotations += index_changes.updated.map(&:name)
+          end
+        else
+          checks.index = false
+        end
+
+        checks.changed_annotations += checks.changed_files
+          .select { |file| file.match?(%r{#{repo.annotations_path}/.*.rbi}) }
+          .map { |file| File.basename(file, ".rbi") }
+          .sort
+
+        if checks.changed_annotations.empty?
+          checks.rubocop = false
+          checks.rubygems = false
+          checks.runtime = false
+          checks.static = false
+        end
+
+        checks
+      end
+
+      sig { params(block: T.proc.void).returns(T::Boolean) }
+      def run_check!(&block)
+        block.call
+        $stderr.puts
+        true
+      rescue Thor::Error
+        false
+      end
+
+      sig do
+        params(
+          block: T.proc.returns(T::Array[Error])
+        ).void
+      end
+      def check_errors!(&block)
+        errors = block.call
+        if errors.empty?
+          success("No errors, good job!")
+        else
+          errors.each do |error|
+            error(error.message)
+          end
+          $stderr.puts
+          raise Thor::Error, red("Some checks failed. See above for details.")
+        end
+      rescue Error => error
+        raise Thor::Error, red(error.message)
+      end
+
+      sig do
+        params(
+          names: T::Array[String],
+          block: T.proc.params(repo: Repo, gem: Gem).returns(T::Array[Error])
+        ).void
+      end
+      def check_gems!(names:, &block)
+        success = T.let(true, T::Boolean)
+
+        repo = self.repo
+        gems = repo.index.target_gems(names)
+
+        last_gem_had_errors = T.let(false, T::Boolean)
+        gems.each do |gem|
+          errors = block.call(repo, gem)
+          if errors.any?
+            success = false
+            $stderr.puts
+            errors.each do |error|
+              error(error.message)
+            end
+            $stderr.puts
+            last_gem_had_errors = true
+          else
+            last_gem_had_errors = false
+          end
+        end
+
+        $stderr.puts if gems.any? && !last_gem_had_errors
+
+        if success
+          success("No errors, good job!")
+        else
+          raise Thor::Error, red("Some checks failed. See above for details.")
+        end
+      end
+
+      class ChecksSelection < T::Struct
+        extend T::Sig
+
+        prop :changed_files, T::Array[String], default: []
+        prop :changed_annotations, T::Array[String], default: []
+        prop :gem_tests, T::Boolean
+        prop :index, T::Boolean
+        prop :rubocop, T::Boolean
+        prop :rubygems, T::Boolean
+        prop :runtime, T::Boolean
+        prop :static, T::Boolean
+
+        sig { params(options: T::Hash[Symbol, T.untyped]).returns(ChecksSelection) }
+        def self.from_options(options)
+          ChecksSelection.new(
+            gem_tests: options[:gem],
+            index: options[:index],
+            rubocop: options[:rubocop],
+            rubygems: options[:rubygems],
+            runtime: options[:runtime],
+            static: options[:static],
+          )
+        end
+
+        sig { returns(T::Boolean) }
+        def any?
+          gem_tests || index || rubocop || rubygems || runtime || static
+        end
+      end
+
+      # Logging
+
+      sig { params(message: String).void }
+      def section(message)
+        $stderr.puts(bold(blue("### #{message}")))
+        $stderr.puts
+      end
+
+      sig { params(message: String).void }
+      def error(message)
+        $stderr.print(red("Error"))
+        $stderr.print(": ")
+        $stderr.puts(highlight(message, default_color: Spoom::Color::WHITE, highlight_color: Spoom::Color::YELLOW))
+      end
+
+      sig { params(message: String).void }
+      def log(message)
+        $stderr.puts(highlight(message, default_color: Spoom::Color::WHITE, highlight_color: Spoom::Color::BLUE))
+      end
+
+      sig { params(message: String).void }
+      def success(message)
+        $stderr.puts(green(message))
+      end
+
+      # Colors
 
       sig { returns(T::Boolean) }
-      def self.color?
-        @color
-      end
-
-      sig { params(value: T::Boolean).void }
-      def self.color=(value)
-        @color = value
-      end
-
-      sig { params(string: String, color: Spoom::Color).returns(String) }
-      def set_color(string, *color)
-        return string unless Helper.color?
-
-        super
+      def color?
+        options[:color]
       end
 
       sig { params(string: String, default_color: Spoom::Color, highlight_color: Spoom::Color).returns(String) }
       def highlight(string, default_color: Spoom::Color::WHITE, highlight_color: Spoom::Color::BLUE)
-        return string unless Helper.color?
+        return string unless color?
 
         color = default_color
         out = String.new
@@ -51,96 +249,37 @@ module RBICentral
         out
       end
 
-      sig { params(message: String).void }
-      def error(message)
-        $stderr.print("Error".red)
-        $stderr.print(": ")
-        $stderr.puts(highlight(message, default_color: Spoom::Color::WHITE, highlight_color: Spoom::Color::YELLOW))
+      sig { params(string: ::String, color: ::Spoom::Color).returns(::String) }
+      def set_color(string, *color)
+        return string unless color?
+
+        super
       end
 
-      sig { params(message: String).void }
-      def log(message)
-        $stderr.puts(highlight(message, default_color: Spoom::Color::WHITE, highlight_color: Spoom::Color::BLUE))
+      sig { params(string: String).returns(String) }
+      def bold(string)
+        set_color(string, Spoom::Color::BOLD)
       end
 
-      sig { params(message: String).void }
-      def success(message)
-        $stderr.puts(message.green)
+      sig { params(string: String).returns(String) }
+      def blue(string)
+        set_color(string, Spoom::Color::BLUE)
       end
 
-      sig { returns(T::Hash[String, T.untyped]) }
-      def load_index
-        JSON.parse(File.read(INDEX_PATH))
-      rescue => e
-        error("Can't load index `#{INDEX_PATH}`")
-        $stderr.puts("\n#{e.message}\n")
-        exit(1)
+      sig { params(string: String).returns(String) }
+      def green(string)
+        set_color(string, Spoom::Color::GREEN)
       end
 
-      sig { params(block: T.proc.returns(T::Boolean)).void }
-      def check_success!(&block)
-        raise Thor::Error, "Some checks failed. See above for details.".red unless block.call
-
-        success("No errors, good job!")
+      sig { params(string: String).returns(String) }
+      def red(string)
+        set_color(string, Spoom::Color::RED)
       end
 
-      sig do
-        params(
-          files: T::Array[String],
-          block: T.proc.params(gem_name: String, annotations_file: String).returns(T::Boolean)
-        ).returns(T::Boolean)
-      end
-      def check_gems(files:, &block)
-        success = T.let(true, T::Boolean)
-
-        targets = target_rbi_files(files)
-
-        targets.each do |annotations_file|
-          gem_name = File.basename(annotations_file, ".rbi")
-          success &= block.call(gem_name, annotations_file)
-        end
-
-        $stderr.puts if targets.any?
-
-        success
-      end
-
-      private
-
-      sig { params(files: T::Array[String]).returns(T::Array[String]) }
-      def target_rbi_files(files)
-        files.empty? ? Dir.glob("./#{ANNOTATIONS_PATH}/*.rbi") : files
+      sig { params(string: String).returns(String) }
+      def yellow(string)
+        set_color(string, Spoom::Color::YELLOW)
       end
     end
-  end
-end
-
-class String
-  extend T::Sig
-  include RBICentral::CLI::Helper
-
-  sig { returns(String) }
-  def bold
-    set_color(self, Spoom::Color::BOLD)
-  end
-
-  sig { returns(String) }
-  def blue
-    set_color(self, Spoom::Color::BLUE)
-  end
-
-  sig { returns(String) }
-  def green
-    set_color(self, Spoom::Color::GREEN)
-  end
-
-  sig { returns(String) }
-  def red
-    set_color(self, Spoom::Color::RED)
-  end
-
-  sig { returns(String) }
-  def yellow
-    set_color(self, Spoom::Color::YELLOW)
   end
 end

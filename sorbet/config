@@ -1,4 +1,0 @@
-.
---ignore=vendor/
---ignore=scripts/
---suppress-error-code=5002,5020,5035,5067
