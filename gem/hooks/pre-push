@@ -1,0 +1,12 @@
+#! /usr/bin/env ruby
+# frozen_string_literal: true
+
+$stderr.puts("Running pre-push validation...\n\n")
+
+unless system("bundle exec repo check --ref main")
+  $stderr.puts("\nSome checks have failed, cancelling the push (see above)".red)
+  exit(1)
+end
+
+$stderr.puts("\n")
+exit(0)
