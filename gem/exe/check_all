@@ -6,7 +6,7 @@ success = true
 
 $stderr.puts("### Checking index...".bold.blue)
 $stderr.puts
-success &= system("scripts/check_index")
+success &= system("bundle exec check_index")
 
 files = RBICentral.rbi_files.join(" ")
 unless files.empty?
