@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/Shopify/spoom.git
+  revision: 33f15bdd03467bd05a20da2dd095c97efb9d6ecd
+  branch: at-project
+  specs:
+    spoom (1.1.11)
+      sorbet (>= 0.5.9204)
+      sorbet-runtime (>= 0.5.9204)
+      thor (>= 0.19.2)
+
 PATH
   remote: .
   specs:
@@ -73,10 +83,6 @@ GEM
     sorbet-static-and-runtime (0.5.10233)
       sorbet (= 0.5.10233)
       sorbet-runtime (= 0.5.10233)
-    spoom (1.1.11)
-      sorbet (>= 0.5.9204)
-      sorbet-runtime (>= 0.5.9204)
-      thor (>= 0.19.2)
     tapioca (0.9.2)
       bundler (>= 1.17.3)
       netrc (>= 0.11.0)
@@ -107,6 +113,7 @@ DEPENDENCIES
   minitest-reporters
   rake (~> 13.0)
   rbi-central!
+  spoom!
 
 BUNDLED WITH
    2.3.13

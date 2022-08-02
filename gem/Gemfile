@@ -8,4 +8,7 @@ group(:development, :test) do
   gem("minitest")
   gem("minitest-reporters")
   gem("rake", "~> 13.0")
+
+  # TODO: remove once `at-project` is merged
+  gem("spoom", github: "Shopify/spoom", branch: "at-project")
 end
