@@ -5,11 +5,14 @@ module RBICentral
   module Runtime
     class Visitor < RBI::Visitor
       extend T::Sig
-      include CLI::Helper
+
+      sig { returns(T::Array[Runtime::Context::Error]) }
+      attr_reader :errors
 
       sig { params(context: Runtime::Context).void }
       def initialize(context)
         super()
+        @errors = T.let([], T::Array[Runtime::Context::Error])
         @context = context
       end
 
@@ -76,7 +79,7 @@ module RBICentral
           case tag
           when "method_missing", "shim"
             unless matches[:desc]
-              error("Annotation `@#{tag}` requires a description (#{comment.loc})")
+              @errors << Runtime::Context::Error.new("Annotation `@#{tag}` requires a description (#{comment.loc})")
             end
           end
 

@@ -6,82 +6,76 @@ module RBICentral
     class Context < RBICentral::Context
       extend T::Sig
 
-      sig { params(gem_name: String, annotations_file: String).void }
-      def initialize(gem_name, annotations_file)
-        super
+      class Error < RBICentral::Context::Error; end
 
-        @requires = T.let(String.new, String)
+      sig { params(gem: Gem, annotations_file: String, color: T::Boolean, bundle_config: T::Hash[String, String]).void }
+      def initialize(gem, annotations_file, color:, bundle_config: {})
+        @annotations_file = annotations_file
+        @color = color
+        super(gem, annotations_file, bundle_config: bundle_config)
       end
 
-      sig { override.returns(T::Boolean) }
-      def run!
+      sig { override.void }
+      def init!
+        super
+
         add_gem_dependency("sorbet", version: ">= 0.5.10109")
-        add_gem_dependency("tapioca", github: "Shopify/tapioca", ref: "8ce7951f69aa41ce9ff4990b67f0c3c9d64c0a6f")
-        add_gem_dependency(@gem_name)
+        add_gem_dependency("tapioca", version: ">= 0.9.2")
+      end
 
-        return false unless super
+      sig { override.returns(T::Array[Error]) }
+      def run!
+        errors = super
+        return errors if errors.any?
 
-        write_require_rb!
-
-        out, status = exec!("bundle exec tapioca gem --no-doc --post #{@workdir}/requires.rb")
-        unless status.success?
-          $stderr.puts("\n#{out}")
-          return false
+        res = bundle_exec("tapioca gem --no-doc --post requires.rb")
+        unless res.status
+          errors << Error.new(res.err.lstrip)
+          return errors
         end
 
-        write_annotation_file!
+        # Copy annotations file inside the context so path look relative
+        FileUtils.mkdir_p("#{absolute_path}/rbi/annotations")
+        FileUtils.cp(@annotations_file, "#{absolute_path}/#{@annotations_file}")
 
-        success = true
-        out, status = exec!("bundle exec tapioca check-shims --no-payload " \
-          "--gem-rbi-dir=#{@workdir}/sorbet/rbi/gems " \
-          "--shim-rbi-dir=#{@workdir}/rbi/annotations " \
-          "--annotations-rbi-dir=#{@workdir}/sorbet/rbi/none")
-        unless status.success?
-          out.gsub!("#{@workdir}/", "")
-          out.gsub!("rbi/annotations and sorbet/rbi/todo.rbi", @annotations_file.yellow)
+        res = bundle_exec("tapioca check-shims --no-payload " \
+          "--gem-rbi-dir=sorbet/rbi/gems " \
+          "--shim-rbi-dir=rbi/annotations " \
+          "--annotations-rbi-dir=sorbet/rbi/none")
+        unless res.status
+          out = res.err
+          out.gsub!("#{absolute_path}/", "")
+          out.gsub!("rbi/annotations and sorbet/rbi/todo.rbi", @annotations_file)
 
+          error = T.let(nil, T.nilable(String))
           out.lines do |line|
             if line.start_with?("Duplicated")
-              error(line.strip)
+              errors << Error.new(error) if error
+              error = String.new(line)
             elsif line.start_with?(" * ")
-              $stderr.puts(line.strip.yellow)
+              T.must(error) << line
             end
           end
-
-          success = false
+          errors << Error.new(error) if error
         end
 
-        out, status = exec!("bundle exec srb tc . " \
-          "--no-error-sections --color=#{RBICentral::CLI::Helper.color? ? "always" : "never"} " \
+        res = bundle_exec("srb tc . " \
+          "--no-error-sections --color=#{@color ? "always" : "never"} " \
           "--ignore vendor/bundle --no-config --no-error-count")
-        unless status.success?
-          $stderr.puts(out)
-          success = false
+        unless res.status
+          errors << Error.new(res.err)
         end
 
-        success
+        errors
       ensure
         destroy!
       end
 
-      sig { params(name: String).void }
+      sig { override.params(name: String).void }
       def add_require(name)
-        @requires << <<~RB
+        write!("requires.rb", <<~RB, append: true)
           require "#{name}"
         RB
-      end
-
-      private
-
-      sig { void }
-      def write_require_rb!
-        File.write("#{@workdir}/requires.rb", @requires)
-      end
-
-      sig { void }
-      def write_annotation_file!
-        FileUtils.mkdir_p("#{@workdir}/rbi/annotations")
-        FileUtils.cp(@annotations_file, "#{@workdir}/#{@annotations_file}")
       end
     end
   end
