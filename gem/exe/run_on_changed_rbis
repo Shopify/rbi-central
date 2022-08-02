@@ -5,7 +5,7 @@
 require "sorbet-runtime"
 
 unless ARGV.size == 1
-  $stderr.puts("usage: #{$0} <command_to_run>")
+  $stderr.puts("usage: #{$PROGRAM_NAME} <command_to_run>")
   exit(1)
 end
 
@@ -20,7 +20,7 @@ if current_branch == default_branch
   exit(!!res)
 end
 
-lines = `git fetch origin #{default_branch} && git diff --name-only origin/#{default_branch} | grep "\.rbi$"`.lines
+lines = %x{git fetch origin #{default_branch} && git diff --name-only origin/#{default_branch} | grep "\.rbi$"}.lines
 files = lines.map(&:strip).select { |file| File.file?(file) }
 
 if lines.empty?

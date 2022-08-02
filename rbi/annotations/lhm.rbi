@@ -102,9 +102,7 @@ class Lhm::Migrator
   sig { params(table: Lhm::Table, connection: T.nilable(Lhm::Connection)).void }
   def initialize(table, connection = nil); end
 
-  sig do
-    params(name: T.any(String, Symbol), definition: T.any(String, Symbol)).void
-  end
+  sig { params(name: T.any(String, Symbol), definition: T.any(String, Symbol)).void }
   def add_column(name, definition); end
 
   sig do

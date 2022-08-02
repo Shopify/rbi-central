@@ -58,19 +58,19 @@ module RBICentral
 
     sig { params(message: String).void }
     def error(message)
-      $stderr.print "Error".red
-      $stderr.print ": "
-      $stderr.puts Colors.highlight(message, default_color: Colors::WHITE, highlight_color: Colors::YELLOW)
+      $stderr.print("Error".red)
+      $stderr.print(": ")
+      $stderr.puts(Colors.highlight(message, default_color: Colors::WHITE, highlight_color: Colors::YELLOW))
     end
 
     sig { params(message: String).void }
     def log(message)
-      $stderr.puts Colors.highlight(message, default_color: Colors::WHITE, highlight_color: Colors::BLUE)
+      $stderr.puts(Colors.highlight(message, default_color: Colors::WHITE, highlight_color: Colors::BLUE))
     end
 
     sig { params(message: String).void }
     def success(message)
-      $stderr.puts message.green
+      $stderr.puts(message.green)
     end
   end
 end

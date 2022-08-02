@@ -45,6 +45,7 @@ module RBICentral
 
       sig { params(context: RuntimeContext).void }
       def initialize(context)
+        super()
         @context = context
       end
 
@@ -70,6 +71,7 @@ module RBICentral
           @context.add_constant(node.fully_qualified_name, loc)
         when RBI::Const
           return if node.value.start_with?("type_member") || node.value.start_with?("type_template")
+
           @context.add_constant(node.fully_qualified_name, loc)
         when RBI::Method
           scope = node.parent_scope
@@ -124,9 +126,9 @@ module RBICentral
       def scope_name(scope)
         scope_name = case scope
         when RBI::Class, RBI::Module
-          scope_name = scope.fully_qualified_name
+          scope.fully_qualified_name
         when RBI::SingletonClass
-          scope_name = scope.parent_scope&.fully_qualified_name
+          scope.parent_scope&.fully_qualified_name
         end
 
         scope_name || "Object"
@@ -185,7 +187,7 @@ module RBICentral
       sig { params(const_name: String, loc: RBI::Loc).void }
       def add_constant(const_name, loc)
         @body << <<~RB
-          __rbi_repo_get_const("#{const_name}", "#{loc.to_s}")
+          __rbi_repo_get_const("#{const_name}", "#{loc}")
         RB
       end
 
@@ -203,7 +205,7 @@ module RBICentral
           __rbi_repo_get_method(
             "#{recv_name}",
             "#{method_name}",
-            "#{loc.to_s}",
+            "#{loc}",
             singleton: #{singleton},
             allow_missing: #{allow_missing}
           )

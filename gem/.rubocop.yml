@@ -1,0 +1,24 @@
+# This file strictly follows the rules defined in the Ruby style guide:
+#   http://shopify.github.io/ruby-style-guide/
+inherit_gem:
+  rubocop-shopify: rubocop.yml
+
+require:
+ - rubocop-sorbet
+
+AllCops:
+  TargetRubyVersion: 2.7
+  NewCops: disable
+  SuggestExtensions: false
+  Exclude:
+  - "vendor/**/*"
+
+Naming/FileName:
+  Exclude:
+  - "lib/rbi-central.rb"
+
+Sorbet:
+  Enabled: true
+
+Sorbet/StrictSigil:
+  Enabled: true

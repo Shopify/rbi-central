@@ -63,9 +63,9 @@ module RBICentral
 
         success = true
         out, status = exec!("bundle exec tapioca check-shims --no-payload " \
-                              "--gem-rbi-dir=#{@workdir}/sorbet/rbi/gems " \
-                              "--shim-rbi-dir=#{@workdir}/rbi/annotations " \
-                              "--annotations-rbi-dir=#{@workdir}/sorbet/rbi/none")
+          "--gem-rbi-dir=#{@workdir}/sorbet/rbi/gems " \
+          "--shim-rbi-dir=#{@workdir}/rbi/annotations " \
+          "--annotations-rbi-dir=#{@workdir}/sorbet/rbi/none")
         unless status.success?
           out.gsub!("#{@workdir}/", "")
           out.gsub!("rbi/annotations and sorbet/rbi/todo.rbi", @rbi_file.yellow)
@@ -86,7 +86,8 @@ module RBICentral
           success = false
         end
 
-        out, status = exec!("bundle exec srb tc . --no-error-sections --color=always --ignore vendor/bundle --no-config --no-error-count")
+        out, status = exec!("bundle exec srb tc . " \
+          "--no-error-sections --color=always --ignore vendor/bundle --no-config --no-error-count")
         unless status.success?
           $stderr.puts("\n#{out}")
           success = false

@@ -19,7 +19,7 @@ module RBICentral
       success = T.let(true, T::Boolean)
 
       files.each do |file|
-        validator = self.new(repo_index, file)
+        validator = new(repo_index, file)
         unless validator.validate_file!
           $stderr.puts("")
           success = false

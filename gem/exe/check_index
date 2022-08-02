@@ -50,7 +50,7 @@ module RBICentral
     def check_against_schema!
       JSON::Validator.validate!(@schema_json, @index_json)
     rescue JSON::Schema::ValidationError => e
-      error("#{e.message.gsub("'", "`")}")
+      error(e.message.gsub("'", "`"))
     end
 
     sig { returns(T::Boolean) }

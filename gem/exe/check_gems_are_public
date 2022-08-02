@@ -16,7 +16,7 @@ module RBICentral
       content = Net::HTTP.get(uri)
       version = JSON.parse(content)["version"]
 
-      if version === "9001.0" || version === "unknown"
+      if version == "9001.0" || version == "unknown"
         error("`#{@gem_name}` doesn't seem to be public")
         $stderr.puts("   Make sure your gem is available at https://rubygems.org/gems/#{@gem_name}")
         return false
