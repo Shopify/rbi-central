@@ -1,0 +1,25 @@
+#! /usr/bin/env ruby
+
+require "rbi-central"
+
+module RBICentral
+  class GemsValidator < RBIValidator
+    def validate_file!
+      log("Checking Rubygems for `#{@gem_name}`...")
+
+      uri = URI("https://rubygems.org/api/v1/versions/#{@gem_name}/latest.json")
+      content = Net::HTTP.get(uri)
+      version = JSON.parse(content)["version"]
+
+      if version === "9001.0" || version === "unknown"
+        error("`#{@gem_name}` doesn't seem to be public")
+        $stderr.puts("   Make sure your gem is available at https://rubygems.org/gems/#{@gem_name}")
+        return false
+      end
+
+      true
+    end
+  end
+end
+
+RBICentral::GemsValidator.validate_files!(RBICentral.load_index, RBICentral.rbi_files)
