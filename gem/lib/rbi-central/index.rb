@@ -1,8 +1,13 @@
+# typed: strict
 # frozen_string_literal: true
 
 module RBICentral
+  extend T::Sig
+  extend CLI
+
   INDEX_PATH = "index.json"
 
+  sig { returns(T::Hash[String, T.untyped]) }
   def self.load_index
     JSON.parse(File.read(INDEX_PATH))
   rescue => e

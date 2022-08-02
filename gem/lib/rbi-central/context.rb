@@ -1,20 +1,25 @@
+# typed: strict
 # frozen_string_literal: true
 
 module RBICentral
   class Context
+    extend T::Sig
     include CLI
 
+    sig { params(rbi_file: String, gem_name: String).void }
     def initialize(rbi_file, gem_name)
-      @workdir = Dir.mktmpdir
+      @workdir = T.let(Dir.mktmpdir, String)
       @rbi_file = rbi_file
       @gem_name = gem_name
-      @gemfile = String.new
+      @gemfile = T.let(String.new, String)
     end
 
+    sig { void }
     def destroy!
       FileUtils.rm_rf(@workdir)
     end
 
+    sig { returns(T::Boolean) }
     def run!
       write_gemfile!
 
@@ -27,6 +32,15 @@ module RBICentral
       true
     end
 
+    sig do
+      params(
+        name: String,
+        version: T.nilable(String),
+        github: T.nilable(String),
+        branch: T.nilable(String),
+        ref: T.nilable(String)
+      ).void
+    end
     def add_gem_dependency(name, version: nil, github: nil, branch: nil, ref: nil)
       @gemfile << "gem '#{name}'"
       @gemfile << ", '#{version}'" if version
@@ -38,6 +52,7 @@ module RBICentral
 
     private
 
+    sig { void }
     def write_gemfile!
       File.write("#{@workdir}/Gemfile", <<~GEMFILE)
         source "https://rubygems.org"
@@ -46,14 +61,16 @@ module RBICentral
       GEMFILE
     end
 
+    sig { returns([String, Process::Status]) }
     def bundle_install!
       exec!("bundle config set --local path 'vendor/bundle'")
       exec!("bundle install --quiet")
     end
 
+    sig { params(command: String).returns([String, Process::Status]) }
     def exec!(command)
       Bundler.with_unbundled_env do
-        Open3.capture2e(command, chdir: @workdir)
+        T.unsafe(Open3).capture2e(command, chdir: @workdir)
       end
     end
   end

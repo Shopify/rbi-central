@@ -1,9 +1,14 @@
 #! /usr/bin/env ruby
+# typed: strict
+# frozen_string_literal: true
 
 require "rbi-central"
 
 module RBICentral
   class StaticValidator < RBIValidator
+    extend T::Sig
+
+    sig { override.returns(T::Boolean) }
     def validate_file!
       log("Checking static for `#{@gem_name}`...")
 
@@ -29,12 +34,16 @@ module RBICentral
     end
 
     class StaticContext < Context
-      def initialize(repo_index, file)
+      extend T::Sig
+
+      sig { params(rbi_file: String, gem_name: String).void }
+      def initialize(rbi_file, gem_name)
         super
 
-        @requires = String.new
+        @requires = T.let(String.new, String)
       end
 
+      sig { override.returns(T::Boolean) }
       def run!
         add_gem_dependency("sorbet", version: ">= 0.5.10109")
         add_gem_dependency("tapioca", github: "Shopify/tapioca", ref: "8ce7951f69aa41ce9ff4990b67f0c3c9d64c0a6f")
@@ -54,9 +63,9 @@ module RBICentral
 
         success = true
         out, status = exec!("bundle exec tapioca check-shims --no-payload " \
-                              "--gem-rbi-dir=#{@workdir}/sorbet/rbi/gems " \
-                              "--shim-rbi-dir=#{@workdir}/rbi/annotations " \
-                              "--annotations-rbi-dir=#{@workdir}/sorbet/rbi/none")
+          "--gem-rbi-dir=#{@workdir}/sorbet/rbi/gems " \
+          "--shim-rbi-dir=#{@workdir}/rbi/annotations " \
+          "--annotations-rbi-dir=#{@workdir}/sorbet/rbi/none")
         unless status.success?
           out.gsub!("#{@workdir}/", "")
           out.gsub!("rbi/annotations and sorbet/rbi/todo.rbi", @rbi_file.yellow)
@@ -77,7 +86,8 @@ module RBICentral
           success = false
         end
 
-        out, status = exec!("bundle exec srb tc . --no-error-sections --color=always --ignore vendor/bundle --no-config --no-error-count")
+        out, status = exec!("bundle exec srb tc . " \
+          "--no-error-sections --color=always --ignore vendor/bundle --no-config --no-error-count")
         unless status.success?
           $stderr.puts("\n#{out}")
           success = false
@@ -88,6 +98,7 @@ module RBICentral
         destroy!
       end
 
+      sig { params(name: String).void }
       def add_require(name)
         @requires << <<~RB
           require "#{name}"
@@ -96,10 +107,12 @@ module RBICentral
 
       private
 
+      sig { void }
       def write_require_rb!
         File.write("#{@workdir}/requires.rb", @requires)
       end
 
+      sig { void }
       def write_annotation_file!
         FileUtils.mkdir_p("#{@workdir}/rbi/annotations")
         FileUtils.cp(@rbi_file, "#{@workdir}/#{@rbi_file}")

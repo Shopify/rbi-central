@@ -1,13 +1,18 @@
 #! /usr/bin/env ruby
+# typed: strict
+# frozen_string_literal: true
 
 require "rbi-central"
 
 module RBICentral
   class RuntimeValidator < RBIValidator
+    extend T::Sig
+
+    sig { override.returns(T::Boolean) }
     def validate_file!
       log("Checking runtime for `#{@gem_name}`...")
 
-      @index_entry = @repo_index[@gem_name]
+      @index_entry = T.let(@repo_index[@gem_name], T.nilable(T::Hash[String, T.untyped]))
       unless @index_entry
         error("No index entry for `#{@gem_name}`")
         return false
@@ -30,17 +35,21 @@ module RBICentral
       visitor.visit(rbi_tree)
       context.run!
     rescue RBI::ParseError => e
-      error("Can't parse RBI file `#{@file}`: #{e.message}")
+      error("Can't parse RBI file `#{@rbi_file}`: #{e.message}")
       false
     end
 
     class Visitor < RBI::Visitor
+      extend T::Sig
       include CLI
 
+      sig { params(context: RuntimeContext).void }
       def initialize(context)
+        super()
         @context = context
       end
 
+      sig { override.params(node: T.nilable(RBI::Node)).void }
       def visit(node)
         return unless node
 
@@ -48,41 +57,48 @@ module RBICentral
         visit_all(node.nodes) if node.is_a?(RBI::Tree)
       end
 
+      sig { params(node: RBI::Node).void }
       def validate_node!(node)
         annotations = validate_annotations!(node)
 
         # Do not test definitions tagged `@shim`
         return if annotations.include?("shim")
 
+        loc = T.must(node.loc)
+
         case node
         when RBI::Module, RBI::Class
-          @context.add_constant(node.fully_qualified_name, node.loc)
+          @context.add_constant(node.fully_qualified_name, loc)
         when RBI::Const
           return if node.value.start_with?("type_member") || node.value.start_with?("type_template")
-          @context.add_constant(node.fully_qualified_name, node.loc)
+
+          @context.add_constant(node.fully_qualified_name, loc)
         when RBI::Method
           scope = node.parent_scope
           scope_name = scope_name(scope)
           is_singleton = node.is_singleton || scope.is_a?(RBI::SingletonClass)
           allow_missing = annotations.include?("method_missing")
 
-          @context.add_method(scope_name, node.name, node.loc, singleton: is_singleton, allow_missing: allow_missing)
+          @context.add_method(scope_name, node.name, loc, singleton: is_singleton, allow_missing: allow_missing)
         when RBI::Attr
           scope = node.parent_scope
           scope_name = scope_name(scope)
           allow_missing = annotations.include?("method_missing")
 
           node.names.each do |name|
-            @context.add_method(scope_name, name, node.loc, allow_missing: allow_missing)
+            @context.add_method(scope_name, name.to_s, loc, allow_missing: allow_missing)
             if node.is_a?(RBI::AttrWriter) || node.is_a?(RBI::AttrAccessor)
-              @context.add_method(scope_name, "#{name}=", node.loc, allow_missing: allow_missing)
+              @context.add_method(scope_name, "#{name}=", loc, allow_missing: allow_missing)
             end
           end
         end
       end
 
+      sig { params(node: RBI::Node).returns(T::Array[String]) }
       def validate_annotations!(node)
         annotations = []
+
+        return annotations unless node.is_a?(RBI::NodeWithComments)
 
         node.comments.each do |comment|
           text = comment.text
@@ -106,12 +122,13 @@ module RBICentral
         annotations
       end
 
+      sig { params(scope: T.nilable(RBI::Scope)).returns(String) }
       def scope_name(scope)
         scope_name = case scope
         when RBI::Class, RBI::Module
-          scope_name = scope.fully_qualified_name
+          scope.fully_qualified_name
         when RBI::SingletonClass
-          scope_name = scope.parent_scope&.fully_qualified_name
+          scope.parent_scope&.fully_qualified_name
         end
 
         scope_name || "Object"
@@ -119,14 +136,18 @@ module RBICentral
     end
 
     class RuntimeContext < Context
+      extend T::Sig
+
       TEST_NAME = "test.rb"
 
+      sig { params(rbi_file: String, gem_name: String).void }
       def initialize(rbi_file, gem_name)
         super
-        @requires = String.new
-        @body = String.new
+        @requires = T.let(String.new, String)
+        @body = T.let(String.new, String)
       end
 
+      sig { override.returns(T::Boolean) }
       def run!
         add_gem_dependency(@gem_name)
 
@@ -151,6 +172,7 @@ module RBICentral
         destroy!
       end
 
+      sig { params(name: String).void }
       def add_require(name)
         @requires << <<~RB
           begin
@@ -162,18 +184,28 @@ module RBICentral
         RB
       end
 
+      sig { params(const_name: String, loc: RBI::Loc).void }
       def add_constant(const_name, loc)
         @body << <<~RB
-          __rbi_repo_get_const("#{const_name}", "#{loc.to_s}")
+          __rbi_repo_get_const("#{const_name}", "#{loc}")
         RB
       end
 
+      sig do
+        params(
+          recv_name: String,
+          method_name: String,
+          loc: RBI::Loc,
+          allow_missing: T::Boolean,
+          singleton: T::Boolean
+        ).void
+      end
       def add_method(recv_name, method_name, loc, allow_missing:, singleton: false)
         @body << <<~RB
           __rbi_repo_get_method(
             "#{recv_name}",
             "#{method_name}",
-            "#{loc.to_s}",
+            "#{loc}",
             singleton: #{singleton},
             allow_missing: #{allow_missing}
           )
@@ -182,10 +214,12 @@ module RBICentral
 
       private
 
+      sig { void }
       def write_test!
         File.write("#{@workdir}/#{TEST_NAME}", ruby_string)
       end
 
+      sig { returns(String) }
       def ruby_string
         <<~RB
           $success = true
