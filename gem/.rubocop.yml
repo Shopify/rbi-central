@@ -22,3 +22,5 @@ Sorbet:
 
 Sorbet/StrictSigil:
   Enabled: true
+  Exclude:
+  - "test/rbi-central/**/*.rb"

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+if [[ 2 -eq $# ]]; then
+  bundle exec rake TEST="$1" TESTOPTS="-n='/$2/'"
+elif [[ 1 -eq $# ]]; then
+  bundle exec rake TEST="$1"
+else
+  bundle exec rake "$@"
+fi
