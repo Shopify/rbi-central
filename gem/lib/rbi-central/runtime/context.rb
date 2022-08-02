@@ -8,39 +8,44 @@ module RBICentral
 
       TEST_NAME = "test.rb"
 
-      sig { params(gem_name: String, annotations_file: String).void }
-      def initialize(gem_name, annotations_file)
-        super
+      class Error < RBICentral::Context::Error; end
+
+      sig { params(gem: Gem, annotations_file: String, bundle_config: T::Hash[String, String]).void }
+      def initialize(gem, annotations_file, bundle_config: {})
         @requires = T.let(String.new, String)
         @body = T.let(String.new, String)
+        super(gem, annotations_file, bundle_config: bundle_config)
       end
 
-      sig { override.returns(T::Boolean) }
+      sig { override.returns(T::Array[Error]) }
       def run!
-        add_gem_dependency(@gem_name)
-
-        return false unless super
+        errors = T.let(super, T::Array[Error])
+        return errors if errors.any?
 
         write_test!
 
-        out, status = exec!("bundle exec ruby #{TEST_NAME}")
-        unless status.success?
+        res = bundle_exec("ruby #{TEST_NAME}")
+        unless res.status
+          out = res.err
+          error = T.let(nil, T.nilable(String))
           out.lines do |line|
             if line.start_with?("Note: ")
-              log(line.strip)
+              T.must(error) << line
             else
-              error(line.strip)
+              errors << Error.new(error) if error
+              error = String.new(line)
             end
           end
-          return false
+          errors << Error.new(error) if error
+          return errors
         end
 
-        true
+        errors
       ensure
         destroy!
       end
 
-      sig { params(name: String).void }
+      sig { override.params(name: String).void }
       def add_require(name)
         @requires << <<~RB
           begin
@@ -80,12 +85,12 @@ module RBICentral
         RB
       end
 
-      private
-
       sig { void }
       def write_test!
-        File.write("#{@workdir}/#{TEST_NAME}", ruby_string)
+        write!(TEST_NAME, ruby_string)
       end
+
+      private
 
       sig { returns(String) }
       def ruby_string

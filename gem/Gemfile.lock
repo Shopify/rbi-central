@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/Shopify/spoom.git
-  revision: 33f15bdd03467bd05a20da2dd095c97efb9d6ecd
+  revision: 8adb3ec88a4d418f032e960336206dab8de2a68d
   branch: at-project
   specs:
     spoom (1.1.11)

@@ -1,0 +1,38 @@
+# typed: true
+# frozen_string_literal: true
+
+require "test_helper"
+
+module RBICentral
+  module Static
+    class ContextTest < Test
+      def test_init_gemfile
+        gem = Gem.new(name: "gem")
+        context = Context.new(gem, "#{ANNOTATIONS_PATH}/gem.rbi", color: false)
+        assert_equal(<<~GEMFILE, context.gemfile)
+          source \"https://rubygems.org\"
+          gem 'gem'
+          gem 'sorbet', '>= 0.5.10109'
+          gem 'tapioca', github: 'Shopify/tapioca', ref: '8ce7951f69aa41ce9ff4990b67f0c3c9d64c0a6f'
+        GEMFILE
+      end
+
+      def test_init_requires_rb
+        gem = Gem.new(name: "gem")
+        context = Context.new(gem, "#{ANNOTATIONS_PATH}/gem.rbi", color: false)
+        assert_equal(<<~RB, context.read("requires.rb"))
+          require "gem"
+        RB
+      end
+
+      def test_init_requires_rb_custom
+        gem = Gem.new(name: "gem", requires: ["dep2", "dep1"])
+        context = Context.new(gem, "#{ANNOTATIONS_PATH}/gem.rbi", color: false)
+        assert_equal(<<~RB, context.read("requires.rb"))
+          require "dep2"
+          require "dep1"
+        RB
+      end
+    end
+  end
+end

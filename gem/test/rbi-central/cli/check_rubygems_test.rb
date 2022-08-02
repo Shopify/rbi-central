@@ -6,22 +6,6 @@ require "test_helper"
 module RBICentral
   module CLI
     class CheckRubygemsTest < TestWithRepo
-      include CLI::Helper
-
-      def test_rubygems_empty_index
-        @repo.write_index!(<<~JSON)
-          {
-          }
-        JSON
-        res = @repo.repo("check rubygems")
-        assert_equal(<<~ERR, res.err)
-          ### Checking that RBI files belong to public gems...
-
-          No errors, good job!
-        ERR
-        assert(res.status)
-      end
-
       def test_rubygems_all_valid
         @repo.write_index!(<<~JSON)
           {
@@ -80,8 +64,10 @@ module RBICentral
 
           Checking Rubygems for `rbi`...
           Checking Rubygems for `some_gem_not_found`...
+
           Error: `some_gem_not_found` doesn't seem to be a public
              Make sure your gem is available at https://rubygems.org/gems/some_gem_not_found
+
           Checking Rubygems for `spoom`...
 
           Some checks failed. See above for details.
@@ -105,6 +91,7 @@ module RBICentral
           ### Checking that RBI files belong to public gems...
 
           Checking Rubygems for `some_gem_not_found`...
+
           Error: `some_gem_not_found` doesn't seem to be a public
              Make sure your gem is available at https://rubygems.org/gems/some_gem_not_found
 
