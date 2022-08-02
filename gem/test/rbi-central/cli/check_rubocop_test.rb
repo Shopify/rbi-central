@@ -6,25 +6,6 @@ require "test_helper"
 module RBICentral
   module CLI
     class CheckRubocopTest < TestWithRepo
-      include CLI::Helper
-
-      def test_rubocop_empty_index
-        @repo.write_index!(<<~JSON)
-          {
-          }
-        JSON
-        res = @repo.repo("check rubocop")
-        assert_includes(res.err, <<~ERR)
-          ### Linting RBI files...
-        ERR
-        assert_includes(res.err, <<~ERR)
-          0 files inspected, no offenses detected
-
-          No errors, good job!
-        ERR
-        assert(res.status)
-      end
-
       def test_rubocop_all_valid
         @repo.write_index!(<<~JSON)
           {
@@ -43,11 +24,11 @@ module RBICentral
           module Gem2; end
         RBI
         res = @repo.repo("check rubocop")
-        assert_includes(res.err, <<~ERR)
+        assert_equal(<<~ERR, res.err)
           ### Linting RBI files...
-        ERR
-        assert_includes(res.err, <<~ERR)
-          2 files inspected, no offenses detected
+
+          Linting `gem1`...
+          Linting `gem2`...
 
           No errors, good job!
         ERR
@@ -69,12 +50,11 @@ module RBICentral
 
           module Gem2; end
         RBI
-        res = @repo.repo("check rubocop rbi/annotations/gem2.rbi")
-        assert_includes(res.err, <<~ERR)
+        res = @repo.repo("check rubocop gem2")
+        assert_equal(<<~ERR, res.err)
           ### Linting RBI files...
-        ERR
-        assert_includes(res.err, <<~ERR)
-          1 file inspected, no offenses detected
+
+          Linting `gem2`...
 
           No errors, good job!
         ERR
@@ -100,17 +80,20 @@ module RBICentral
           end
         RBI
         res = @repo.repo("check rubocop")
-        assert_includes(res.err, <<~ERR)
+        assert_equal(<<~ERR, res.err)
           ### Linting RBI files...
-        ERR
-        assert_includes(res.err, <<~ERR)
-          rbi/annotations/gem1.rbi:1:1: C: Sorbet/StrictSigil: Sorbet sigil should be at least strict got true.
-        ERR
-        assert_includes(res.err, <<~ERR)
-          rbi/annotations/gem2.rbi:3:1: C: [Correctable] Sorbet/SingleLineRbiClassModuleDefinitions: Empty class/module definitions in RBI files should be on a single line.
-        ERR
-        assert_includes(res.err, <<~ERR)
-          2 files inspected, 2 offenses detected, 1 offense autocorrectable
+
+          Linting `gem1`...
+
+          Error: rbi/annotations/gem1.rbi:1:1: C: Sorbet/StrictSigil: Sorbet sigil should be at least strict got true.
+          # typed: true
+          ^^^^^^^^^^^^^
+
+          Linting `gem2`...
+
+          Error: rbi/annotations/gem2.rbi:3:1: C: [Correctable] Sorbet/SingleLineRbiClassModuleDefinitions: Empty class/module definitions in RBI files should be on a single line.
+          module Gem2 ...
+          ^^^^^^^^^^^
 
           Some checks failed. See above for details.
         ERR
@@ -132,15 +115,15 @@ module RBICentral
 
           module Gem2; end
         RBI
-        res = @repo.repo("check rubocop rbi/annotations/gem2.rbi")
-        assert_includes(res.err, <<~ERR)
+        res = @repo.repo("check rubocop gem2")
+        assert_equal(<<~ERR, res.err)
           ### Linting RBI files...
-        ERR
-        assert_includes(res.err, <<~ERR)
-          rbi/annotations/gem2.rbi:1:1: C: Sorbet/StrictSigil: Sorbet sigil should be at least strict got true.
-        ERR
-        assert_includes(res.err, <<~ERR)
-          1 file inspected, 1 offense detected
+
+          Linting `gem2`...
+
+          Error: rbi/annotations/gem2.rbi:1:1: C: Sorbet/StrictSigil: Sorbet sigil should be at least strict got true.
+          # typed: true
+          ^^^^^^^^^^^^^
 
           Some checks failed. See above for details.
         ERR

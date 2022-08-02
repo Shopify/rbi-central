@@ -44,15 +44,13 @@ $ bin/tapioca annotations
 
 The CI for this repository is written using GitHub Actions. Here is a list of currently available CI checks:
 
-| CLI Command                                                 | Description                                                             |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `scripts/check_index`                                       | Lint `index.json` and check entries match `rbi/annotations/*.rbi` files |
-| `scripts/run_on_changed_rbis "bundle exec rubocop"`         | Lint RBI files                                                          |
-| `scripts/run_on_changed_rbis scripts/check_runtime`         | Check RBI annotations against runtime behavior                          |
-| `scripts/run_on_changed_rbis scripts/check_static`          | Check RBI annotations against Tapioca generated RBIs and Sorbet         |
-| `scripts/run_on_changed_rbis scripts/check_gems_are_public` | Check new RBI files belong to public gems                               |
-
-All scripts used in the CI checks are located in the `scripts` folder.
+| CLI Command                       | Description                                                             |
+| ----------------------------------| ----------------------------------------------------------------------- |
+| `bundle exec repo check index`    | Lint `index.json` and check entries match `rbi/annotations/*.rbi` files |
+| `bundle exec repo check rubygems` | Check new RBI files belong to public gems                               |
+| `bundle exec repo check rubocop`  | Lint RBI files                                                          |
+| `bundle exec repo check runtime`  | Check RBI annotations against runtime behavior                          |
+| `bundle exec repo check static`   | Check RBI annotations against Tapioca generated RBIs and Sorbet         |
 
 To avoid pushing a PR with errors, configure the `pre-push` git hook by running:
 
