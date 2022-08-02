@@ -21,7 +21,7 @@ if current_branch == default_branch
 end
 
 lines = %x{git fetch origin #{default_branch} && git diff --name-only origin/#{default_branch} | grep "\.rbi$"}.lines
-files = lines.map(&:strip).select { |file| File.file?(file) }
+files = lines.map(&:strip).select { |file| (file.start_with?("rbi/") || file == "index") && File.file?(file) }
 
 if lines.empty?
   $stderr.puts("Nothing to check")
