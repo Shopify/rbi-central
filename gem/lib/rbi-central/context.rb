@@ -4,13 +4,16 @@
 module RBICentral
   class Context
     extend T::Sig
-    include CLI
+    extend T::Helpers
+    include CLI::Helper
 
-    sig { params(rbi_file: String, gem_name: String).void }
-    def initialize(rbi_file, gem_name)
+    abstract!
+
+    sig { params(gem_name: String, annotations_file: String).void }
+    def initialize(gem_name, annotations_file)
       @workdir = T.let(Dir.mktmpdir, String)
-      @rbi_file = rbi_file
       @gem_name = gem_name
+      @annotations_file = annotations_file
       @gemfile = T.let(String.new, String)
     end
 

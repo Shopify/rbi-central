@@ -16,14 +16,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   spec.bindir        = "exe"
-  spec.executables   = [
-    "check_all",
-    "check_gems_are_public",
-    "check_index",
-    "check_runtime",
-    "check_static",
-    "run_on_changed_rbis",
-  ]
+  spec.executables   = ["repo", "run_on_changed_rbis"]
   spec.require_paths = ["lib"]
 
   spec.files         = Dir.glob("lib/**/*.rb") + ["README.md", "Gemfile"]
