@@ -20,5 +20,10 @@ Naming/FileName:
 Sorbet:
   Enabled: true
 
+Sorbet/TrueSigil:
+  Enabled: true
+
 Sorbet/StrictSigil:
   Enabled: true
+  Exclude:
+  - "test/rbi-central/**/*.rb"

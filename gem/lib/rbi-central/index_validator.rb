@@ -1,28 +1,13 @@
-#! /usr/bin/env ruby
 # typed: strict
 # frozen_string_literal: true
 
-require "rbi-central"
-
 module RBICentral
-  SCHEMA_PATH = "schema.json"
-
   class IndexValidator
     extend T::Sig
-    extend CLI
-    include CLI
+    extend CLI::Helper
+    include CLI::Helper
 
     EXPECTED_PATH = "expected"
-
-    sig { params(index_path: String, schema_path: String, rbis_path: String).void }
-    def self.validate!(index_path: INDEX_PATH, schema_path: SCHEMA_PATH, rbis_path: RBIS_PATH)
-      log("Checking `index`...\n")
-
-      validator = new(index_path: index_path, schema_path: schema_path, rbis_path: rbis_path)
-      exit(1) unless validator.validate!
-
-      success("No errors, good job!")
-    end
 
     sig { params(index_path: String, schema_path: String, rbis_path: String).void }
     def initialize(index_path:, schema_path:, rbis_path:)
@@ -49,8 +34,9 @@ module RBICentral
     sig { returns(T::Boolean) }
     def check_against_schema!
       JSON::Validator.validate!(@schema_json, @index_json)
-    rescue JSON::Schema::ValidationError => e
-      error(e.message.gsub("'", "`"))
+    rescue JSON::Schema::ValidationError => error
+      error(error.message.gsub("'", "`"))
+      false
     end
 
     sig { returns(T::Boolean) }
@@ -60,7 +46,7 @@ module RBICentral
         file = "#{@rbis_path}/#{gem_name}.rbi"
         next if File.file?(file)
 
-        error("Missing RBI file matching index entry `#{gem_name}` (annotation `#{file}` not found)")
+        error("Missing RBI annotations file for `#{gem_name}` (file `#{file}` not found)")
         success = false
       end
       success
@@ -74,7 +60,7 @@ module RBICentral
         name = File.basename(path, ".rbi")
         next if @index_json.key?(name)
 
-        error("Missing index entry matching RBI file `#{path}` (key `#{name}` not found in `#{@index_path}`)")
+        error("Missing index entry for `#{path}` (key `#{name}` not found in `#{@index_path}`)")
         success = false
       end
       success
@@ -89,7 +75,10 @@ module RBICentral
       out, status = Open3.capture2e("diff -u #{@index_path} #{EXPECTED_PATH}")
       unless status.success?
         error("Formatting errors found in `#{@index_path}`:")
-        $stderr.puts("\n#{out}\n")
+        lines = out.lines
+        lines[0] = "--- expected\n"
+        lines[1] = "+++ #{@index_path}\n"
+        $stderr.puts(lines.join + "\n")
         return false
       end
 
@@ -107,12 +96,5 @@ module RBICentral
       $stderr.puts("\n#{error}\n")
       exit(1)
     end
-
-    sig { params(path: String).returns(T::Array[String]) }
-    def load_annotations_names(path)
-      Dir.glob("#{path}/*.rbi").sort.map { |path| File.basename(path, ".rbi") }
-    end
   end
 end
-
-RBICentral::IndexValidator.validate!

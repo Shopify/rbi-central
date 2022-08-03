@@ -1,43 +1,13 @@
-#! /usr/bin/env ruby
 # typed: strict
 # frozen_string_literal: true
 
-require "rbi-central"
-
 module RBICentral
-  class StaticValidator < RBIValidator
-    extend T::Sig
-
-    sig { override.returns(T::Boolean) }
-    def validate_file!
-      log("Checking static for `#{@gem_name}`...")
-
-      index_entry = @repo_index[@gem_name]
-      unless index_entry
-        error("No index entry for `#{@gem_name}`")
-        return false
-      end
-
-      context = StaticContext.new(@rbi_file, @gem_name)
-
-      deps = index_entry["dependencies"]
-      deps&.each do |dep_name|
-        context.add_gem_dependency(dep_name)
-      end
-
-      requires = index_entry["requires"] || [@gem_name]
-      requires.each do |require_name|
-        context.add_require(require_name)
-      end
-
-      context.run!
-    end
-
-    class StaticContext < Context
+  module Static
+    class Context < RBICentral::Context
       extend T::Sig
 
-      sig { params(rbi_file: String, gem_name: String).void }
-      def initialize(rbi_file, gem_name)
+      sig { params(gem_name: String, annotations_file: String).void }
+      def initialize(gem_name, annotations_file)
         super
 
         @requires = T.let(String.new, String)
@@ -68,18 +38,13 @@ module RBICentral
           "--annotations-rbi-dir=#{@workdir}/sorbet/rbi/none")
         unless status.success?
           out.gsub!("#{@workdir}/", "")
-          out.gsub!("rbi/annotations and sorbet/rbi/todo.rbi", @rbi_file.yellow)
+          out.gsub!("rbi/annotations and sorbet/rbi/todo.rbi", @annotations_file.yellow)
 
           out.lines do |line|
-            line.strip!
-            next if line.end_with?("...  Done")
-
-            if line.start_with?("Duplicated RBI")
+            if line.start_with?("Duplicated")
               error(line.strip)
-            elsif line.start_with?("* ")
+            elsif line.start_with?(" * ")
               $stderr.puts(line.strip.yellow)
-            else
-              $stderr.puts(line.strip)
             end
           end
 
@@ -87,9 +52,10 @@ module RBICentral
         end
 
         out, status = exec!("bundle exec srb tc . " \
-          "--no-error-sections --color=always --ignore vendor/bundle --no-config --no-error-count")
+          "--no-error-sections --color=#{RBICentral::CLI::Helper.color? ? "always" : "never"} " \
+          "--ignore vendor/bundle --no-config --no-error-count")
         unless status.success?
-          $stderr.puts("\n#{out}")
+          $stderr.puts(out)
           success = false
         end
 
@@ -115,10 +81,8 @@ module RBICentral
       sig { void }
       def write_annotation_file!
         FileUtils.mkdir_p("#{@workdir}/rbi/annotations")
-        FileUtils.cp(@rbi_file, "#{@workdir}/#{@rbi_file}")
+        FileUtils.cp(@annotations_file, "#{@workdir}/#{@annotations_file}")
       end
     end
   end
 end
-
-RBICentral::StaticValidator.validate_files!(RBICentral.load_index, RBICentral.rbi_files)

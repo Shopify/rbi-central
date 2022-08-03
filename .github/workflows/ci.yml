@@ -21,4 +21,4 @@ jobs:
           ruby-version: '2.7'
           bundler-cache: true
       - name: Check RBIs and index
-        run: bundle exec run_on_changed_rbis "bundle exec check_all"
+        run: bundle exec run_on_changed_rbis "bundle exec repo check all"
