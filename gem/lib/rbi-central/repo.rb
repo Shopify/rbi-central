@@ -176,11 +176,11 @@ module RBICentral
       files = []
 
       res = git("ls-files --others --exclude-standard")
-      raise Error.new(res.err) unless res.status
+      raise Error, res.err unless res.status
 
       files.concat(res.out.lines.map(&:strip))
       res = git("diff --name-only #{ref} --")
-      raise Error.new(res.err) unless res.status
+      raise Error, res.err unless res.status
 
       files.concat(res.out.lines.map(&:strip))
       files.sort
@@ -194,7 +194,7 @@ module RBICentral
         .sort
     end
 
-    sig {  params(ref: String).returns(T::Boolean) }
+    sig { params(ref: String).returns(T::Boolean) }
     def index_changed?(ref: "HEAD")
       changed_files(ref: ref).include?(@index_path)
     end

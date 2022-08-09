@@ -29,121 +29,61 @@ module RBICentral
       option :ref, type: :string, default: "HEAD", desc: "Check against a Git ref"
       option :source, type: :string, default: "https://rubygems.org", desc: "Source to install gems from"
       def auto(*gem_names)
-        check_index = options[:index]
-        check_rubocop = options[:rubocop]
-        check_rubygems = options[:rubygems]
-        check_runtime = options[:runtime]
-        check_static = options[:static]
-        check_gem = options[:gem]
-        verbose = options[:verbose]
-        success = T.let(true, T::Boolean)
-
         section("Checking changed files...")
 
-        if options[:all]
-          check_gem &= true
-          check_index &= true
-          check_rubocop &= true
-          check_rubygems &= true
-          check_runtime &= true
-          check_static &= true
-        elsif gem_names.any?
-          check_index &= true
-          check_rubocop &= true
-          check_rubygems &= true
-          check_runtime &= true
-          check_static &= true
-        else
-          changed_files = repo.changed_files(ref: options[:ref])
+        checks = select_checks(gem_names, options)
+        if checks.changed_files.any?
+          $stderr.puts(<<~LOG)
+            Changed files:
 
-          if changed_files.empty?
-            log("No change detected. Run with `--all` to run all checks.")
-          else
-            $stderr.puts(<<~LOG)
-              Changed files:
+            #{checks.changed_files.map { |file| " * #{file}" }.join("\n")}
 
-              #{changed_files.map{ |file| " * #{file}" }.join("\n") }
+          LOG
+        end
 
-            LOG
-
-            if changed_files.any? { |file| file.match?(%r{^gem/.*}) }
-              check_gem = true
-              check_index &= true
-              check_rubocop &= true
-              check_rubygems &= true
-              check_runtime &= true
-              check_static &= true
-            elsif changed_files.include?("Gemfile")
-              check_gem = false
-              check_index &= true
-              check_rubocop &= true
-              check_rubygems &= true
-              check_runtime &= true
-              check_static &= true
-            else
-              check_gem = false
-
-              unless changed_files.include?(repo.index_path)
-                check_index = false
-              end
-
-              gem_names = changed_files
-                .select { |file| file.match?(%r{#{repo.annotations_path}/.*.rbi}) }
-                .map { |file| File.basename(file, ".rbi") }
-                .sort
-
-              if gem_names.empty?
-                check_rubocop = false
-                check_rubygems = false
-                check_runtime = false
-                check_static = false
-              end
-
-              unless check_index || check_rubocop || check_rubygems || check_runtime || check_static
-                log("No change detected. Run with `--all` to run all checks.")
-                return
-              end
-            end
-          end
+        unless checks.any?
+          log("No change detected. Run with `--all` to run all checks.")
+          return
         end
 
         log("The following checks will run:\n")
-        log("  `gem`      runs the test units of the embedded gem") if check_gem
-        log("  `index`    checks the index validity") if check_index
-        log("  `rubocop`  checks the RBI files against RuboCop") if check_rubocop
-        log("  `rubygems` checks the RBI files against Rubygems") if check_rubygems
-        log("  `runtime`  checks the RBI files against runtime execution") if check_runtime
-        log("  `static`   checks the RBI files against Tapioca and Sorbet") if check_static
+        log("  `gem`      runs the test units of the embedded gem") if checks.gem_tests
+        log("  `index`    checks the index validity") if checks.index
+        log("  `rubocop`  checks the RBI files against RuboCop") if checks.rubocop
+        log("  `rubygems` checks the RBI files against Rubygems") if checks.rubygems
+        log("  `runtime`  checks the RBI files against runtime execution") if checks.runtime
+        log("  `static`   checks the RBI files against Tapioca and Sorbet") if checks.static
+
         $stderr.puts("\n")
 
+        gem_names = checks.changed_annotations
         success = T.let(true, T::Boolean)
-
-        if check_gem
+        if checks.gem_tests
           success &= run_check! do
             gem
           end
         end
-        if check_index
+        if checks.index
           success &= run_check! do
             index
           end
         end
-        if check_rubocop
+        if checks.rubocop
           success &= run_check! do
             T.unsafe(self).rubocop(*gem_names)
           end
         end
-        if check_rubygems
+        if checks.rubygems
           success &= run_check! do
             T.unsafe(self).rubygems(*gem_names)
           end
         end
-        if check_runtime
+        if checks.runtime
           success &= run_check! do
             T.unsafe(self).runtime(*gem_names)
           end
         end
-        if check_static
+        if checks.static
           success &= run_check! do
             T.unsafe(self).static(*gem_names)
           end

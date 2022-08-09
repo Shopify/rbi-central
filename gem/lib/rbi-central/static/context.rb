@@ -20,7 +20,7 @@ module RBICentral
         super
 
         add_gem_dependency("sorbet", version: ">= 0.5.10109")
-        add_gem_dependency("tapioca", github: "Shopify/tapioca", ref: "8ce7951f69aa41ce9ff4990b67f0c3c9d64c0a6f")
+        add_gem_dependency("tapioca", version: ">= 0.9.2")
       end
 
       sig { override.returns(T::Array[Error]) }

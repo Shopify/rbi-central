@@ -16,6 +16,82 @@ module RBICentral
         @repo ||= T.let(Repo.new(".", bundle_config: options[:bundle_config]), T.nilable(Repo))
       end
 
+      sig { params(gem_names: T::Array[String], options: T::Hash[Symbol, T.untyped]).returns(ChecksSelection) }
+      def select_checks(gem_names, options)
+        checks = ChecksSelection.from_options(options)
+
+        if options[:all]
+          checks.gem_tests &= true
+          checks.index &= true
+          checks.rubocop &= true
+          checks.rubygems &= true
+          checks.runtime &= true
+          checks.static &= true
+          return checks
+        end
+
+        if gem_names.any?
+          checks.index &= true
+          checks.rubocop &= true
+          checks.rubygems &= true
+          checks.runtime &= true
+          checks.static &= true
+          return checks
+        end
+
+        checks.changed_files = repo.changed_files(ref: options[:ref])
+
+        if checks.changed_files.empty?
+          checks.gem_tests = false
+          checks.index = false
+          checks.rubocop = false
+          checks.rubygems = false
+          checks.runtime = false
+          checks.static = false
+          return checks
+        end
+
+        if checks.changed_files.any? { |file| file.match?(%r{^gem/.*}) }
+          checks.gem_tests = true
+          checks.index &= true
+          checks.rubocop &= true
+          checks.rubygems &= true
+          checks.runtime &= true
+          checks.static &= true
+          return checks
+        end
+
+        if checks.changed_files.include?("Gemfile") || checks.changed_files.include?("Gemfile.lock")
+          checks.gem_tests = false
+          checks.index &= true
+          checks.rubocop &= true
+          checks.rubygems &= true
+          checks.runtime &= true
+          checks.static &= true
+          return checks
+        end
+
+        checks.gem_tests = false
+
+        unless checks.changed_files.include?(repo.index_path)
+          checks.index = false
+        end
+
+        checks.changed_annotations = checks.changed_files
+          .select { |file| file.match?(%r{#{repo.annotations_path}/.*.rbi}) }
+          .map { |file| File.basename(file, ".rbi") }
+          .sort
+
+        if checks.changed_annotations.empty?
+          checks.rubocop = false
+          checks.rubygems = false
+          checks.runtime = false
+          checks.static = false
+        end
+
+        checks
+      end
+
       sig { params(block: T.proc.void).returns(T::Boolean) }
       def run_check!(&block)
         block.call
@@ -79,6 +155,36 @@ module RBICentral
           success("No errors, good job!")
         else
           raise Thor::Error, red("Some checks failed. See above for details.")
+        end
+      end
+
+      class ChecksSelection < T::Struct
+        extend T::Sig
+
+        prop :changed_files, T::Array[String], default: []
+        prop :changed_annotations, T::Array[String], default: []
+        prop :gem_tests, T::Boolean
+        prop :index, T::Boolean
+        prop :rubocop, T::Boolean
+        prop :rubygems, T::Boolean
+        prop :runtime, T::Boolean
+        prop :static, T::Boolean
+
+        sig { params(options: T::Hash[Symbol, T.untyped]).returns(ChecksSelection) }
+        def self.from_options(options)
+          ChecksSelection.new(
+            gem_tests: options[:gem],
+            index: options[:index],
+            rubocop: options[:rubocop],
+            rubygems: options[:rubygems],
+            runtime: options[:runtime],
+            static: options[:static],
+          )
+        end
+
+        sig { returns(T::Boolean) }
+        def any?
+          gem_tests || index || rubocop || rubygems || runtime || static
         end
       end
 

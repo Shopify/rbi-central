@@ -32,11 +32,11 @@ module RBICentral
             if line.start_with?("Note: ")
               T.must(error) << line
             else
-              errors << Error.new(error) if error
+              errors << Error.new(error.strip) if error
               error = String.new(line)
             end
           end
-          errors << Error.new(error) if error
+          errors << Error.new(error.strip) if error
           return errors
         end
 

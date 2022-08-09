@@ -150,9 +150,57 @@ module RBICentral
         refute(res.status)
       end
 
+      def test_check_no_changes
+        @repo.write_index!(<<~JSON)
+          {
+            "gem1": {
+              "path": "#{@repo.add_mock_gem("gem1").absolute_path}"
+            }
+          }
+        JSON
+        @repo.write_annotations_file!("gem1", "<rbi>")
+        @repo.bundle_install!
+        @repo.git_init!
+        @repo.git_commit!
+        res = @repo.repo("check")
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+          ### Checking changed files...
+
+          No change detected. Run with `--all` to run all checks.
+        ERR
+        assert(res.status)
+      end
+
+      def test_check_no_relevant_changes
+        @repo.write_index!(<<~JSON)
+          {
+            "gem1": {
+              "path": "#{@repo.add_mock_gem("gem1").absolute_path}"
+            }
+          }
+        JSON
+        @repo.write_annotations_file!("gem1", "<rbi>")
+        @repo.bundle_install!
+        @repo.git_init!
+        @repo.git_commit!
+        @repo.write!("some_other_file.rb", "")
+        res = @repo.repo("check")
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+          ### Checking changed files...
+
+          Changed files:
+
+           * some_other_file.rb
+
+          No change detected. Run with `--all` to run all checks.
+        ERR
+        assert(res.status)
+      end
+
       def test_check_index_modified
         gem1 = @repo.add_mock_gem("gem1")
         gem2 = @repo.add_mock_gem("gem2")
+        @repo.bundle_install!
         @repo.git_init!
         @repo.write_index!(<<~JSON)
           {
@@ -175,7 +223,6 @@ module RBICentral
 
           Changed files:
 
-           * Gemfile.lock
            * index.json
 
           The following checks will run:
@@ -194,6 +241,7 @@ module RBICentral
       def test_check_annotations_modified
         gem1 = @repo.add_mock_gem("gem1")
         gem2 = @repo.add_mock_gem("gem2")
+        @repo.bundle_install!
         @repo.write_index!(<<~JSON)
           {
             "gem1": {
@@ -214,7 +262,6 @@ module RBICentral
 
           Changed files:
 
-           * Gemfile.lock
            * rbi/annotations/gem2.rbi
 
           The following checks will run:
@@ -281,6 +328,7 @@ module RBICentral
       def test_check_gem_modified
         gem1 = @repo.add_mock_gem("gem1")
         gem2 = @repo.add_mock_gem("gem2")
+        @repo.bundle_install!
         @repo.write_index!(<<~JSON)
           {
             "gem1": {
@@ -307,7 +355,6 @@ module RBICentral
 
           Changed files:
 
-           * Gemfile.lock
            * gem/bin/test
 
           The following checks will run:

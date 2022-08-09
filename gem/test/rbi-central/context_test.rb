@@ -53,7 +53,7 @@ module RBICentral
       errors = context.run!
       assert_equal(1, errors.size)
       assert_equal(<<~ERROR.strip, errors.first&.message)
-        Can't install gem `a-gem-that-does-not-exist` (Could not find gem 'a-gem-that-does-not-exist' in rubygems repositoryhttps://rubygems.org/ or installed locally.)
+        Can't install gem `a-gem-that-does-not-exist` (Could not find gem 'a-gem-that-does-not-exist' in rubygems repository https://rubygems.org/ or installed locally.)
       ERROR
     end
 
