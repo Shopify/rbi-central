@@ -10,11 +10,12 @@ module RBICentral
 
     class Error < RBICentral::Error; end
 
-    sig { params(gem: Gem, annotations_file: String).void }
-    def initialize(gem, annotations_file)
+    sig { params(gem: Gem, annotations_file: String, bundle_config: T::Hash[String, String]).void }
+    def initialize(gem, annotations_file, bundle_config: {})
       super(Dir.mktmpdir)
 
       @gem = gem
+      @bundle_config = bundle_config
       init!
     end
 
@@ -37,14 +38,16 @@ module RBICentral
         end
       end
 
-      bundle("config set --local path 'vendor/bundle'")
+      @bundle_config.each do |key, value|
+        bundle("config set --local #{key} #{value}")
+      end
     end
 
     sig { returns(T::Array[Error]) }
     def run!
       res = bundle_install!
       unless res.status
-        return [Error.new("Can't install gem `#{@gem.name}` (#{res.err.gsub(/\n/, "")})")]
+        return [Error.new("Can't install gem `#{@gem.name}` (#{res.err.gsub(/\n/, " ")})")]
       end
 
       []

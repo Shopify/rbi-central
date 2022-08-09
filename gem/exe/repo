@@ -14,6 +14,7 @@ module RBICentral
       include Helper
 
       class_option :color, type: :boolean, default: true, desc: "Use colors"
+      class_option :bundle_config, type: :hash, default: {}, desc: "Config to pass to bundle"
 
       default_task :auto
 

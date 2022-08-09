@@ -10,11 +10,11 @@ module RBICentral
 
       class Error < RBICentral::Context::Error; end
 
-      sig { params(gem: Gem, annotations_file: String).void }
-      def initialize(gem, annotations_file)
+      sig { params(gem: Gem, annotations_file: String, bundle_config: T::Hash[String, String]).void }
+      def initialize(gem, annotations_file, bundle_config: {})
         @requires = T.let(String.new, String)
         @body = T.let(String.new, String)
-        super(gem, annotations_file)
+        super(gem, annotations_file, bundle_config: bundle_config)
       end
 
       sig { override.returns(T::Array[Error]) }

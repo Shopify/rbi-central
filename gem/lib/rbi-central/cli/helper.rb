@@ -13,7 +13,7 @@ module RBICentral
       sig { returns(Repo) }
       def repo
         # TODO: pass paths options
-        @repo ||= T.let(Repo.new("."), T.nilable(Repo))
+        @repo ||= T.let(Repo.new(".", bundle_config: options[:bundle_config]), T.nilable(Repo))
       end
 
       sig { params(block: T.proc.void).returns(T::Boolean) }

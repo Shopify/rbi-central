@@ -8,11 +8,11 @@ module RBICentral
 
       class Error < RBICentral::Context::Error; end
 
-      sig { params(gem: Gem, annotations_file: String, color: T::Boolean).void }
-      def initialize(gem, annotations_file, color:)
+      sig { params(gem: Gem, annotations_file: String, color: T::Boolean, bundle_config: T::Hash[String, String]).void }
+      def initialize(gem, annotations_file, color:, bundle_config: {})
         @annotations_file = annotations_file
         @color = color
-        super(gem, annotations_file)
+        super(gem, annotations_file, bundle_config: bundle_config)
       end
 
       sig { override.void }

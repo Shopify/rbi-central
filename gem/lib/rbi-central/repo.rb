@@ -18,19 +18,22 @@ module RBICentral
         absolute_path: String,
         index_schema: T::Hash[String, T.untyped],
         index_path: String,
-        annotations_path: String
+        annotations_path: String,
+        bundle_config: T::Hash[String, String]
       ).void
     end
     def initialize(
       absolute_path,
       index_schema: INDEX_SCHEMA,
       index_path: INDEX_PATH,
-      annotations_path: ANNOTATIONS_PATH
+      annotations_path: ANNOTATIONS_PATH,
+      bundle_config: {}
     )
       super(absolute_path)
       @index_schema = index_schema
       @index_path = index_path
       @annotations_path = annotations_path
+      @bundle_config = bundle_config
     end
 
     sig { returns(Index) }
@@ -149,7 +152,7 @@ module RBICentral
     sig { params(gem: Gem, color: T::Boolean).returns(T::Array[Static::Context::Error]) }
     def check_static_for(gem, color:)
       annotations_file = annotations_file_for(gem)
-      context = Static::Context.new(gem, annotations_file, color: color)
+      context = Static::Context.new(gem, annotations_file, color: color, bundle_config: @bundle_config)
       context.run!
     end
 
@@ -157,7 +160,7 @@ module RBICentral
     def check_runtime_for(gem)
       annotations_file = annotations_file_for(gem)
       rbi_tree = RBI::Parser.parse_file(annotations_file)
-      context = Runtime::Context.new(gem, annotations_file)
+      context = Runtime::Context.new(gem, annotations_file, bundle_config: @bundle_config)
       visitor = Runtime::Visitor.new(context)
       visitor.visit(rbi_tree)
       errors = T.let([], T::Array[Runtime::Context::Error])
