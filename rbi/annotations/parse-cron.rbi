@@ -2,8 +2,6 @@
 
 # Parses cron expressions and computes the next occurence of the "job"
 class CronParser
-  extend T::Generic
-
   SYMBOLS = T.let({}, T::Hash[String, String])
   SUBELEMENT_REGEX = T.let(%r{}, Regexp)
 
@@ -33,22 +31,22 @@ class CronParser
   sig { params(year: Integer, month: Integer).returns([T::Set[Integer], T::Array[Integer]]) }
   def interpolate_weekdays_without_cache(year, month); end
 
-  sig { params(t: InternalTime[T.class_of(Time), Time], dir: Symbol).returns(Integer) }
+  sig { params(t: InternalTime, dir: Symbol).returns(Integer) }
   def nudge_year(t, dir = :next); end
 
-  sig { params(t: InternalTime[T.class_of(Time), Time], dir: Symbol).returns(Integer) }
+  sig { params(t: InternalTime, dir: Symbol).returns(Integer) }
   def nudge_month(t, dir = :next); end
 
-  sig { params(t: InternalTime[T.class_of(Time), Time], dir: Symbol).returns(T::Boolean) }
+  sig { params(t: InternalTime, dir: Symbol).returns(T::Boolean) }
   def date_valid?(t, dir = :next); end
 
-  sig { params(t: InternalTime[T.class_of(Time), Time], dir: Symbol, can_nudge_month: T::Boolean).returns(T.nilable(Integer)) }
+  sig { params(t: InternalTime, dir: Symbol, can_nudge_month: T::Boolean).returns(T.nilable(Integer)) }
   def nudge_date(t, dir = :next, can_nudge_month = true); end
 
-  sig { params(t: InternalTime[T.class_of(Time), Time], dir: Symbol).returns(T.nilable(Integer)) }
+  sig { params(t: InternalTime, dir: Symbol).returns(T.nilable(Integer)) }
   def nudge_hour(t, dir = :next); end
 
-  sig { params(t: InternalTime[T.class_of(Time), Time], dir: Symbol).returns(T.nilable(Integer)) }
+  sig { params(t: InternalTime, dir: Symbol).returns(T.nilable(Integer)) }
   def nudge_minute(t, dir = :next); end
 
   sig { returns(T::Hash[Symbol, [T::Set[Integer], T::Array[Integer], String]]) }
@@ -71,8 +69,6 @@ end
 
 # internal "mutable" time representation
 class CronParser::InternalTime
-  extend T::Generic
-
   sig { returns(Integer) }
   attr_accessor :year, :month, :day, :hour, :min
 

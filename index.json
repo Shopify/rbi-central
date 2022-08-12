@@ -109,7 +109,9 @@
       "minitest"
     ],
     "requires": [
-      "minitest/test"
+      "minitest/test",
+      "webmock/api",
+      "webmock/minitest"
     ]
   }
 }
