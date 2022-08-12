@@ -64,6 +64,35 @@ module RBICentral
         RB
       end
 
+      sig { params(const_name: String, superclass_name: T.nilable(String), loc: RBI::Loc).void }
+      def add_class(const_name, superclass_name, loc)
+        superclass = superclass_name ? "\"#{superclass_name}\"" : "nil"
+        @body << <<~RB
+          __rbi_repo_get_class("#{const_name}", #{superclass}, "#{loc}")
+        RB
+      end
+
+      sig { params(const_name: String, loc: RBI::Loc).void }
+      def add_module(const_name, loc)
+        @body << <<~RB
+          __rbi_repo_get_module("#{const_name}", "#{loc}")
+        RB
+      end
+
+      sig { params(const_name: String, mixin_name: String, loc: RBI::Loc).void }
+      def add_include(const_name, mixin_name, loc)
+        @body << <<~RB
+          __rbi_repo_get_include("#{const_name}", "#{mixin_name}", "#{loc}")
+        RB
+      end
+
+      sig { params(const_name: String, mixin_name: String, loc: RBI::Loc).void }
+      def add_extend(const_name, mixin_name, loc)
+        @body << <<~RB
+          __rbi_repo_get_extend("#{const_name}", "#{mixin_name}", "#{loc}")
+        RB
+      end
+
       sig do
         params(
           recv_name: String,
@@ -103,6 +132,65 @@ module RBICentral
             $stderr.puts("Missing runtime constant `\#{const_name}` (defined at `\#{rbi_loc}`)")
             $success = false
             nil
+          end
+
+          def __rbi_repo_get_class(const_name, superclass_name, rbi_loc)
+            const = __rbi_repo_get_const(const_name, rbi_loc)
+            return unless const
+
+            unless const.is_a?(Class)
+              $stderr.puts("Runtime constant `\#{const_name}` is not a class (defined at `\#{rbi_loc}`)")
+              $success = false
+              return
+            end
+
+            return unless superclass_name
+
+            superclass = __rbi_repo_get_const(superclass_name, rbi_loc)
+            return unless superclass
+
+            unless const.superclass == superclass
+              $stderr.puts("Runtime constant `\#{const_name}` is not a subclass of `\#{superclass}` found `\#{const.superclass}` (defined at `\#{rbi_loc}`)")
+              $success = false
+              nil
+            end
+          end
+
+          def __rbi_repo_get_module(const_name, rbi_loc)
+            const = __rbi_repo_get_const(const_name, rbi_loc)
+            return unless const
+
+            if const.is_a?(Class)
+              $stderr.puts("Runtime constant `\#{const_name}` is not a module (defined at `\#{rbi_loc}`)")
+              $success = false
+              nil
+            end
+          end
+
+          def __rbi_repo_get_include(const_name, mixin_name, rbi_loc)
+            const = __rbi_repo_get_const(const_name, rbi_loc)
+            return unless const
+
+            mixin = __rbi_repo_get_const(mixin_name, rbi_loc)
+            return unless mixin
+
+            unless const.ancestors.include?(mixin)
+              $stderr.puts("Runtime constant `\#{const_name}` does not include `\#{mixin}` (defined at `\#{rbi_loc}`)")
+              $success = false
+            end
+          end
+
+          def __rbi_repo_get_extend(const_name, mixin_name, rbi_loc)
+            const = __rbi_repo_get_const(const_name, rbi_loc)
+            return unless const
+
+            mixin = __rbi_repo_get_const(mixin_name, rbi_loc)
+            return unless mixin
+
+            unless const.singleton_class.ancestors.include?(mixin)
+              $stderr.puts("Runtime constant `\#{const_name}` does not extend `\#{mixin}` (defined at `\#{rbi_loc}`)")
+              $success = false
+            end
           end
 
           def __rbi_repo_get_method(recv_name, method_name, rbi_loc, singleton:, allow_missing:)

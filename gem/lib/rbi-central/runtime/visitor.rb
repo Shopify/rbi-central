@@ -34,12 +34,26 @@ module RBICentral
         loc = T.must(node.loc)
 
         case node
-        when RBI::Module, RBI::Class
-          @context.add_constant(node.fully_qualified_name, loc)
+        when RBI::Class
+          @context.add_class(node.fully_qualified_name, node.superclass_name, loc)
+        when RBI::Module
+          @context.add_module(node.fully_qualified_name, loc)
         when RBI::Const
           return if node.value.start_with?("type_member") || node.value.start_with?("type_template")
 
           @context.add_constant(node.fully_qualified_name, loc)
+        when RBI::Include
+          scope = node.parent_scope
+          scope_name = scope_name(scope)
+          node.names.each do |name|
+            @context.add_include(scope_name, name, loc)
+          end
+        when RBI::Extend
+          scope = node.parent_scope
+          scope_name = scope_name(scope)
+          node.names.each do |name|
+            @context.add_extend(scope_name, name, loc)
+          end
         when RBI::Method
           scope = node.parent_scope
           scope_name = scope_name(scope)
