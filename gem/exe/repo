@@ -99,7 +99,24 @@ module RBICentral
       def gem
         section("Checking gem...")
         Bundler.with_unbundled_env do
-          unless system("cd gem && bundle install --quiet && bin/test")
+          log("Installing gem dependencies...")
+          $stderr.puts
+          success = system("cd gem && bundle install --quiet")
+          if success
+            log("Running Sorbet on gem...")
+            $stderr.puts
+            success &= system("cd gem && bin/typecheck")
+            $stderr.puts
+            log("Running Rubocop on gem...")
+            $stderr.puts
+            success &= system("cd gem && bin/style")
+            $stderr.puts
+            log("Running gem tests...")
+            $stderr.puts
+            success &= system("cd gem && bin/test")
+            $stderr.puts
+          end
+          unless success
             raise Thor::Error, red("Some checks failed. See above for details.")
           end
         end

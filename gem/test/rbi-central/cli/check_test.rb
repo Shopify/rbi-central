@@ -343,9 +343,21 @@ module RBICentral
         @repo.write_annotations_file!("gem2", "module Foo; end")
         @repo.git_init!
         @repo.git_commit!
+        @repo.write!("gem/bin/typecheck", <<~RB)
+          #!/usr/bin/env ruby
+          $stderr.puts "Sorbet OK"
+          exit(0)
+        RB
+        @repo.exec("chmod +x gem/bin/typecheck")
+        @repo.write!("gem/bin/style", <<~RB)
+          #!/usr/bin/env ruby
+          $stderr.puts "Rubocop OK"
+          exit(0)
+        RB
+        @repo.exec("chmod +x gem/bin/style")
         @repo.write!("gem/bin/test", <<~RB)
           #!/usr/bin/env ruby
-          $stderr.puts "Gem tests OK"
+          $stderr.puts "Tests OK"
           exit(0)
         RB
         @repo.exec("chmod +x gem/bin/test")
@@ -355,7 +367,9 @@ module RBICentral
 
           Changed files:
 
+           * gem/bin/style
            * gem/bin/test
+           * gem/bin/typecheck
 
           The following checks will run:
             `gem`      runs the test units of the embedded gem
@@ -364,7 +378,20 @@ module RBICentral
 
           ### Checking gem...
 
-          Gem tests OK
+          Installing gem dependencies...
+
+          Running Sorbet on gem...
+
+          Sorbet OK
+
+          Running Rubocop on gem...
+
+          Rubocop OK
+
+          Running gem tests...
+
+          Tests OK
+
 
           ### Checking index...
 
