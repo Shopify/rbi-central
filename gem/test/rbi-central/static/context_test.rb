@@ -9,11 +9,11 @@ module RBICentral
       def test_init_gemfile
         gem = Gem.new(name: "gem")
         context = Context.new(gem, "#{ANNOTATIONS_PATH}/gem.rbi", color: false)
-        assert_equal(<<~GEMFILE, context.gemfile)
+        assert_equal(<<~GEMFILE, context.read_gemfile)
           source \"https://rubygems.org\"
           gem 'gem'
           gem 'sorbet', '>= 0.5.10109'
-          gem 'tapioca', github: 'Shopify/tapioca', ref: '8ce7951f69aa41ce9ff4990b67f0c3c9d64c0a6f'
+          gem 'tapioca', '>= 0.9.2'
         GEMFILE
       end
 

@@ -15,7 +15,7 @@ module RBICentral
     def test_init_gemfile
       gem = Gem.new(name: "gem")
       context = DummyContext.new(gem, "#{ANNOTATIONS_PATH}/gem.rbi")
-      assert_equal(<<~GEMFILE, context.gemfile)
+      assert_equal(<<~GEMFILE, context.read_gemfile)
         source \"https://rubygems.org\"
         gem 'gem'
       GEMFILE
@@ -24,7 +24,7 @@ module RBICentral
     def test_init_gemfile_dependencies
       gem = Gem.new(name: "gem", dependencies: ["dep2", "dep1"])
       context = DummyContext.new(gem, "#{ANNOTATIONS_PATH}/gem.rbi")
-      assert_equal(<<~GEMFILE, context.gemfile)
+      assert_equal(<<~GEMFILE, context.read_gemfile)
         source \"https://rubygems.org\"
         gem 'gem'
         gem 'dep1'
@@ -38,7 +38,7 @@ module RBICentral
       context.add_gem_dependency("dep1")
       context.add_gem_dependency("dep2", version: ">= 1.0.0")
       context.add_gem_dependency("dep3", github: "Shopify/gem", branch: "feature")
-      assert_equal(<<~GEMFILE, context.gemfile)
+      assert_equal(<<~GEMFILE, context.read_gemfile)
         source \"https://rubygems.org\"
         gem 'gem'
         gem 'dep1'

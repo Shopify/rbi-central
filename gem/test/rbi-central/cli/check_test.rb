@@ -295,7 +295,7 @@ module RBICentral
         @repo.write_annotations_file!("gem2", "module Foo; end")
         @repo.git_init!
         @repo.git_commit!
-        @repo.gemfile!("\n", append: true)
+        @repo.write_gemfile!("\n", append: true)
         res = @repo.repo("check --no-gem --no-rubocop --no-runtime --no-static")
         assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
           ### Checking changed files...

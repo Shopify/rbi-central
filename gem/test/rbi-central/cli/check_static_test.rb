@@ -48,12 +48,12 @@ module RBICentral
 
           Error: Duplicated RBI for ::Gem1:
            * rbi/annotations/gem1.rbi:1:0-1:16
-           * sorbet/rbi/gems/gem1@0.0.1.rbi:7:0-7:16
+           * sorbet/rbi/gems/gem1@0.0.1.rbi:8:0-8:16
 
           Checking static for `gem2`...
 
-          Error: sorbet/rbi/gems/gem2@0.0.1.rbi:7: `Gem2` was previously defined as a `class` https://srb.help/4012
-               7 |module Gem2; end
+          Error: sorbet/rbi/gems/gem2@0.0.1.rbi:8: `Gem2` was previously defined as a `class` https://srb.help/4012
+               8 |module Gem2; end
                   ^^^^^^^^^^^
 
           Some checks failed. See above for details.
@@ -77,7 +77,7 @@ module RBICentral
 
           Error: Duplicated RBI for ::Gem1:
            * rbi/annotations/gem1.rbi:1:0-1:16
-           * sorbet/rbi/gems/gem1@0.0.1.rbi:7:0-7:16
+           * sorbet/rbi/gems/gem1@0.0.1.rbi:8:0-8:16
 
           Some checks failed. See above for details.
         ERR

@@ -82,7 +82,7 @@ module RBICentral
       line << ", ref: '#{ref}'" if ref
       line << ", path: '#{path}'" if path
       line << "\n"
-      gemfile!(line, append: true)
+      write_gemfile!(line, append: true)
     end
   end
 
@@ -131,10 +131,10 @@ module RBICentral
     def initialize(name)
       super(name)
       @repo = T.let(Repo.mktmp!, Repo)
-      @repo.gemfile!(<<~GEMFILE)
+      @repo.write_gemfile!(<<~GEMFILE)
         source 'https://rubygems.org'
 
-        gem "spoom", github: "Shopify/spoom", branch: "at-project"
+        gem "spoom", github: "Shopify/spoom", branch: "main"
         gem "rbi-central", path: "#{GEM_ROOT}"
       GEMFILE
       @repo.bundle_install!

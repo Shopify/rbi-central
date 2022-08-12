@@ -21,7 +21,7 @@ module RBICentral
 
     sig { void }
     def init!
-      gemfile!(<<~GEMFILE)
+      write_gemfile!(<<~GEMFILE)
         source "https://rubygems.org"
       GEMFILE
 
@@ -77,7 +77,7 @@ module RBICentral
       line << ", path: '#{path}'" if path
       line << ", source: '#{source}'" if source
       line << "\n"
-      gemfile!(line, append: true)
+      write_gemfile!(line, append: true)
     end
   end
 end

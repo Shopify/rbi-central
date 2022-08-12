@@ -10,7 +10,6 @@ require "rbi"
 require "spoom"
 require "tempfile"
 require "tmpdir"
-require "spoom"
 
 module RBICentral
   extend T::Sig
