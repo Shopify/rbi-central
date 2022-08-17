@@ -251,5 +251,48 @@ module RBICentral
       refute(@repo.index_changed?)
       assert(@repo.index_changed?(ref: "main"))
     end
+
+    def test_load_index_ref
+      @repo.git_init!
+      @repo.git_commit!
+
+      assert_raises(Index::Error) do
+        @repo.load_index
+      end
+
+      @repo.write_index!("{ \"foo\": {} }")
+      assert(@repo.load_index.gem?("foo"))
+
+      @repo.git_commit!
+      assert(@repo.load_index(ref: "HEAD").gem?("foo"))
+
+      @repo.write_index!("{}")
+      refute(@repo.load_index.gem?("foo"))
+      assert(@repo.load_index(ref: "HEAD").gem?("foo"))
+    end
+
+    def test_index_changes
+      @repo.git_init!
+      @repo.git_commit!
+      assert_nil(@repo.index_changes)
+
+      @repo.write_index!("{ \"gem1\": {} }")
+      @repo.git_commit!
+      assert_nil(@repo.index_changes)
+
+      @repo.write_index!("{ \"gem1\": {   } }")
+      assert_empty(@repo.index_changes)
+
+      @repo.write_index!("{ \"gem2\": {} }")
+      changes = @repo.index_changes
+      assert_equal(["gem1"], changes&.removed&.map(&:name))
+      assert_equal(["gem2"], changes&.added&.map(&:name))
+
+      @repo.write_index!("{ \"gem2\": {} }")
+      @repo.git_commit!
+      changes = @repo.index_changes(ref: "HEAD~1")
+      assert_equal(["gem1"], changes&.removed&.map(&:name))
+      assert_equal(["gem2"], changes&.added&.map(&:name))
+    end
   end
 end

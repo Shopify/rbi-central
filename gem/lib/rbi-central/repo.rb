@@ -199,11 +199,21 @@ module RBICentral
       changed_files(ref: ref).include?(@index_path)
     end
 
-    private
+    sig { params(ref: String).returns(T.nilable(Index::ChangeSet)) }
+    def index_changes(ref: "HEAD")
+      return nil unless index_changed?(ref: ref)
 
-    sig { returns(Index) }
-    def load_index
-      json = read(@index_path)
+      Index.compare(before: load_index(ref: ref), after: load_index)
+    end
+
+    sig { params(ref: T.nilable(String)).returns(Index) }
+    def load_index(ref: nil)
+      json = if ref
+        git("show #{ref}:#{@index_path}").out
+      else
+        read(@index_path)
+      end
+
       object = JSON.parse(json)
       JSON::Validator.validate!(index_schema, object)
       Index.from_object(object)
