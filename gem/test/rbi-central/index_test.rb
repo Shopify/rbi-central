@@ -99,5 +99,23 @@ module RBICentral
         }
       JSON
     end
+
+    def test_compare_with
+      before = Index.new
+      before << Gem.new(name: "gem1")
+      before << Gem.new(name: "gem2")
+      before << Gem.new(name: "gem3")
+
+      after = Index.new
+      after << Gem.new(name: "gem1")
+      after << Gem.new(name: "gem3", dependencies: ["a", "b"])
+      after << Gem.new(name: "gem4")
+      after << Gem.new(name: "gem5")
+
+      changes = Index.compare(before: before, after: after)
+      assert_equal(["gem2"], changes.removed.map(&:name))
+      assert_equal(["gem3"], changes.updated.map(&:name))
+      assert_equal(["gem4", "gem5"], changes.added.map(&:name))
+    end
   end
 end
