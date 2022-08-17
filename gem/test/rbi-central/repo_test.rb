@@ -13,7 +13,7 @@ module RBICentral
     end
 
     def test_index_bad_json
-      @repo.write!(@repo.index_path, "")
+      @repo.write_index!("")
       e = assert_raises(RBICentral::Index::Error) do
         @repo.index
       end
@@ -21,7 +21,7 @@ module RBICentral
     end
 
     def test_index_bad_schema
-      @repo.write!(@repo.index_path, <<~JSON)
+      @repo.write_index!(<<~JSON)
         {
           "foo": 42
         }
@@ -33,7 +33,7 @@ module RBICentral
     end
 
     def test_index_valid
-      @repo.write!(@repo.index_path, <<~JSON)
+      @repo.write_index!(<<~JSON)
         {
           "gem1": {},
           "gem2": {
@@ -46,14 +46,15 @@ module RBICentral
     end
 
     def test_annotations_files
+      @repo.write_annotations_file!("gem1", "<some rbi>")
+      @repo.write_annotations_file!("gem2", "<some rbi>")
+
       path = @repo.annotations_path
-      @repo.write!("#{path}/gem1.rbi", "<some rbi>")
-      @repo.write!("#{path}/gem2.rbi", "<some rbi>")
       assert_equal(["#{path}/gem1.rbi", "#{path}/gem2.rbi"], @repo.annotations_files)
     end
 
     def test_check_index_format
-      @repo.write!(@repo.index_path, <<~JSON)
+      @repo.write_index!(<<~JSON)
         {
           "gem1": {},
           "gem2": {
@@ -88,15 +89,14 @@ module RBICentral
     end
 
     def test_check_missing_index_entries
-      @repo.write!(@repo.index_path, <<~JSON)
+      @repo.write_index!(<<~JSON)
         {
           "gem1": {}
         }
       JSON
-      path = @repo.annotations_path
-      @repo.write!("#{path}/gem1.rbi", "<rbi>")
-      @repo.write!("#{path}/gem2.rbi", "<rbi>")
-      @repo.write!("#{path}/gem3.rbi", "<rbi>")
+      @repo.write_annotations_file!("gem1", "<rbi>")
+      @repo.write_annotations_file!("gem2", "<rbi>")
+      @repo.write_annotations_file!("gem3", "<rbi>")
       assert_messages([
         "Missing index entry for `rbi/annotations/gem2.rbi` (key `gem2` not found in `index.json`)",
         "Missing index entry for `rbi/annotations/gem3.rbi` (key `gem3` not found in `index.json`)",
@@ -104,14 +104,14 @@ module RBICentral
     end
 
     def test_check_missing_annotations_files
-      @repo.write!(@repo.index_path, <<~JSON)
+      @repo.write_index!(<<~JSON)
         {
           "gem1": {},
           "gem2": {},
           "gem3": {}
         }
       JSON
-      @repo.write!("#{@repo.annotations_path}/gem1.rbi", "<rbi>")
+      @repo.write_annotations_file!("gem1", "<rbi>")
       assert_messages([
         "Missing RBI annotations file for `gem2` (file `rbi/annotations/gem2.rbi` not found)",
         "Missing RBI annotations file for `gem3` (file `rbi/annotations/gem3.rbi` not found)",
@@ -119,7 +119,7 @@ module RBICentral
     end
 
     def test_check_rubocop_for_valid
-      @repo.write!("#{@repo.annotations_path}/gem1.rbi", <<~RBI)
+      @repo.write_annotations_file!("gem1", <<~RBI)
         # typed: strict
 
         module Spoom; end
@@ -128,7 +128,7 @@ module RBICentral
     end
 
     def test_check_rubocop_for_invalid
-      @repo.write!("#{@repo.annotations_path}/gem1.rbi", <<~RBI)
+      @repo.write_annotations_file!("gem1", <<~RBI)
         # typed: true
 
         module Spoom; end
@@ -179,13 +179,13 @@ module RBICentral
       @repo.git_commit!
       assert_empty(@repo.changed_files)
 
-      @repo.write!("annotations/foo.rbi", "<rbi>")
-      @repo.write!("index.json", "<rbi>")
-      assert_equal(["annotations/foo.rbi", "index.json"], @repo.changed_files)
+      @repo.write_annotations_file!("foo", "<rbi>")
+      @repo.write_index!("<json>")
+      assert_equal(["index.json", "rbi/annotations/foo.rbi"], @repo.changed_files)
 
       @repo.git_commit!
-      @repo.write!("annotations/foo.rbi", "<changed>")
-      assert_equal(["annotations/foo.rbi"], @repo.changed_files)
+      @repo.write_annotations_file!("foo", "<changed>")
+      assert_equal(["rbi/annotations/foo.rbi"], @repo.changed_files)
     end
 
     def test_changed_files_since_ref
@@ -194,19 +194,22 @@ module RBICentral
       assert_empty(@repo.changed_files)
 
       @repo.git_create_and_checkout_branch!("branch")
-      @repo.write!("annotations/foo.rbi", "<rbi>")
-      @repo.write!("index.json", "<json>")
+      @repo.write_annotations_file!("foo", "<rbi>")
+      @repo.write_index!("<json>")
       @repo.git_commit!
-      assert_equal(["annotations/foo.rbi", "index.json"], @repo.changed_files(ref: "main"))
+      assert_equal(["index.json", "rbi/annotations/foo.rbi"], @repo.changed_files(ref: "main"))
 
-      @repo.write!("annotations/bar.rbi", "<rbi>")
-      @repo.write!("annotations/foo.rbi", "<changed>")
-      assert_equal(["annotations/bar.rbi", "annotations/foo.rbi", "index.json"], @repo.changed_files(ref: "main"))
+      @repo.write_annotations_file!("bar", "<rbi>")
+      @repo.write_annotations_file!("foo", "<changed>")
+      assert_equal(
+        ["index.json", "rbi/annotations/bar.rbi", "rbi/annotations/foo.rbi"],
+        @repo.changed_files(ref: "main")
+      )
     end
 
-    def test_changed_anontations
+    def test_changed_annotations
       @repo.git_init!
-      @repo.write!("rbi/annotations/foo.rbi", "<rbi>")
+      @repo.write_annotations_file!("foo", "<rbi>")
       @repo.git_commit!
       assert_empty(@repo.changed_annotations)
 
@@ -215,13 +218,17 @@ module RBICentral
       @repo.git_commit!
 
       @repo.git_create_and_checkout_branch!("branch")
-      @repo.write!("rbi/annotations/bar.rbi", "<rbi>")
-      @repo.write!("rbi/annotations/foo.rbi", "<update>")
+      @repo.write_annotations_file!("bar", "<rbi>")
+      @repo.write_annotations_file!("foo", "<update>")
       assert_equal(["bar", "foo"], @repo.changed_annotations)
 
       @repo.git_commit!
       assert_empty(@repo.changed_annotations)
       assert_equal(["bar", "foo"], @repo.changed_annotations(ref: "main"))
+
+      @repo.remove!("rbi/annotations/foo.rbi")
+      assert_empty(@repo.changed_annotations)
+      assert_empty(@repo.changed_annotations(ref: "HEAD"))
     end
 
     def test_index_changed?
@@ -230,14 +237,14 @@ module RBICentral
       @repo.git_commit!
       refute(@repo.index_changed?)
 
-      @repo.write!("index.json", "<json>")
+      @repo.write_index!("<json>")
       assert(@repo.index_changed?)
 
       @repo.git_commit!
       refute(@repo.index_changed?)
 
       @repo.git_create_and_checkout_branch!("branch")
-      @repo.write!("index.json", "<update>")
+      @repo.write_index!("<update>")
       assert(@repo.index_changed?)
 
       @repo.git_commit!
