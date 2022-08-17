@@ -73,11 +73,18 @@ module RBICentral
 
         checks.gem_tests = false
 
-        unless checks.changed_files.include?(repo.index_path)
+        if checks.changed_files.include?(repo.index_path)
+          checks.index &= true
+          index_changes = repo.index_changes(ref: options[:ref])
+          if index_changes
+            checks.changed_annotations += index_changes.added.map(&:name)
+            checks.changed_annotations += index_changes.updated.map(&:name)
+          end
+        else
           checks.index = false
         end
 
-        checks.changed_annotations = checks.changed_files
+        checks.changed_annotations += checks.changed_files
           .select { |file| file.match?(%r{#{repo.annotations_path}/.*.rbi}) }
           .map { |file| File.basename(file, ".rbi") }
           .sort

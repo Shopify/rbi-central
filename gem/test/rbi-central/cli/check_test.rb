@@ -198,26 +198,53 @@ module RBICentral
       end
 
       def test_check_index_modified
-        gem1 = @repo.add_mock_gem("gem1")
-        gem2 = @repo.add_mock_gem("gem2")
-        @repo.bundle_install!
         @repo.git_init!
         @repo.write_index!(<<~JSON)
           {
+            "gem1": {
+            }
           }
         JSON
+        @repo.write_annotations_file!("gem1", "<rbi>")
         @repo.git_commit!
         @repo.write_index!(<<~JSON)
           {
             "gem1": {
-              "path": "#{gem1.absolute_path}"
             },
             "gem2": {
-              "path": "#{gem2.absolute_path}"
             }
           }
         JSON
-        res = @repo.repo("check --no-gem")
+        res = @repo.repo("check --no-rubocop --no-runtime --no-static")
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+          ### Checking changed files...
+
+          Changed files:
+
+           * index.json
+
+          The following checks will run:
+            `index`    checks the index validity
+            `rubygems` checks the RBI files against Rubygems
+
+          ### Checking index...
+
+          Error: Missing RBI annotations file for `gem2` (file `rbi/annotations/gem2.rbi` not found)
+
+          ### Checking that RBI files belong to public gems...
+
+          Checking Rubygems for `gem2`...
+
+          No errors, good job!
+
+          Some checks failed. See above for details.
+        ERR
+        refute(res.status)
+        @repo.write_index!(<<~JSON)
+          {
+          }
+        JSON
+        res = @repo.repo("check --no-rubocop --no-runtime --no-static")
         assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
           ### Checking changed files...
 
@@ -230,12 +257,45 @@ module RBICentral
 
           ### Checking index...
 
-          Error: Missing RBI annotations file for `gem1` (file `rbi/annotations/gem1.rbi` not found)
-          Error: Missing RBI annotations file for `gem2` (file `rbi/annotations/gem2.rbi` not found)
+          Error: Missing index entry for `rbi/annotations/gem1.rbi` (key `gem1` not found in `index.json`)
 
           Some checks failed. See above for details.
         ERR
         refute(res.status)
+        @repo.write_index!(<<~JSON)
+          {
+            "gem1": {
+              "requires": [
+                "gem2"
+              ]
+            }
+          }
+        JSON
+        res = @repo.repo("check --no-rubocop --no-runtime --no-static")
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+          ### Checking changed files...
+
+          Changed files:
+
+           * index.json
+
+          The following checks will run:
+            `index`    checks the index validity
+            `rubygems` checks the RBI files against Rubygems
+
+          ### Checking index...
+
+          No errors, good job!
+
+          ### Checking that RBI files belong to public gems...
+
+          Checking Rubygems for `gem1`...
+
+          No errors, good job!
+
+          All checks passed without error, good job!
+        ERR
+        assert(res.status)
       end
 
       def test_check_annotations_modified
@@ -274,6 +334,26 @@ module RBICentral
           No errors, good job!
 
           All checks passed without error, good job!
+        ERR
+        assert(res.status)
+      end
+
+      def test_check_annotations_removed
+        @repo.bundle_install!
+        @repo.write_index!(<<~JSON)
+          {
+            "gem1": {}
+          }
+        JSON
+        @repo.write_annotations_file!("gem1", "<rbi>")
+        @repo.git_init!
+        @repo.git_commit!
+        @repo.remove!("rbi/annotations/gem1.rbi")
+        res = @repo.repo("check --no-rubocop --no-runtime --no-static")
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+          ### Checking changed files...
+
+          No change detected. Run with `--all` to run all checks.
         ERR
         assert(res.status)
       end

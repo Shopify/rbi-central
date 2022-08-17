@@ -179,7 +179,7 @@ module RBICentral
       raise Error, res.err unless res.status
 
       files.concat(res.out.lines.map(&:strip))
-      res = git("diff --name-only #{ref} --")
+      res = git("diff --name-only #{ref} --diff-filter=ACMRTUXB --")
       raise Error, res.err unless res.status
 
       files.concat(res.out.lines.map(&:strip))
