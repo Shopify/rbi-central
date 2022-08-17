@@ -25,6 +25,21 @@ module RBICentral
       assert_equal({ "requires" => ["x"], "dependencies" => ["a", "b"] }, gem.to_object)
     end
 
+    def test_equality
+      gem = Gem.new(name: "foo", path: "path", source: "src", requires: ["x"], dependencies: ["a", "b"])
+      same = Gem.new(name: "foo", path: "path", source: "src", requires: ["x"], dependencies: ["a", "b"])
+      diff_name = Gem.new(name: "bar")
+      diff_source = Gem.new(name: "foo", source: "bar")
+      diff_dependencies = Gem.new(name: "foo", dependencies: ["bar"])
+      diff_requires = Gem.new(name: "foo", requires: ["bar"])
+      assert_equal(gem, same)
+      refute_equal(gem, diff_name)
+      refute_equal(gem, diff_name)
+      refute_equal(gem, diff_source)
+      refute_equal(gem, diff_dependencies)
+      refute_equal(gem, diff_requires)
+    end
+
     def test_belongs_to_rubygems
       gem = Gem.new(name: "rbi")
       assert(gem.belongs_to_rubygems?)

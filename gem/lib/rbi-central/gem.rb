@@ -43,6 +43,14 @@ module RBICentral
       version && version != "9001.0" && version != "unknown"
     end
 
+    sig { params(other: Gem).returns(T::Boolean) }
+    def ==(other)
+      name == other.name &&
+        source == other.source &&
+        dependencies == other.dependencies &&
+        requires == other.requires
+    end
+
     sig { returns(String) }
     def to_s
       name
