@@ -69,7 +69,7 @@ class Lhm::Printer::Base
   def initialize; end
 end
 
-class Lhm::Printer::Percentage < Lhm::Printer::Base
+class Lhm::Printer::Percentage
   sig { void }
   def end; end
 
