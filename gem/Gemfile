@@ -8,6 +8,4 @@ group(:development, :test) do
   gem("minitest")
   gem("minitest-reporters")
   gem("rake", "~> 13.0")
-  # TODO: remove once contexts are released
-  gem("spoom", github: "Shopify/spoom", branch: "main")
 end

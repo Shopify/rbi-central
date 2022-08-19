@@ -147,7 +147,6 @@ module RBICentral
       @repo.write_gemfile!(<<~GEMFILE)
         source 'https://rubygems.org'
 
-        gem "spoom", github: "Shopify/spoom", branch: "main"
         gem "rbi-central", path: "#{GEM_ROOT}"
       GEMFILE
       @repo.bundle_install!
