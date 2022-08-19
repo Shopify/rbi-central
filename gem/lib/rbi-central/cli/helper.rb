@@ -52,7 +52,7 @@ module RBICentral
         end
 
         if checks.changed_files.any? { |file| file.match?(%r{^gem/.*}) }
-          checks.gem_tests = true
+          checks.gem_tests &= true
           checks.index &= true
           checks.rubocop &= true
           checks.rubygems &= true
