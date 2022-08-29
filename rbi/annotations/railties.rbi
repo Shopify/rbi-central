@@ -30,21 +30,9 @@ class Rails::Application < ::Rails::Engine
   def config; end
 end
 
-module Rails::Command::Behavior
-  mixes_in_class_methods ::Rails::Command::Behavior::ClassMethods
-end
-
 class Rails::Engine < ::Rails::Railtie
   sig { returns(ActionDispatch::Routing::RouteSet) }
   def routes(&block); end
-end
-
-module Rails::Generators::Migration
-  mixes_in_class_methods ::Rails::Generators::Migration::ClassMethods
-end
-
-module Rails::Initializable
-  mixes_in_class_methods ::Rails::Initializable::ClassMethods
 end
 
 class Rails::Railtie
