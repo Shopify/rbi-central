@@ -26,7 +26,7 @@ module Rails
 end
 
 class Rails::Application < ::Rails::Engine
-  sig { returns(Rails::Application::Configuration) }
+  sig { returns(T.untyped) }
   def config; end
 end
 
