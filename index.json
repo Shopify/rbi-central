@@ -100,6 +100,8 @@
       "sidekiq/web"
     ]
   },
+  "sorbet-coerce": {
+  },
   "state_machines": {
   },
   "stripe": {
