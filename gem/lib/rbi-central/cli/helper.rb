@@ -87,7 +87,9 @@ module RBICentral
         checks.changed_annotations += checks.changed_files
           .select { |file| file.match?(%r{#{repo.annotations_path}/.*.rbi}) }
           .map { |file| File.basename(file, ".rbi") }
-          .sort
+
+        checks.changed_annotations.uniq!
+        checks.changed_annotations.sort!
 
         if checks.changed_annotations.empty?
           checks.rubocop = false
