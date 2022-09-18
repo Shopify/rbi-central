@@ -8,4 +8,5 @@ end
 class ActiveRecord::Migration
   # @shim: Methods on migration are delegated to `SchemaStatements` using `method_missing`
   include ActiveRecord::ConnectionAdapters::SchemaStatements
+  include ActiveRecord::ConnectionAdapters::DatabaseStatements
 end
