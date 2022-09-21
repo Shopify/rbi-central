@@ -73,10 +73,9 @@ For each gem the test works as follows:
    2. Tries to `const_get` each constant defined in the RBI file
    3. Tries to call `instance_method` for each method and attribute accessor (or `method` for singleton methods) in the RBI file
 
-It is possible to allow necessary shims for non-existing runtime definitions by using comment tags:
+It is possible to allow necessary shims for non-existing runtime definitions by using a comment tag:
 
-* `@missing_method` to indicate that a method is delegated to another receiver using `method_missing`
-* `@shim` to indicate that a definition doesn't actually exist at runtime but is needed to allow type checking
+* `@shim` to indicate that a definition doesn't actually exist at runtime but is needed to allow type checking. [Example usage](https://github.com/Shopify/rbi-central/blob/9d61292566d9c72110b102bd788bfd9a75a4db07/rbi/annotations/sidekiq-scheduler.rbi#L4-L6)
 
 ### Static checks
 
