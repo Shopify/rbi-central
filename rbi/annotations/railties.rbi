@@ -39,3 +39,8 @@ class Rails::Railtie
   sig { params(block: T.proc.bind(Rails::Railtie).void).void }
   def configure(&block); end
 end
+
+class Rails::Railtie::Configuration
+  sig { params(blk: T.proc.bind(ActiveSupport::Reloader).void).void }
+  def to_prepare(&blk); end
+end
