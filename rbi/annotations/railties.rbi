@@ -26,12 +26,20 @@ module Rails
 end
 
 class Rails::Application < ::Rails::Engine
+  class << self
+    sig { params(block: T.proc.bind(Rails::Application).void).void }
+    def configure(&block); end
+  end
+
+  sig { params(block: T.proc.bind(Rails::Application).void).void }
+  def configure(&block); end
+
   sig { returns(T.untyped) }
   def config; end
 end
 
 class Rails::Engine < ::Rails::Railtie
-  sig { returns(ActionDispatch::Routing::RouteSet) }
+  sig { params(block: T.untyped).returns(ActionDispatch::Routing::RouteSet) }
   def routes(&block); end
 end
 
