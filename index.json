@@ -62,13 +62,6 @@
   },
   "pundit": {
   },
-  "rails": {
-    "requires": [
-      "rake",
-      "rake/tasklib",
-      "rails/all"
-    ]
-  },
   "railties": {
     "requires": [
       "rake",
