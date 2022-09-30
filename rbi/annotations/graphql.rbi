@@ -49,7 +49,7 @@ module GraphQL::Schema::Member::HasFields
     params(
       args: T.untyped,
       kwargs: T.untyped,
-      block: T.nilable(T.proc.bind(GraphQL::Schema::Field).void)
+      block: T.nilable(T.proc.bind(GraphQL::Schema::Field).params(field: GraphQL::Schema::Field).void)
     ).returns(T.untyped)
   end
   def field(*args, **kwargs, &block); end
