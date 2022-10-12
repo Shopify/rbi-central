@@ -58,6 +58,8 @@
       "mocha/api"
     ]
   },
+  "paper_trail": {
+  },
   "parse-cron": {
   },
   "pundit": {
