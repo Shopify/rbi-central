@@ -88,6 +88,35 @@ module RBICentral
         ], context.run!)
       end
 
+      def test_annotated_singleton_method_missing
+        mock = MockGem.new(Dir.mktmpdir, "foo")
+        mock.gemspec!(mock.default_gemspec)
+        mock.write!("lib/foo.rb", <<~RB)
+          class Foo
+            class << self
+              def method_missing(*); end
+            end
+          end
+        RB
+        context = Context.new(mock.gem, "gem.rbi")
+        visitor = Runtime::Visitor.new(context)
+        rbi_tree = RBI::Parser.parse_string(<<~RBI)
+          class Foo
+            class << self
+              # @method_missing: some description
+              def bar; end
+              def baz; end
+            end
+          end
+        RBI
+        visitor.visit(rbi_tree)
+        assert_messages([
+          "Missing runtime method `::Foo.baz` (defined at `-:5:4-5:16`)\n" \
+            "Note: `baz` could be delegated to :method_missing but the RBI " \
+            "definition isn't annotated with `@method_missing`.",
+        ], context.run!)
+      end
+
       def test_wrong_kind
         mock = MockGem.new(Dir.mktmpdir, "foo")
         mock.gemspec!(mock.default_gemspec)
