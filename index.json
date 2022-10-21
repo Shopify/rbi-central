@@ -31,6 +31,9 @@
     ]
   },
   "aws-sdk-acm": {
+    "dependencies": [
+      "nokogiri"
+    ]
   },
   "bencode": {
   },
