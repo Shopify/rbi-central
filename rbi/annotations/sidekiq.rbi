@@ -29,20 +29,14 @@ class Sidekiq::Launcher
 end
 
 class Sidekiq::Middleware::Chain
-  include ::Enumerable
-
   Elem = type_member {{fixed: T.untyped}}
 end
 
 class Sidekiq::ProcessSet
-  include ::Enumerable
-
   Elem = type_member {{fixed: Sidekiq::Process}}
 end
 
 class Sidekiq::Queue
-  include ::Enumerable
-
   Elem = type_member {{fixed: Sidekiq::Job}}
 
   sig { returns(T::Boolean) }
@@ -61,14 +55,10 @@ class Sidekiq::ScheduledSet < ::Sidekiq::JobSet
 end
 
 class Sidekiq::SortedSet
-  include ::Enumerable
-
   Elem = type_member {{fixed: Sidekiq::SortedEntry}}
 end
 
 module Sidekiq::Worker
-  mixes_in_class_methods ::Sidekiq::Worker::ClassMethods
-
   sig { returns(String) }
   def jid; end
 end
@@ -85,7 +75,5 @@ module Sidekiq::Worker::ClassMethods
 end
 
 class Sidekiq::WorkSet
-  include ::Enumerable
-
   Elem = type_member {{fixed: T.untyped}}
 end

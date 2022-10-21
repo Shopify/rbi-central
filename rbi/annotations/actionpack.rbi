@@ -1,17 +1,5 @@
 # typed: strict
 
-module AbstractController::Helpers
-  mixes_in_class_methods(::AbstractController::Helpers::ClassMethods)
-end
-
-module AbstractController::UrlFor
-  mixes_in_class_methods(::AbstractController::UrlFor::ClassMethods)
-end
-
-class ActionController::Base < ::ActionController::Metal
-  include(::ActiveSupport::Rescuable)
-end
-
 class ActionController::API
   MODULES = T.let(T.unsafe(nil), T::Array[T.untyped])
 end
@@ -19,10 +7,6 @@ end
 module ActionController::Flash::ClassMethods
   sig { params(types: Symbol).void }
   def add_flash_types(*types); end
-end
-
-module ActionController::Helpers
-  mixes_in_class_methods(::ActionController::Helpers::ClassMethods)
 end
 
 module ActionController::Helpers::ClassMethods
@@ -226,14 +210,6 @@ class ActionController::Parameters
   def values_at(*keys); end
 end
 
-module ActionController::Renderers
-  mixes_in_class_methods(::ActionController::Renderers::ClassMethods)
-end
-
-module ActionController::Rendering
-  mixes_in_class_methods(::ActionController::Rendering::ClassMethods)
-end
-
 module ActionController::RequestForgeryProtection
   private
 
@@ -255,8 +231,6 @@ module ActionController::StrongParameters
 end
 
 module ActionDispatch::Http::Parameters
-  mixes_in_class_methods ::ActionDispatch::Http::Parameters::ClassMethods
-
   sig { returns(ActionController::Parameters) }
   def parameters(); end
 

@@ -8,9 +8,6 @@ module GraphQL
 end
 
 class GraphQL::Backtrace
-  include ::Enumerable
-  extend ::Forwardable
-
   Elem = type_member {{fixed: T.untyped}}
 end
 
@@ -27,21 +24,13 @@ class GraphQL::Schema::InputObject < ::GraphQL::Schema::Member
 end
 
 class GraphQL::Schema::Object < ::GraphQL::Schema::Member
-  extend ::GraphQL::Schema::Member::HasFields
-
   sig { returns(GraphQL::Query::Context) }
   def context; end
 end
 
 class GraphQL::Schema::Resolver
-  extend ::GraphQL::Schema::Member::BaseDSLMethods
-
   sig { returns(GraphQL::Query::Context) }
   def context; end
-end
-
-class GraphQL::Schema::Member
-  extend ::GraphQL::Schema::Member::BaseDSLMethods
 end
 
 module GraphQL::Schema::Member::HasFields
@@ -63,12 +52,4 @@ end
 module GraphQL::Schema::Interface
   mixes_in_class_methods ::GraphQL::Schema::Member::BaseDSLMethods
   mixes_in_class_methods ::GraphQL::Schema::Member::HasFields
-end
-
-class GraphQL::Schema::Mutation < ::GraphQL::Schema::Resolver
-  extend ::GraphQL::Schema::Member::HasFields
-end
-
-class GraphQL::Schema::Subscription < ::GraphQL::Schema::Resolver
-  extend ::GraphQL::Schema::Member::HasFields
 end
