@@ -298,6 +298,60 @@ module RBICentral
         assert(res.status)
       end
 
+      def test_check_annotations_added
+        gem1 = @repo.add_mock_gem("gem1")
+        gem2 = @repo.add_mock_gem("gem2")
+        @repo.bundle_install!
+        @repo.write_index!(<<~JSON)
+          {
+            "gem1": {
+              "path": "#{gem1.absolute_path}"
+            }
+          }
+        JSON
+        @repo.write_annotations_file!("gem1", "module Gem1; end")
+        @repo.git_init!
+        @repo.git_commit!
+
+        @repo.write_index!(<<~JSON)
+          {
+            "gem1": {
+              "path": "#{gem1.absolute_path}"
+            },
+            "gem2": {
+              "path": "#{gem2.absolute_path}"
+            }
+          }
+        JSON
+        @repo.write_annotations_file!("gem2", "module Gem2; end")
+        res = @repo.repo("check --no-rubocop --no-runtime --no-static")
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+          ### Checking changed files...
+
+          Changed files:
+
+           * index.json
+           * rbi/annotations/gem2.rbi
+
+          The following checks will run:
+            `index`    checks the index validity
+            `rubygems` checks the RBI files against Rubygems
+
+          ### Checking index...
+
+          No errors, good job!
+
+          ### Checking that RBI files belong to public gems...
+
+          Checking Rubygems for `gem2`...
+
+          No errors, good job!
+
+          All checks passed without error, good job!
+        ERR
+        assert(res.status)
+      end
+
       def test_check_annotations_modified
         gem1 = @repo.add_mock_gem("gem1")
         gem2 = @repo.add_mock_gem("gem2")
