@@ -53,6 +53,20 @@ module RBICentral
       assert_equal(["#{path}/gem1.rbi", "#{path}/gem2.rbi"], @repo.annotations_files)
     end
 
+    def test_check_unexpected_annotations_files
+      @repo.write!("#{@repo.annotations_path}/file1", "<rbi>")
+      @repo.write!("#{@repo.annotations_path}/file2.rb", "<rbi>")
+      @repo.write!("#{@repo.annotations_path}/file3.RBI", "<rbi>")
+      @repo.write!("#{@repo.annotations_path}/dir/file4.rbi", "<rbi>")
+
+      assert_messages([
+        "Unexpected RBI annotations file `rbi/annotations/dir/file4.rbi` (must be in `rbi/annotations` root directory)",
+        "Unexpected RBI annotations file `rbi/annotations/file1` (should have `.rbi` extension)",
+        "Unexpected RBI annotations file `rbi/annotations/file2.rb` (should have `.rbi` extension)",
+        "Unexpected RBI annotations file `rbi/annotations/file3.RBI` (should have `.rbi` extension)",
+      ], @repo.check_unexpected_annotations_files)
+    end
+
     def test_check_index_format
       @repo.write_index!(<<~JSON)
         {

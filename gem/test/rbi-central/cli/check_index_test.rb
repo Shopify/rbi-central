@@ -55,10 +55,12 @@ module RBICentral
         @repo.write_annotations_file!("gem1", "<rbi>")
         @repo.write_annotations_file!("gem2", "<rbi>")
         @repo.write_annotations_file!("gem4", "<rbi>")
+        @repo.write!("#{@repo.annotations_path}/gem5.rb", "<rbi>")
         res = @repo.repo("check index")
         assert_equal(<<~ERR, res.err)
           ### Checking index...
 
+          Error: Unexpected RBI annotations file `rbi/annotations/gem5.rb` (should have `.rbi` extension)
           Error: Missing index entry for `rbi/annotations/gem4.rbi` (key `gem4` not found in `index.json`)
           Error: Missing RBI annotations file for `gem3` (file `rbi/annotations/gem3.rbi` not found)
           Error: Formatting errors found in `index.json`:
