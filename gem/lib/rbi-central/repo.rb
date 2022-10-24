@@ -59,12 +59,32 @@ module RBICentral
     sig { returns(T::Array[Index::Error]) }
     def check_index
       errors = T.let([], T::Array[Index::Error])
+      errors.concat(check_unexpected_annotations_files)
       errors.concat(check_missing_index_entries)
       errors.concat(check_missing_annotations_files)
       errors.concat(check_index_format)
       errors
     rescue Index::Error => error
       [error]
+    end
+
+    sig { returns(T::Array[Index::Error]) }
+    def check_unexpected_annotations_files
+      errors = T.let([], T::Array[Index::Error])
+
+      glob("#{@annotations_path}/**/*").sort.each do |path|
+        next unless file?(path)
+
+        errors << Index::Error.new(
+          "Unexpected RBI annotations file `#{path}` (must be in `#{@annotations_path}` root directory)"
+        ) unless File.dirname(path) == @annotations_path
+
+        errors << Index::Error.new(
+          "Unexpected RBI annotations file `#{path}` (should have `.rbi` extension)"
+        ) unless File.extname(path) == ".rbi"
+      end
+
+      errors
     end
 
     sig { returns(T::Array[Index::Error]) }
