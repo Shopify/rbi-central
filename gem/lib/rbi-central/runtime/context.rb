@@ -203,7 +203,7 @@ module RBICentral
               const.instance_method("\#{method_name}")
             end
           rescue NameError => e
-            if const && !singleton && __rbi_repo_respond_to_method_missing?(const)
+            if const && __rbi_repo_respond_to_method_missing?(const, singleton: singleton)
               return if allow_missing
 
               $stderr.puts("Missing runtime method `\#{recv_name}\#{singleton ? "." : "#"}\#{method_name}` (defined at `\#{rbi_loc}`)")
@@ -217,8 +217,12 @@ module RBICentral
             nil
           end
 
-          def __rbi_repo_respond_to_method_missing?(const)
-            method = const.instance_method(:method_missing)
+          def __rbi_repo_respond_to_method_missing?(const, singleton:)
+            method = if singleton
+              const.singleton_method(:method_missing)
+            else
+              const.instance_method(:method_missing)
+            end
             !/\\(BasicObject\\)/.match?(method.to_s)
           rescue NameError => e
             false
