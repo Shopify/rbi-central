@@ -219,7 +219,7 @@ module RBICentral
 
           def __rbi_repo_respond_to_method_missing?(const, singleton:)
             method = if singleton
-              const.method(:method_missing)
+              const.singleton_method(:method_missing)
             else
               const.instance_method(:method_missing)
             end
