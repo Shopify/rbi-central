@@ -59,6 +59,9 @@
     ]
   },
   "paper_trail": {
+    "requires": [
+      "active_record"
+    ]
   },
   "parse-cron": {
   },
