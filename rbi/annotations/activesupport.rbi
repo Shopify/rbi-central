@@ -39,7 +39,10 @@ class ActiveSupport::TestCase
   def self.test(name, &block); end
 end
 
-class String
+class Object
   sig { returns(T::Boolean) }
   def blank?; end
+
+  sig { returns(T::Boolean) }
+  def present?; end
 end
