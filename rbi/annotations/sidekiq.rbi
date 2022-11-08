@@ -58,12 +58,12 @@ class Sidekiq::SortedSet
   Elem = type_member {{fixed: Sidekiq::SortedEntry}}
 end
 
-module Sidekiq::Worker
+module Sidekiq::Job
   sig { returns(String) }
   def jid; end
 end
 
-module Sidekiq::Worker::ClassMethods
+module Sidekiq::Job::ClassMethods
   sig { params(args: T.untyped).returns(String) }
   def perform_async(*args); end
 
