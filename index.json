@@ -90,9 +90,6 @@
       "rake/tasklib",
       "rails",
       "sidekiq/cli",
-      "sidekiq/extensions/action_mailer",
-      "sidekiq/extensions/active_record",
-      "sidekiq/extensions/class_methods",
       "sidekiq/web"
     ]
   },
