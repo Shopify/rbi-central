@@ -16,11 +16,12 @@ end
 class Mocha::Expectation
   sig do
     params(
-      expected_parameters: T.untyped,
+      expected_parameters_or_matchers: T.untyped,
+      _arg1: T.untyped,
       matching_block: T.nilable(T.proc.params(actual_parameters: T.untyped).void)
     ).returns(Mocha::Expectation)
   end
-  def with(*expected_parameters, &matching_block); end
+  def with(*expected_parameters_or_matchers, **_arg1, &matching_block); end
 
   sig { params(values: T.untyped).returns(Mocha::Expectation) }
   def returns(*values); end
