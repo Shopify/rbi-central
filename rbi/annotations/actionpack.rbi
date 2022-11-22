@@ -261,6 +261,10 @@ class ActionDispatch::IntegrationTest
   private
 
   # @method_missing: delegated to ActionDispatch::Integration::Session
+  sig { returns(ActionDispatch::TestRequest) }
+  attr_reader :request
+
+  # @method_missing: delegated to ActionDispatch::Integration::Session
   sig { returns(ActionDispatch::TestResponse) }
   attr_reader :response
 end
