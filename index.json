@@ -107,6 +107,14 @@
   },
   "stripe": {
   },
+  "turbo-rails": {
+    "dependencies": [
+      "actionpack"
+    ],
+    "requires": [
+      "action_dispatch"
+    ]
+  },
   "webmock": {
     "dependencies": [
       "minitest"
