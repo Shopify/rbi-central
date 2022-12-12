@@ -40,7 +40,7 @@ module RBICentral
     sig { returns(Spoom::ExecResult) }
     def git_commit!
       git("add -A")
-      git("commit -m 'Update'")
+      git("-c commit.gpgsign=false commit -m 'Update'")
     end
 
     sig { params(name: String).returns(Spoom::ExecResult) }
