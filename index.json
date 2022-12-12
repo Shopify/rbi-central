@@ -50,6 +50,14 @@
   },
   "faraday": {
   },
+  "globalid": {
+    "dependencies": [
+      "activerecord"
+     ],
+    "requires": [
+      "active_record"
+    ]
+  },
   "graphql": {
   },
   "lhm": {
