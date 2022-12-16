@@ -60,6 +60,16 @@
   },
   "graphql": {
   },
+  "kredis": {
+    "dependencies": [
+      "activemodel",
+      "kredis"
+    ],
+    "requires": [
+      "active_model",
+      "kredis"
+    ]
+  },
   "lhm": {
   },
   "lhm-shopify": {
