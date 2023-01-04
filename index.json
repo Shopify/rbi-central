@@ -53,7 +53,7 @@
   "globalid": {
     "dependencies": [
       "activerecord"
-     ],
+    ],
     "requires": [
       "active_record"
     ]
