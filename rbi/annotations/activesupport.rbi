@@ -46,3 +46,6 @@ class Object
   sig { returns(T::Boolean) }
   def present?; end
 end
+
+class ActiveSupport::TimeWithZone < Time
+end
