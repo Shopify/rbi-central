@@ -47,5 +47,7 @@ class Object
   def present?; end
 end
 
-class ActiveSupport::TimeWithZone < Time
+class ActiveSupport::TimeWithZone
+   # @shim: Methods are delegated to `Time` using `method_missing`
+  include Time
 end
