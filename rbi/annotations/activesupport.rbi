@@ -105,16 +105,31 @@ class Array
   def extract_options!; end
 
   sig do
-    params(number: Integer, fill_with: T.untyped, block: T.nilable(T.proc.void)).returns(T::Array[T::Array[Elem]])
+    type_parameters(:FillType)
+      .params(
+        number: Integer,
+        fill_with: T.type_parameter(:FillType),
+        block: T.nilable(T.proc.params(group: T::Array[T.any(Elem, T.type_parameter(:FillType))]).void),
+      )
+      .returns(T::Array[T.any(Elem, T.type_parameter(:FillType))])
   end
-  def in_groups(number, fill_with = nil, &block); end
+  def in_groups(number, fill_with = T.unsafe(nil), &block); end
 
   sig do
-    params(number: Integer, fill_with: T.untyped, block: T.nilable(T.proc.void)).returns(T::Array[T::Array[Elem]])
+    type_parameters(:FillType)
+      .params(
+        number: Integer,
+        fill_with: T.type_parameter(:FillType),
+        block: T.nilable(T.proc.params(group: T::Array[T.any(Elem, T.type_parameter(:FillType))]).void),
+      )
+      .returns(T::Array[T.any(Elem, T.type_parameter(:FillType))])
   end
-  def in_groups_of(number, fill_with = nil, &block); end
+  def in_groups_of(number, fill_with = T.unsafe(nil), &block); end
 
-  sig { params(value: T.untyped, block: T.nilable(T.proc.void)).returns(T::Array[T::Array[Elem]]) }
+  sig do
+    params(value: T.untyped, block: T.nilable(T.proc.params(element: Elem).returns(T.untyped)))
+      .returns(T::Array[T::Array[Elem]])
+  end
   def split(value = nil, &block); end
 
   sig { params(object: T.untyped).returns(T::Array[T.untyped]) }
