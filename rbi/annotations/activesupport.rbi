@@ -111,7 +111,7 @@ class Array
         fill_with: T.type_parameter(:FillType),
         block: T.nilable(T.proc.params(group: T::Array[T.any(Elem, T.type_parameter(:FillType))]).void),
       )
-      .returns(T::Array[T.any(Elem, T.type_parameter(:FillType))])
+      .returns(T::Array[T::Array[T.any(Elem, T.type_parameter(:FillType))]])
   end
   def in_groups(number, fill_with = T.unsafe(nil), &block); end
 
