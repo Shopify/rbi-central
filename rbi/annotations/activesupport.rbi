@@ -47,6 +47,14 @@ class Object
   def present?; end
 end
 
+class NilClass
+  sig { returns(TrueClass) }
+  def blank?; end
+
+  sig { returns(FalseClass) }
+  def present?; end
+end
+
 class Hash
   sig { returns(T::Boolean) }
   def extractable_options?; end
