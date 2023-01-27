@@ -56,7 +56,8 @@
       "activerecord"
     ],
     "requires": [
-      "active_record"
+      "active_record",
+      "global_id/identification"
     ]
   },
   "graphql": {
