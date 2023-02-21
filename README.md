@@ -92,6 +92,9 @@ For each gem the test works as follows:
 
 ## Contributing
 
+If you working on the gem using VS Code, change into the `gem/` directory then run `code .`.
+This ensures that Sorbet and vscode-rdbg will work correctly.
+
 Bug reports and pull requests are welcome on GitHub at https://github.com/Shopify/rbi-central.
 
 This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](https://github.com/Shopify/rbi-central/blob/main/CODE_OF_CONDUCT.md) code of conduct.
