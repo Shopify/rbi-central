@@ -7,11 +7,10 @@
         {
             "type": "rdbg",
             "name": "Debug current file with rdbg",
-            "cwd": "${workspaceFolder}/gem",
             "useBundler": true,
             "command": "ruby",
             "request": "launch",
-            "script": "-Itest ${file}",
+            "script": "-Itest ${relativeFile}",
             "args": [],
             "askParameters": true
         }

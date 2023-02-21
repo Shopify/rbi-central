@@ -8,4 +8,5 @@ group(:development, :test) do
   gem("minitest")
   gem("minitest-reporters")
   gem("rake", "~> 13.0")
+  gem("debug")
 end
