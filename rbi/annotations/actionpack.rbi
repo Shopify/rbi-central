@@ -108,22 +108,14 @@ class ActionController::Parameters
   sig { params(block: T.untyped).returns(T.untyped) }
   def reject(&block); end
 
-  sig { params(key: T.any(String, Symbol)).returns(T.nilable(T.any(String, Numeric, ActionController::Parameters))) }
+  sig { params(key: T.any(String, Symbol)).returns(T.untyped) }
   def [](key); end
 
-  sig do
-    params(
-      key: T.any(String, Symbol, T::Array[T.any(String, Symbol)]),
-    ).returns(T.any(String, Numeric, T::Array[T.untyped], ActionController::Parameters))
-  end
+  sig { params(key: T.any(String, Symbol, T::Array[T.any(String, Symbol)])).returns(T.untyped) }
   def require(key); end
 
   # required is an alias of require
-  sig do
-    params(
-      key: T.any(String, Symbol, T::Array[T.any(String, Symbol)])
-    ).returns(T.any(String, Numeric, T::Array[T.untyped], ActionController::Parameters))
-  end
+  sig { params(key: T.any(String, Symbol, T::Array[T.any(String, Symbol)])).returns(T.untyped) }
   def required(key); end
 
   sig { params(other_hash: T.untyped).returns(ActionController::Parameters) }
@@ -232,11 +224,11 @@ end
 
 module ActionDispatch::Http::Parameters
   sig { returns(ActionController::Parameters) }
-  def parameters(); end
+  def parameters; end
 
   # params is an alias of parameters
   sig { returns(ActionController::Parameters) }
-  def params(); end
+  def params; end
 end
 
 module ActionDispatch::Integration::Runner
@@ -261,7 +253,6 @@ class ActionDispatch::IntegrationTest
   # `TestResponse` / `Request` (via `delegate`).
   #
   # Cf. https://github.com/Shopify/rbi-central/pull/138 for more context.
-
   # @method_missing: delegated to ActionDispatch::TestProcess
   sig { returns(ActionDispatch::Flash::FlashHash) }
   def flash; end
@@ -279,7 +270,7 @@ class ActionDispatch::IntegrationTest
   def status_message; end
 
   # @method_missing: delegated to ActionDispatch::TestResponse
-  sig { returns(T.nilable(ActionDispatch::Response::Header)) }
+  sig { returns(ActionDispatch::Response::Header) }
   def headers; end
 
   # @method_missing: delegated to ActionDispatch::TestResponse
