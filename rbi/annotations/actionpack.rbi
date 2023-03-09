@@ -108,22 +108,14 @@ class ActionController::Parameters
   sig { params(block: T.untyped).returns(T.untyped) }
   def reject(&block); end
 
-  sig { params(key: T.any(String, Symbol)).returns(T.nilable(T.any(String, Numeric, ActionController::Parameters))) }
+  sig { params(key: T.any(String, Symbol)).returns(T.untyped) }
   def [](key); end
 
-  sig do
-    params(
-      key: T.any(String, Symbol, T::Array[T.any(String, Symbol)]),
-    ).returns(T.any(String, Numeric, T::Array[T.untyped], ActionController::Parameters))
-  end
+  sig { params(key: T.any(String, Symbol, T::Array[T.any(String, Symbol)])).returns(T.untyped) }
   def require(key); end
 
   # required is an alias of require
-  sig do
-    params(
-      key: T.any(String, Symbol, T::Array[T.any(String, Symbol)])
-    ).returns(T.any(String, Numeric, T::Array[T.untyped], ActionController::Parameters))
-  end
+  sig { params(key: T.any(String, Symbol, T::Array[T.any(String, Symbol)])).returns(T.untyped) }
   def required(key); end
 
   sig { params(other_hash: T.untyped).returns(ActionController::Parameters) }
