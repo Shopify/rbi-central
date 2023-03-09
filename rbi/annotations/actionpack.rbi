@@ -166,8 +166,8 @@ class ActionController::Parameters
   sig { params(keys: T.any(String, Symbol)).returns(ActionController::Parameters) }
   def slice(*keys); end
 
-  sig { returns(ActiveSupport::HashWithIndifferentAccess) }
-  def to_h; end
+  sig { params(block: T.nilable(Proc)).returns(ActiveSupport::HashWithIndifferentAccess) }
+  def to_h(&block); end
 
   sig { returns(T::Hash[T.untyped, T.untyped]) }
   def to_hash; end
