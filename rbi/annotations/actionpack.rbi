@@ -224,11 +224,11 @@ end
 
 module ActionDispatch::Http::Parameters
   sig { returns(ActionController::Parameters) }
-  def parameters(); end
+  def parameters; end
 
   # params is an alias of parameters
   sig { returns(ActionController::Parameters) }
-  def params(); end
+  def params; end
 end
 
 module ActionDispatch::Integration::Runner
@@ -253,7 +253,6 @@ class ActionDispatch::IntegrationTest
   # `TestResponse` / `Request` (via `delegate`).
   #
   # Cf. https://github.com/Shopify/rbi-central/pull/138 for more context.
-
   # @method_missing: delegated to ActionDispatch::TestProcess
   sig { returns(ActionDispatch::Flash::FlashHash) }
   def flash; end
