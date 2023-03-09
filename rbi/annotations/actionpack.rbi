@@ -270,7 +270,7 @@ class ActionDispatch::IntegrationTest
   def status_message; end
 
   # @method_missing: delegated to ActionDispatch::TestResponse
-  sig { returns(T.nilable(ActionDispatch::Response::Header)) }
+  sig { returns(ActionDispatch::Response::Header) }
   def headers; end
 
   # @method_missing: delegated to ActionDispatch::TestResponse
