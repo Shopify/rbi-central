@@ -7,6 +7,15 @@ class Money
   sig { returns(T.any(Money::Currency, Money::NullCurrency)) }
   attr_reader :currency
 
+  sig do
+    params(
+      value: T.nilable(T.any(Money, Numeric, String)),
+      currency: T.nilable(T.any(Money::Currency, Money::NullCurrency, String)),
+    )
+      .void
+  end
+  def initialize(value, currency); end
+
   # @method_missing: delegated to BigDecimal
   sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(T::Boolean) }
   def zero?(*args, **_arg1, &block); end
@@ -76,15 +85,6 @@ class Money
     end
     def with_currency(new_currency, &block); end
   end
-
-  sig do
-    params(
-      value: T.nilable(T.any(Money, Numeric, String)),
-      currency: T.nilable(T.any(Money::Currency, Money::NullCurrency, String)),
-    )
-      .void
-  end
-  def initialize(value, currency); end
 
   sig { params(format: Symbol).returns(Integer) }
   def subunits(format: :iso4217); end
