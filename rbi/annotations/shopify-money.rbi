@@ -77,11 +77,12 @@ class Money
     def current_currency=(currency); end
 
     sig do
-      params(
-        new_currency: T.nilable(T.any(Money::Currency, Money::NullCurrency, String)),
-        block: T.nilable(T.proc.void),
-      )
-        .void
+      type_parameters(:U)
+        .params(
+          new_currency: T.nilable(T.any(Money::Currency, Money::NullCurrency, String)),
+          block: T.nilable(T.proc.returns(T.type_parameter(:U))),
+        )
+        .returns(T.type_parameter(:U))
     end
     def with_currency(new_currency, &block); end
   end
