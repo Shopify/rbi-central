@@ -166,8 +166,8 @@ class ActionController::Parameters
   sig { params(keys: T.any(String, Symbol)).returns(ActionController::Parameters) }
   def slice(*keys); end
 
-  sig { returns(ActiveSupport::HashWithIndifferentAccess) }
-  def to_h; end
+  sig { params(block: T.nilable(Proc)).returns(ActiveSupport::HashWithIndifferentAccess) }
+  def to_h(&block); end
 
   sig { returns(T::Hash[T.untyped, T.untyped]) }
   def to_hash; end
@@ -392,7 +392,7 @@ class ActionDispatch::Request
   #
   # This unique ID is useful for tracing a request from end-to-end as part of logging or debugging.
   # This relies on the Rack variable set by the ActionDispatch::RequestId middleware.
-  sig { returns(String) }
+  sig { returns(T.nilable(String)) }
   def request_id; end
 
   # Returns true if the request has a header matching the given key parameter.
