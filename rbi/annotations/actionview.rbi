@@ -49,7 +49,7 @@ module ActionView::Helpers::UrlHelper
 
   sig do
     params(
-      name: String,
+      name: T.nilable(String),
       options: T.untyped,
       html_options: T.untyped,
       block: T.untyped
