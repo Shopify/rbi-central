@@ -21,7 +21,7 @@ class ActiveModel::Errors
   sig { params(attribute: T.any(Symbol, String), type: T.untyped, options: T.untyped).returns(T.nilable(T::Array[String])) }
   def delete(attribute, type = nil, **options); end
 
-  sig { returns(T::Hash[Symbol, T::Array[T::Hash[Symbol, Symbol]]]) }
+  sig { returns(T::Hash[Symbol, T::Array[T::Hash[Symbol, T.untyped]]]) }
   def details; end
 
   sig { returns(T::Array[Elem]) }
