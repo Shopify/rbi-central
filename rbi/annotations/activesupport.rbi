@@ -39,6 +39,10 @@ class ActiveSupport::TestCase
   def self.test(name, &block); end
 end
 
+class ActiveSupport::TimeWithZone
+  include ::DateAndTime::Calculations
+end
+
 class Object
   sig { returns(T::Boolean) }
   def blank?; end
