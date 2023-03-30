@@ -26,7 +26,7 @@ module RBICentral
 
         res = bundle_exec("ruby #{TEST_NAME}")
         unless res.status
-          out = res.err
+          out = T.must(res.err)
           error = T.let(nil, T.nilable(String))
           out.lines do |line|
             if line.start_with?("Note: ")
