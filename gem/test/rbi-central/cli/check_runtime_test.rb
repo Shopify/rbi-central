@@ -16,7 +16,7 @@ module RBICentral
         @repo.write_annotations_file!("gem1", "module Gem1; end")
         @repo.write_annotations_file!("gem2", "module Gem2; end")
         res = @repo.repo("check runtime")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking RBI files against runtime execution...
 
           Checking runtime for `gem1`...
@@ -37,7 +37,7 @@ module RBICentral
         @repo.write_annotations_file!("gem1", "module NotFound; end")
         @repo.write_annotations_file!("gem2", "module NotFound; end")
         res = @repo.repo("check runtime")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking RBI files against runtime execution...
 
           Checking runtime for `gem1`...
@@ -62,7 +62,7 @@ module RBICentral
         JSON
         @repo.write_annotations_file!("gem1", "module NotFound; end")
         res = @repo.repo("check runtime gem1")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking RBI files against runtime execution...
 
           Checking runtime for `gem1`...

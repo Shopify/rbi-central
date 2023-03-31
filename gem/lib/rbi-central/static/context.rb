@@ -30,7 +30,7 @@ module RBICentral
 
         res = bundle_exec("tapioca gem --no-doc --post requires.rb")
         unless res.status
-          errors << Error.new(res.err.lstrip)
+          errors << Error.new(T.must(res.err).lstrip)
           return errors
         end
 
@@ -43,7 +43,7 @@ module RBICentral
           "--shim-rbi-dir=rbi/annotations " \
           "--annotations-rbi-dir=sorbet/rbi/none")
         unless res.status
-          out = res.err
+          out = T.must(res.err)
           out.gsub!("#{absolute_path}/", "")
           out.gsub!("rbi/annotations and sorbet/rbi/todo.rbi", @annotations_file)
 
