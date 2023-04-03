@@ -40,7 +40,10 @@ class ActiveSupport::TestCase
 end
 
 class ActiveSupport::TimeWithZone
+  include ::Comparable
+  include ::DateAndTime::Zones
   include ::DateAndTime::Calculations
+  include ::DateAndTime::Compatibility
 end
 
 class Object
