@@ -32,7 +32,7 @@ module RBICentral
           end
         RBI
         res = @repo.repo("check --no-gem --no-static --all")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           The following checks will run:
@@ -93,7 +93,7 @@ module RBICentral
           end
         RBI
         res = @repo.repo("check --no-gem --no-static --all")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           The following checks will run:
@@ -163,7 +163,7 @@ module RBICentral
         @repo.git_init!
         @repo.git_commit!
         res = @repo.repo("check")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           No change detected. Run with `--all` to run all checks.
@@ -185,7 +185,7 @@ module RBICentral
         @repo.git_commit!
         @repo.write!("some_other_file.rb", "")
         res = @repo.repo("check")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           Changed files:
@@ -216,7 +216,7 @@ module RBICentral
           }
         JSON
         res = @repo.repo("check --no-rubocop --no-runtime --no-static")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           Changed files:
@@ -245,7 +245,7 @@ module RBICentral
           }
         JSON
         res = @repo.repo("check --no-rubocop --no-runtime --no-static")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           Changed files:
@@ -272,7 +272,7 @@ module RBICentral
           }
         JSON
         res = @repo.repo("check --no-rubocop --no-runtime --no-static")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           Changed files:
@@ -325,7 +325,7 @@ module RBICentral
         JSON
         @repo.write_annotations_file!("gem2", "module Gem2; end")
         res = @repo.repo("check --no-rubocop --no-runtime --no-static")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           Changed files:
@@ -371,7 +371,7 @@ module RBICentral
         @repo.git_commit!
         @repo.write_annotations_file!("gem2", "module Foo; end")
         res = @repo.repo("check --no-rubocop --no-runtime --no-static")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           Changed files:
@@ -404,7 +404,7 @@ module RBICentral
         @repo.git_commit!
         @repo.remove!("rbi/annotations/gem1.rbi")
         res = @repo.repo("check --no-rubocop --no-runtime --no-static")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           No change detected. Run with `--all` to run all checks.
@@ -431,7 +431,7 @@ module RBICentral
         @repo.git_commit!
         @repo.write_gemfile!("\n", append: true)
         res = @repo.repo("check --no-gem --no-rubocop --no-runtime --no-static")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           Changed files:
@@ -496,7 +496,7 @@ module RBICentral
         RB
         @repo.exec("chmod +x gem/bin/test")
         res = @repo.repo("check --no-rubocop --no-runtime --no-static --gem")
-        assert_equal(<<~ERR, RBICentral.filter_parser_warning(res.err))
+        assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))
           ### Checking changed files...
 
           Changed files:

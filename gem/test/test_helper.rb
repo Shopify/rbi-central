@@ -30,17 +30,11 @@ module RBICentral
       write!("#{annotations_path}/#{gem_name}.rbi", rbi)
     end
 
-    sig { override.params(branch: String).void }
+    sig { override.params(branch: T.nilable(String)).returns(Spoom::ExecResult) }
     def git_init!(branch: "main")
       super
       git("config user.name 'test'")
       git("config user.email 'test@shopify.com'")
-    end
-
-    sig { returns(Spoom::ExecResult) }
-    def git_commit!
-      git("add -A")
-      git("-c commit.gpgsign=false commit -m 'Update'")
     end
 
     sig { params(name: String).returns(Spoom::ExecResult) }

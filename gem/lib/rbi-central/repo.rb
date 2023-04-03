@@ -151,7 +151,7 @@ module RBICentral
       res = bundle_exec("rubocop #{color_opt} -f clang #{annotations_file_for(gem)} -c #{config_file.path} >&2")
       return [] if res.status
 
-      message = RBICentral.filter_parser_warning(res.err).lines[0..-3]&.join
+      message = RBICentral.filter_parser_warning(T.must(res.err)).lines[0..-3]&.join
       # TODO: parse errors lines
       [Gem::Error.new(message)]
     ensure
