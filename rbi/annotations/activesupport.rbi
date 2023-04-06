@@ -41,7 +41,9 @@ end
 
 class ActiveSupport::TimeWithZone
   include ::Comparable
+  # @shim: Methods on ActiveSupport::TimeWithZone are delegated to `Time` using `method_missing
   include ::DateAndTime::Zones
+  # @shim: Methods on ActiveSupport::TimeWithZone are delegated to `Time` using `method_missing
   include ::DateAndTime::Calculations
   include ::DateAndTime::Compatibility
 end
