@@ -107,6 +107,11 @@
       "rainbow/version"
     ]
   },
+  "shopify-money": {
+    "requires": [
+      "money"
+    ]
+  },
   "sidekiq": {
     "dependencies": [
       "rails"
