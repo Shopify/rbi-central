@@ -142,8 +142,11 @@ class Array
   sig { params(object: T.untyped).returns(T::Array[T.untyped]) }
   def self.wrap(object); end
 
-  sig { returns(T.untyped) }
-  def extract!; end
+  sig do
+    params(block: T.nilable(T.proc.params(element: Elem).returns(T.untyped)))
+      .returns(T::Array[T::Array[Elem]])
+  end
+  def extract!(&block); end
 
   sig { returns(ActiveSupport::ArrayInquirer) }
   def inquiry; end
