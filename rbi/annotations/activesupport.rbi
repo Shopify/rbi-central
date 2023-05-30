@@ -144,7 +144,7 @@ class Array
 
   sig do
     params(block: T.nilable(T.proc.params(element: Elem).returns(T.untyped)))
-      .returns(T::Array[T::Array[Elem]])
+      .returns(T.any(T::Array[Elem], T::Enumerator[Elem]))
   end
   def extract!(&block); end
 
