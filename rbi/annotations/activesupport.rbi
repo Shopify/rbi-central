@@ -59,7 +59,7 @@ class Hash
   def extractable_options?; end
 end
 
-class Integer
+class Numeric
   sig { returns(ActiveSupport::Duration) }
   def seconds; end
   sig { returns(ActiveSupport::Duration) }
