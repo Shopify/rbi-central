@@ -88,6 +88,12 @@ class Numeric
   def years; end
   sig { returns(ActiveSupport::Duration) }
   def year; end
+  sig { returns(ActiveSupport::Duration) }
+  def fortnight; end
+  sig { returns(ActiveSupport::Duration) }
+  def fortnights; end
+  sig { returns(Integer) }
+  def in_milliseconds; end
 end
 
 class Array
