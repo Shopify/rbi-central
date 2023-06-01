@@ -59,6 +59,17 @@ class Hash
   def extractable_options?; end
 end
 
+class Integer
+  def months; end
+  sig { returns(ActiveSupport::Duration) }
+  def month; end
+  sig { returns(ActiveSupport::Duration) }
+  def years; end
+  sig { returns(ActiveSupport::Duration) }
+  def year; end
+  sig { returns(ActiveSupport::Duration) }
+end
+
 class Numeric
   sig { returns(ActiveSupport::Duration) }
   def seconds; end
@@ -80,14 +91,6 @@ class Numeric
   def weeks; end
   sig { returns(ActiveSupport::Duration) }
   def week; end
-  sig { returns(ActiveSupport::Duration) }
-  def months; end
-  sig { returns(ActiveSupport::Duration) }
-  def month; end
-  sig { returns(ActiveSupport::Duration) }
-  def years; end
-  sig { returns(ActiveSupport::Duration) }
-  def year; end
   sig { returns(ActiveSupport::Duration) }
   def fortnight; end
   sig { returns(ActiveSupport::Duration) }
