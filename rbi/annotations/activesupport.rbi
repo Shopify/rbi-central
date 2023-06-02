@@ -60,6 +60,7 @@ class Hash
 end
 
 class Integer
+  sig { returns(ActiveSupport::Duration) }
   def months; end
   sig { returns(ActiveSupport::Duration) }
   def month; end
@@ -67,7 +68,6 @@ class Integer
   def years; end
   sig { returns(ActiveSupport::Duration) }
   def year; end
-  sig { returns(ActiveSupport::Duration) }
 end
 
 class Numeric
