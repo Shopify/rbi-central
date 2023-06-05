@@ -10,7 +10,7 @@ RBI Central is a cumulative repository of [RBI](https://sorbet.org/docs/rbi) ("R
 
 The RBIs in this repository are used by [Tapioca](https://github.com/Shopify/tapioca).
 
-The `[rbi-central](https://rubygems.org/gems/rbi-central)` gem exists only to prevent name squatting - it should **not** be installed.
+The [rbi-central](https://rubygems.org/gems/rbi-central) gem exists only to prevent name squatting - it should **not** be installed.
 
 ### Annotations
 
