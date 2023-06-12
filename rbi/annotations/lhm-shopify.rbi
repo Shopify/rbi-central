@@ -153,7 +153,7 @@ class Lhm::Migrator
 end
 
 module Lhm::Throttler
-  sig { params(type: T.any(Lhm::Command, Symbol, String, Class), options: T::Hash[T.untyped, T.untyped]).void }
+  sig { params(type: T.any(Lhm::Command, Symbol, String, T::Class[T.anything]), options: T::Hash[T.untyped, T.untyped]).void }
   def setup_throttler(type, options = {}); end
 
   sig { returns(Lhm::Throttler) }
@@ -184,7 +184,7 @@ end
 class Lhm::Throttler::Factory
   sig do
     params(
-      type: T.any(Lhm::Command, Symbol, String, Class),
+      type: T.any(Lhm::Command, Symbol, String, T::Class[T.anything]),
       options: T::Hash[T.untyped, T.untyped]
     ).returns(Lhm::Throttler)
   end
