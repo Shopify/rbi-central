@@ -533,6 +533,42 @@ class Stripe::File < Stripe::APIResource
 
   sig { params(id: T.any(String, T::Hash[Symbol, T.untyped]), opts: T.nilable(T::Hash[Symbol, T.untyped])).returns(Stripe::File) }
   def self.retrieve(id, opts = nil); end
+
+  # @method_missing: from StripeObject
+  sig { returns(String) }
+  def purpose; end
+
+  # @method_missing: from StripeObject
+  sig { returns(String) }
+  def type; end
+
+  # @method_missing: from StripeObject
+  sig { returns(Integer) }
+  def created; end
+
+  # @method_missing: from StripeObject
+  sig { returns(T.nilable(Integer)) }
+  def expires_at; end
+
+  # @method_missing: from StripeObject
+  sig { returns(String) }
+  def filename; end
+
+  # @method_missing: from StripeObject
+  sig { returns(Stripe::ListObject) }
+  def links; end
+
+  # @method_missing: from StripeObject
+  sig { returns(Integer) }
+  def size; end
+
+  # @method_missing: from StripeObject
+  sig { returns(T.nilable(String)) }
+  def title; end
+
+  # @method_missing: from StripeObject
+  sig { returns(String) }
+  def url; end
 end
 
 class Stripe::ListObject
