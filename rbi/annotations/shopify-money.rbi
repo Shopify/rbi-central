@@ -150,7 +150,7 @@ class Money
   sig { params(splits: T::Array[Numeric], strategy: Symbol).returns(T::Array[Money]) }
   def allocate(splits, strategy); end
 
-  sig { params(maximums: T::Array[Numeric]).returns(T::Array[Money]) }
+  sig { params(maximums: T::Array[T.any(Money, Numeric, String)]).returns(T::Array[Money]) }
   def allocate_max_amounts(maximums); end
 
   sig { params(num: Numeric).returns(T::Array[Money]) }
