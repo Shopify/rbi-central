@@ -69,6 +69,9 @@ module RBICentral
       MinimumStrictness: "true"
       SuggestedStrictness: "true"
       RequireSigilOnAllFiles: true
+
+    Sorbet/EnforceSignatures:
+      Enabled: true
   YML
 
   class Error < StandardError; end
