@@ -121,10 +121,7 @@ module RBICentral
 
           Linting `gem1`...
 
-          Error: rbi/annotations/gem1.rbi:1:1: C: [Correctable] Sorbet/StrictSigil: No Sorbet sigil found in file. Try a typed: strict to start (you can also use rubocop -a to automatically add this).
-          class Gem1::NotFound; end
-          ^^^^^
-          rbi/annotations/gem1.rbi:1:1: C: [Correctable] Sorbet/ValidSigil: No Sorbet sigil found in file. Try a typed: true to start (you can also use rubocop -a to automatically add this).
+          Error: rbi/annotations/gem1.rbi:1:1: C: [Correctable] Sorbet/ValidSigil: No Sorbet sigil found in file. Try a typed: true to start (you can also use rubocop -a to automatically add this).
           class Gem1::NotFound; end
           ^^^^^
 

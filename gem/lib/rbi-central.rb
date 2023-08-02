@@ -64,8 +64,11 @@ module RBICentral
       Include:
       - 'rbi/**/*'
 
-    Sorbet/StrictSigil:
+    Sorbet/ValidSigil:
       Enabled: true
+      MinimumStrictness: "true"
+      SuggestedStrictness: "true"
+      RequireSigilOnAllFiles: true
   YML
 
   class Error < StandardError; end
