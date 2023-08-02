@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 class Aws::ACM::Client
   sig { params(params: T.untyped, options: T.untyped).returns(Aws::ACM::Types::DescribeCertificateResponse) }

@@ -1,4 +1,4 @@
-# typed: strong
+# typed: true
 
 module Configs
   sig { params(name: T.any(String, Symbol)).returns(ActiveSupport::HashWithIndifferentAccess) }

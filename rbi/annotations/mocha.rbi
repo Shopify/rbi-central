@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 module Mocha::API
   sig { params(arguments: T.untyped).returns(Mocha::Mock) }

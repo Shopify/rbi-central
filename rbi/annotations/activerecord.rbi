@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 class ActiveRecord::Schema
   sig {params(info: T::Hash[T.untyped, T.untyped], blk: T.proc.bind(ActiveRecord::Schema).void).void}

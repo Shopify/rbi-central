@@ -64,7 +64,13 @@ module RBICentral
       Include:
       - 'rbi/**/*'
 
-    Sorbet/StrictSigil:
+    Sorbet/ValidSigil:
+      Enabled: true
+      MinimumStrictness: "true"
+      SuggestedStrictness: "true"
+      RequireSigilOnAllFiles: true
+
+    Sorbet/EnforceSignatures:
       Enabled: true
   YML
 

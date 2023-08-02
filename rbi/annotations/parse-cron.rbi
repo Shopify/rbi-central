@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 # Parses cron expressions and computes the next occurence of the "job"
 class CronParser

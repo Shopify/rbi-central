@@ -1,4 +1,4 @@
-# typed: strong
+# typed: true
 
 module Rails
   class << self

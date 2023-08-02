@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 module Rainbow
   # @shim: https://github.com/sickill/rainbow/blob/master/lib/rainbow.rb#L10-L12

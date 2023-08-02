@@ -1,4 +1,4 @@
-# typed: strong
+# typed: true
 
 module ActionView
   TemplateError = T.type_alias { Template::Error }

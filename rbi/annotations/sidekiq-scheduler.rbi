@@ -1,4 +1,4 @@
-# typed: strong
+# typed: true
 
 class SidekiqScheduler::Scheduler
   # @shim: Instance methods are made to function as class methods using `method_missing`

@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 class String
   extend Colorize::ClassMethods
@@ -105,9 +105,6 @@ class String
 
   sig { returns(String) }
   def red; end
-
-  sig { returns(String) }
-  def swap; end
 
   sig { returns(String) }
   def underline; end
