@@ -107,9 +107,6 @@ class String
   def red; end
 
   sig { returns(String) }
-  def swap; end
-
-  sig { returns(String) }
   def underline; end
 
   sig { returns(String) }
