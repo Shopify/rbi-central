@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 module Kredis::Types
   sig { params(key: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Scalar) }

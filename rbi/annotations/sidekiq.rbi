@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 class Sidekiq::CLI
   sig { returns(Sidekiq::CLI) }

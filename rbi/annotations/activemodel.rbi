@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 class ActiveModel::Errors
   Elem = type_member { { fixed: ActiveModel::Error } }

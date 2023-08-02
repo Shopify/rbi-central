@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 class String
   extend Colorize::ClassMethods

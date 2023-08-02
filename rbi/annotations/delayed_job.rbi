@@ -1,4 +1,4 @@
-# typed: strong
+# typed: true
 
 module Delayed::MessageSending
   sig { params(options: T.nilable(T::Hash[Symbol, T.untyped])).returns(T.self_type) }

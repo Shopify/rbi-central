@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 module AASM
   mixes_in_class_methods(AASM::ClassMethods)

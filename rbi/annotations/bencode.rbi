@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 class Array
   # Bencodes the Array object. Bencoded arrays are represented as +lxe+, where

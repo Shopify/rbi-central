@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 class Stripe::APIResource < Stripe::StripeObject
   Elem = type_member { { fixed: T.untyped } }

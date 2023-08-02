@@ -1,4 +1,4 @@
-# typed: strong
+# typed: true
 
 class Money
   sig { returns(BigDecimal) }

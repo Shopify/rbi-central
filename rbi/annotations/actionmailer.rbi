@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 class ActionMailer::Base
   sig { params(headers: T.untyped, block: T.nilable(T.proc.void)).returns(Mail::Message) }

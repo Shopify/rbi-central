@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 module ActiveSupport::Testing::Declarative
   sig { params(name: String, block: T.proc.bind(T.untyped).void).void }
