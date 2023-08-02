@@ -11,7 +11,10 @@ end
 class Sidekiq::Client
   private
 
+  sig { params(item: T.untyped).returns(T.untyped) }
   def normalize_item(item); end
+
+  sig { params(item_class: T.untyped).returns(T.untyped) }
   def normalized_hash(item_class); end
 end
 

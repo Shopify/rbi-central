@@ -498,6 +498,7 @@ class Stripe::Invoice < Stripe::APIResource
   def subtotal; end
 
   # @method_missing: from StripeObject
+  sig { returns(T::Hash[T.untyped, T.untyped]) }
   def status_transitions; end
 end
 
@@ -525,6 +526,7 @@ class Stripe::InvoiceItem < Stripe::APIResource
 
   # unsure how to represent a StripeObject with specific keys/mmethods without causing typing errors
   # @method_missing: from StripeObject
+  sig { returns(T::Hash[T.untyped, T.untyped]) }
   def period; end
 end
 
@@ -648,6 +650,7 @@ class Stripe::Plan < Stripe::APIResource
 
   # unsure how to represent a StripeObject with specific keys/mmethods without causing typing errors
   # @method_missing: from StripeObject
+  sig { returns(T::Hash[T.untyped, T.untyped]) }
   def period; end
 
   # @method_missing: from StripeObject
