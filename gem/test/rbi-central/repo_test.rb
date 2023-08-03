@@ -134,7 +134,7 @@ module RBICentral
 
     def test_check_rubocop_for_valid
       @repo.write_annotations_file!("gem1", <<~RBI)
-        # typed: strict
+        # typed: true
 
         module Spoom; end
       RBI
@@ -143,15 +143,15 @@ module RBICentral
 
     def test_check_rubocop_for_invalid
       @repo.write_annotations_file!("gem1", <<~RBI)
-        # typed: false
+        # typed: strict
 
         module Spoom; end
       RBI
       errors = @repo.check_rubocop_for(Gem.new(name: "gem1"))
       assert_equal(<<~ERR, errors.first&.message)
-        rbi/annotations/gem1.rbi:1:1: C: Sorbet/ValidSigil: Sorbet sigil should be at least true got false.
-        # typed: false
-        ^^^^^^^^^^^^^^
+        rbi/annotations/gem1.rbi:1:1: C: Sorbet/ValidSigil: Sorbet sigil should be true got strict.
+        # typed: strict
+        ^^^^^^^^^^^^^^^
       ERR
     end
 

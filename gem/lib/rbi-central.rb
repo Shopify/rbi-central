@@ -66,7 +66,7 @@ module RBICentral
 
     Sorbet/ValidSigil:
       Enabled: true
-      MinimumStrictness: "true"
+      ExactStrictness: "true"
       SuggestedStrictness: "true"
       RequireSigilOnAllFiles: true
 
