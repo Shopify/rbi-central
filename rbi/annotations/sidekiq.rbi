@@ -75,6 +75,9 @@ module Sidekiq::Job::ClassMethods
 
   sig { params(interval: T.untyped, args: T.untyped).returns(String) }
   def perform_in(interval, *args); end
+
+  sig { params(args: T.untyped, kwargs: T.untyped).returns(String) }
+  def perform_bulk(*args, **kwargs); end
 end
 
 class Sidekiq::WorkSet
