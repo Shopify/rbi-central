@@ -18,14 +18,14 @@ module RBICentral
           }
         JSON
         @repo.write_annotations_file!("gem1", <<~RBI)
-          # typed: strict
+          # typed: true
 
           module Gem1
             abstract!
           end
         RBI
         @repo.write_annotations_file!("gem2", <<~RBI)
-          # typed: strict
+          # typed: true
 
           module Gem2
             abstract!
@@ -86,7 +86,7 @@ module RBICentral
           class Gem1::NotFound; end
         RBI
         @repo.write_annotations_file!("gem2", <<~RBI)
-          # typed: strict
+          # typed: true
 
           module Gem2
             abstract!

@@ -14,12 +14,12 @@ module RBICentral
           }
         JSON
         @repo.write_annotations_file!("gem1", <<~RBI)
-          # typed: strict
+          # typed: true
 
           module Gem1; end
         RBI
         @repo.write_annotations_file!("gem2", <<~RBI)
-          # typed: strict
+          # typed: true
 
           module Gem2; end
         RBI
@@ -46,7 +46,7 @@ module RBICentral
           module Gem1; end
         RBI
         @repo.write_annotations_file!("gem2", <<~RBI)
-          # typed: strict
+          # typed: true
 
           module Gem2; end
         RBI
@@ -69,12 +69,12 @@ module RBICentral
           }
         JSON
         @repo.write_annotations_file!("gem1", <<~RBI)
-          # typed: false
+          # typed: strict
 
           module Gem1; end
         RBI
         @repo.write_annotations_file!("gem2", <<~RBI)
-          # typed: strict
+          # typed: true
 
           module Gem2
           end
@@ -85,9 +85,9 @@ module RBICentral
 
           Linting `gem1`...
 
-          Error: rbi/annotations/gem1.rbi:1:1: C: Sorbet/ValidSigil: Sorbet sigil should be at least true got false.
-          # typed: false
-          ^^^^^^^^^^^^^^
+          Error: rbi/annotations/gem1.rbi:1:1: C: Sorbet/ValidSigil: Sorbet sigil should be true got strict.
+          # typed: strict
+          ^^^^^^^^^^^^^^^
 
           Linting `gem2`...
 
@@ -121,7 +121,7 @@ module RBICentral
 
           Linting `gem2`...
 
-          Error: rbi/annotations/gem2.rbi:1:1: C: Sorbet/ValidSigil: Sorbet sigil should be at least true got false.
+          Error: rbi/annotations/gem2.rbi:1:1: C: Sorbet/ValidSigil: Sorbet sigil should be true got false.
           # typed: false
           ^^^^^^^^^^^^^^
 
