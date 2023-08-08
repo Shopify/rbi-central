@@ -108,7 +108,7 @@ class Money
   sig { params(numeric: Numeric).returns(Money) }
   def *(numeric); end
 
-  sig { params(numeric: Numeric).returns(T.noreturn) }
+  sig { params(numeric: T.untyped).returns(T.noreturn) }
   def /(numeric); end
 
   sig { returns(String) }
