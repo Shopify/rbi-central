@@ -159,7 +159,7 @@ class Money
   sig { params(num: Numeric).returns(T::Hash[Money, Numeric]) }
   def calculate_splits(num); end
 
-  sig { params(min: Numeric, max: Numeric).returns(Money) }
+  sig { params(min: T.any(Numeric, Money), max: T.any(Numeric, Money)).returns(Money) }
   def clamp(min, max); end
 end
 
