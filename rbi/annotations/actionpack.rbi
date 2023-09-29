@@ -76,8 +76,8 @@ class ActionController::Parameters
   sig { returns(String) }
   def inspect; end
 
-  sig { params(other_hash: T.untyped).returns(ActionController::Parameters) }
-  def merge!(other_hash); end
+  sig { params(other_hash: T.untyped, block: T.untyped).returns(ActionController::Parameters) }
+  def merge!(other_hash, &block); end
 
   sig { params(other_hash: T.untyped).returns(ActionController::Parameters) }
   def merge(other_hash); end
