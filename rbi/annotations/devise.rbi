@@ -82,7 +82,19 @@ class Devise::RegistrationsController < DeviseController
   def cancel; end
 end
 
-class Devise::SessionsController< DeviseController
+class Devise::SessionsController < DeviseController
+  # GET /resource/sign_in
+  def new; end
+
+  # POST /resource/sign_in
+  def create; end
+
+  # DELETE /resource/sign_out
+  def destroy; end
+
+  protected
+  sig { returns(ActionController::Parameters)}
+  def sign_in_params; end
 end
 
 class Devise::UnlocksController< DeviseController
