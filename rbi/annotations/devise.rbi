@@ -43,7 +43,18 @@ class Devise::ConfirmationsController < DeviseController
   def show; end
 end
 
-class Devise::PasswordsController< DeviseController
+class Devise::PasswordsController < DeviseController
+ # GET /resource/password/new
+  def new; end
+
+  # POST /resource/password
+  def create; end
+
+  # GET /resource/password/edit?reset_password_token=abcdef
+  def edit; end
+
+  # PUT /resource/password
+  def update; end
 end
 
 class Devise::RegistrationsController< DeviseController
