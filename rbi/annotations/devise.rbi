@@ -36,6 +36,11 @@ class DeviseController
 end
 
 class Devise::ConfirmationsController < DeviseController
+  def new; end
+  # POST /resource/confirmation
+  def create; end
+  # GET /resource/confirmation?confirmation_token=abcdef
+  def show; end
 end
 
 class Devise::PasswordsController< DeviseController
