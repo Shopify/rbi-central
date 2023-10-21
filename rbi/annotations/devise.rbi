@@ -57,7 +57,29 @@ class Devise::PasswordsController < DeviseController
   def update; end
 end
 
-class Devise::RegistrationsController< DeviseController
+class Devise::RegistrationsController < DeviseController
+  def new; end
+
+  # POST /resource
+  def create; end
+
+  # GET /resource/edit
+  def edit; end
+
+  # PUT /resource
+  # We need to use a copy of the resource because we don't want to change
+  # the current user in place.
+  def update; end
+
+  # DELETE /resource
+  def destroy; end
+
+  # GET /resource/cancel
+  # Forces the session data which is usually expired after sign
+  # in to be expired now. This is useful if the user wants to
+  # cancel oauth signing in/up in the middle of the process,
+  # removing all OAuth session data.
+  def cancel; end
 end
 
 class Devise::SessionsController< DeviseController
