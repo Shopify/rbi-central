@@ -97,5 +97,23 @@ class Devise::SessionsController < DeviseController
   def sign_in_params; end
 end
 
-class Devise::UnlocksController< DeviseController
+class Devise::UnlocksController < DeviseController
+ # GET /resource/unlock/new
+  def new; end
+
+  # POST /resource/unlock
+  def create; end
+
+  # GET /resource/unlock?unlock_token=abcdef
+  def show; end
+
+  protected
+
+  # The path used after sending unlock password instructions
+  sig {params(resource: T.untyped).returns(String)}
+  def after_sending_unlock_instructions_path_for(resource); end
+
+  sig {params(resource: T.untyped).returns(String)}
+  # The path used after unlocking the resource
+  def after_unlock_path_for(resource); end
 end
