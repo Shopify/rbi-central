@@ -36,42 +36,54 @@ class DeviseController
 end
 
 class Devise::ConfirmationsController < DeviseController
+  sig {returns(T.untyped)}
   def new; end
   # POST /resource/confirmation
+  sig {returns(T.untyped)}
   def create; end
   # GET /resource/confirmation?confirmation_token=abcdef
+  sig {returns(T.untyped)}
   def show; end
 end
 
 class Devise::PasswordsController < DeviseController
- # GET /resource/password/new
+  # GET /resource/password/new
+  sig {returns(T.untyped)}
   def new; end
 
   # POST /resource/password
+  sig {returns(T.untyped)}
   def create; end
 
   # GET /resource/password/edit?reset_password_token=abcdef
+  sig {returns(T.untyped)}
   def edit; end
 
   # PUT /resource/password
+  sig {returns(T.untyped)}
   def update; end
 end
 
 class Devise::RegistrationsController < DeviseController
+  sig {returns(T.untyped)}
   def new; end
 
   # POST /resource
+  sig {returns(T.untyped)}
   def create; end
 
   # GET /resource/edit
+  sig {returns(T.untyped)}
   def edit; end
 
   # PUT /resource
   # We need to use a copy of the resource because we don't want to change
   # the current user in place.
+  sig {returns(T.untyped)}
   def update; end
 
   # DELETE /resource
+  sig {returns(T.untyped)}
   def destroy; end
 
   # GET /resource/cancel
@@ -79,17 +91,21 @@ class Devise::RegistrationsController < DeviseController
   # in to be expired now. This is useful if the user wants to
   # cancel oauth signing in/up in the middle of the process,
   # removing all OAuth session data.
+  sig {returns(T.untyped)}
   def cancel; end
 end
 
 class Devise::SessionsController < DeviseController
   # GET /resource/sign_in
+  sig {returns(T.untyped)}
   def new; end
 
   # POST /resource/sign_in
+  sig {returns(T.untyped)}
   def create; end
 
   # DELETE /resource/sign_out
+  sig {returns(T.untyped)}
   def destroy; end
 
   protected
@@ -99,12 +115,15 @@ end
 
 class Devise::UnlocksController < DeviseController
  # GET /resource/unlock/new
+  sig {returns(T.untyped)}
   def new; end
 
   # POST /resource/unlock
+  sig {returns(T.untyped)}
   def create; end
 
   # GET /resource/unlock?unlock_token=abcdef
+  sig {returns(T.untyped)}
   def show; end
 
   protected

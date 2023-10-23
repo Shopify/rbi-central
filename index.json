@@ -49,6 +49,8 @@
   },
   "delayed_job": {
   },
+  "devise": {
+  },
   "elasticsearch-dsl": {
     "requires": [
       "elasticsearch/dsl"
