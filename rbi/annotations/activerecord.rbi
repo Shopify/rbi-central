@@ -183,4 +183,10 @@ class ActiveRecord::Base
     ).void
   end
   def self.after_rollback(*args, **options, &block); end
+
+  sig { returns(FalseClass) }
+  def blank?; end
+
+  sig { returns(TrueClass) }
+  def present?; end
 end
