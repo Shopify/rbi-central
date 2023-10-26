@@ -187,6 +187,10 @@ class ActiveRecord::Base
   sig { returns(FalseClass) }
   def blank?; end
 
+  # @shim: since `present?` is always true, `presence` always returns `self`
+  sig { returns(T.self_type) }
+  def presence; end
+
   sig { returns(TrueClass) }
   def present?; end
 end
