@@ -2,6 +2,9 @@
 
 module AASM
   mixes_in_class_methods(AASM::ClassMethods)
+
+  sig { params(name: T.any(Symbol, String)).returns(AASM::InstanceBase) }
+  def aasm(name = :default); end
 end
 
 module AASM::ClassMethods
