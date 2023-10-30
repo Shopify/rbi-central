@@ -44,6 +44,17 @@ class ActiveSupport::TimeWithZone
   include ::DateAndTime::Zones
   # @shim: Methods on ActiveSupport::TimeWithZone are delegated to `Time` using `method_missing
   include ::DateAndTime::Calculations
+
+  sig { returns(FalseClass) }
+  def blank?; end
+
+  # @shim: since `present?` is always true, `presence` always returns `self`
+  sig { returns(T.self_type) }
+  def presence; end
+
+  # @shim: since `blank?` is always false, `present?` always returns `true`
+  sig { returns(TrueClass) }
+  def present?; end
 end
 
 class Object
@@ -156,4 +167,95 @@ class Array
 
   sig { returns(ActiveSupport::ArrayInquirer) }
   def inquiry; end
+end
+
+class Date
+  sig { returns(FalseClass) }
+  def blank?; end
+
+  # @shim: since `present?` is always true, `presence` always returns `self`
+  sig { returns(T.self_type) }
+  def presence; end
+
+  # @shim: since `blank?` is always false, `present?` always returns `true`
+  sig { returns(TrueClass) }
+  def present?; end
+end
+
+class DateTime
+  sig { returns(FalseClass) }
+  def blank?; end
+
+  # @shim: since `present?` is always true, `presence` always returns `self`
+  sig { returns(T.self_type) }
+  def presence; end
+
+  # @shim: since `blank?` is always false, `present?` always returns `true`
+  sig { returns(TrueClass) }
+  def present?; end
+end
+
+class NilClass
+  sig { returns(TrueClass) }
+  def blank?; end
+
+  # @shim: since `present?` is always false, `presence` always returns `nil`
+  sig { returns(NilClass) }
+  def presence; end
+
+  # @shim: since `blank?` is always true, `present?` always returns `false`
+  sig { returns(FalseClass) }
+  def present?; end
+end
+
+class FalseClass
+  sig { returns(TrueClass) }
+  def blank?; end
+
+  # @shim: since `present?` is always false, `presence` always returns `nil`
+  sig { returns(NilClass) }
+  def presence; end
+
+  # @shim: since `blank?` is always true, `present?` always returns `false`
+  sig { returns(FalseClass) }
+  def present?; end
+end
+
+class TrueClass
+  sig { returns(FalseClass) }
+  def blank?; end
+
+  # @shim: since `present?` is always true, `presence` always returns `self`
+  sig { returns(T.self_type) }
+  def presence; end
+
+  # @shim: since `blank?` is always false, `present?` always returns `true`
+  sig { returns(TrueClass) }
+  def present?; end
+end
+
+class Numeric
+  sig { returns(FalseClass) }
+  def blank?; end
+
+  # @shim: since `present?` is always true, `presence` always returns `self`
+  sig { returns(T.self_type) }
+  def presence; end
+
+  # @shim: since `blank?` is always false, `present?` always returns `true`
+  sig { returns(TrueClass) }
+  def present?; end
+end
+
+class Time
+  sig { returns(FalseClass) }
+  def blank?; end
+
+  # @shim: since `present?` is always true, `presence` always returns `self`
+  sig { returns(T.self_type) }
+  def presence; end
+
+  # @shim: since `blank?` is always false, `present?` always returns `true`
+  sig { returns(TrueClass) }
+  def present?; end
 end
