@@ -20,16 +20,19 @@ module RBICentral
       def visit(node)
         return unless node
 
-        validate_node!(node)
-        visit_all(node.nodes) if node.is_a?(RBI::Tree)
+        skip = validate_node!(node)
+        visit_all(node.nodes) if node.is_a?(RBI::Tree) && !skip
       end
 
-      sig { params(node: RBI::Node).void }
+      sig { params(node: RBI::Node).returns(T.nilable(T.any(T::Boolean, Module))) }
       def validate_node!(node)
         annotations = validate_annotations!(node)
 
         # Do not test definitions tagged `@shim`
-        return if annotations.include?("shim")
+        if annotations.include?("shim")
+          return true if node.is_a?(RBI::Class) || node.is_a?(RBI::Module)
+          return false
+        end
 
         loc = T.must(node.loc)
 
