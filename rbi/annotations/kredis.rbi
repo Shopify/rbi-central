@@ -4,8 +4,8 @@ module Kredis::Types
   sig { params(key: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Scalar) }
   def boolean(key, default: nil, config: nil, after_change: nil, expires_in: nil); end
 
-  sig { params(key: T.untyped, expires_in: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::Counter) }
-  def counter(key, expires_in: nil, config: nil, after_change: nil); end
+  sig { params(key: T.untyped, expires_in: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::Counter) }
+  def counter(key, expires_in: nil, default: nil, config: nil, after_change: nil); end
 
   sig { params(key: T.untyped, values: T.untyped, expires_in: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::Cycle) }
   def cycle(key, values:, expires_in: nil, config: nil, after_change: nil); end
@@ -16,14 +16,14 @@ module Kredis::Types
   sig { params(key: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Scalar) }
   def decimal(key, default: nil, config: nil, after_change: nil, expires_in: nil); end
 
-  sig { params(key: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Flag) }
-  def flag(key, config: nil, after_change: nil, expires_in: nil); end
+  sig { params(key: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Flag) }
+  def flag(key, default: nil, config: nil, after_change: nil, expires_in: nil); end
 
   sig { params(key: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Scalar) }
   def float(key, default: nil, config: nil, after_change: nil, expires_in: nil); end
 
-  sig { params(key: T.untyped, typed: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::Hash) }
-  def hash(key, typed: nil, config: nil, after_change: nil); end
+  sig { params(key: T.untyped, typed: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::Hash) }
+  def hash(key, typed: nil, default: nil, config: nil, after_change: nil); end
 
   sig { params(key: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Scalar) }
   def integer(key, default: nil, config: nil, after_change: nil, expires_in: nil); end
@@ -31,8 +31,8 @@ module Kredis::Types
   sig { params(key: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Scalar) }
   def json(key, default: nil, config: nil, after_change: nil, expires_in: nil); end
 
-  sig { params(key: T.untyped, typed: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::List) }
-  def list(key, typed: nil, config: nil, after_change: nil); end
+  sig { params(key: T.untyped, default: T.untyped, typed: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::List) }
+  def list(key, default: nil, typed: nil, config: nil, after_change: nil); end
 
   sig { params(key: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::Proxy) }
   def proxy(key, config: nil, after_change: nil); end
@@ -40,8 +40,8 @@ module Kredis::Types
   sig { params(key: T.untyped, typed: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Scalar) }
   def scalar(key, typed: nil, default: nil, config: nil, after_change: nil, expires_in: nil); end
 
-  sig { params(key: T.untyped, typed: T.untyped, config: T.untyped, after_change: T.untyped,).returns(Kredis::Types::Set) }
-  def set(key, typed: nil, config: nil, after_change: nil); end
+  sig { params(key: T.untyped, default: T.untyped, typed: T.untyped, config: T.untyped, after_change: T.untyped,).returns(Kredis::Types::Set) }
+  def set(key, default: nil, typed: nil, config: nil, after_change: nil); end
 
   sig { params(key: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::Slots) }
   def slot(key, config: nil, after_change: nil); end
@@ -52,8 +52,8 @@ module Kredis::Types
   sig { params(key: T.untyped, default: T.untyped, config: T.untyped, after_change: T.untyped, expires_in: T.untyped).returns(Kredis::Types::Scalar) }
   def string(key, default: nil, config: nil, after_change: nil, expires_in: nil); end
 
-  sig { params(key: T.untyped, typed: T.untyped, limit: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::UniqueList) }
-  def unique_list(key, typed: nil, limit: nil, config: nil, after_change: nil); end
+  sig { params(key: T.untyped, default: T.untyped, typed: T.untyped, limit: T.untyped, config: T.untyped, after_change: T.untyped).returns(Kredis::Types::UniqueList) }
+  def unique_list(key, default: nil, typed: nil, limit: nil, config: nil, after_change: nil); end
 end
 
 class Kredis::Types::Counter
