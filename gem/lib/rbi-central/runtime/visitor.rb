@@ -20,20 +20,22 @@ module RBICentral
       def visit(node)
         return unless node
 
-        skip = validate_node!(node)
-        visit_all(node.nodes) if node.is_a?(RBI::Tree) && !skip
+        annotations = validate_annotations!(node)
+        return if shim?(annotations)
+
+        validate_definition!(node, annotations)
+        visit_all(node.nodes) if node.is_a?(RBI::Tree)
       end
 
-      sig { params(node: RBI::Node).returns(T.nilable(T.any(T::Boolean, Module))) }
-      def validate_node!(node)
-        annotations = validate_annotations!(node)
+      private
 
-        # Do not test definitions tagged `@shim`
-        if annotations.include?("shim")
-          return true if node.is_a?(RBI::Class) || node.is_a?(RBI::Module)
-          return false
-        end
+      sig { params(annotations: T::Array[String]).returns(T::Boolean) }
+      def shim?(annotations)
+        annotations.include?("shim")
+      end
 
+      sig { params(node: RBI::Node, annotations: T::Array[String]).void }
+      def validate_definition!(node, annotations)
         loc = T.must(node.loc)
 
         case node
