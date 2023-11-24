@@ -114,13 +114,14 @@ class Devise::SessionsController < DeviseController
   def destroy; end
 
   protected
+
   sig { returns(ActionController::Parameters)}
   def sign_in_params; end
 end
 
 # @shim: Devise controllers are loaded by rails
 class Devise::UnlocksController < DeviseController
- # GET /resource/unlock/new
+  # GET /resource/unlock/new
   sig {returns(T.untyped)}
   def new; end
 
