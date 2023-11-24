@@ -1,5 +1,6 @@
 # typed: true
 
+# @shim: Devise controllers are loaded by rails
 class DeviseController
   protected
 
@@ -35,6 +36,7 @@ class DeviseController
   def translation_scope; end
 end
 
+# @shim: Devise controllers are loaded by rails
 class Devise::ConfirmationsController < DeviseController
   sig {returns(T.untyped)}
   def new; end
@@ -46,6 +48,7 @@ class Devise::ConfirmationsController < DeviseController
   def show; end
 end
 
+# @shim: Devise controllers are loaded by rails
 class Devise::PasswordsController < DeviseController
   # GET /resource/password/new
   sig {returns(T.untyped)}
@@ -64,6 +67,7 @@ class Devise::PasswordsController < DeviseController
   def update; end
 end
 
+# @shim: Devise controllers are loaded by rails
 class Devise::RegistrationsController < DeviseController
   sig {returns(T.untyped)}
   def new; end
@@ -95,6 +99,7 @@ class Devise::RegistrationsController < DeviseController
   def cancel; end
 end
 
+# @shim: Devise controllers are loaded by rails
 class Devise::SessionsController < DeviseController
   # GET /resource/sign_in
   sig {returns(T.untyped)}
@@ -113,6 +118,7 @@ class Devise::SessionsController < DeviseController
   def sign_in_params; end
 end
 
+# @shim: Devise controllers are loaded by rails
 class Devise::UnlocksController < DeviseController
  # GET /resource/unlock/new
   sig {returns(T.untyped)}
