@@ -88,6 +88,36 @@ module RBICentral
         ], context.run!)
       end
 
+      def test_shim_annotation
+        mock = MockGem.new(Dir.mktmpdir, "foo")
+        mock.gemspec!(mock.default_gemspec)
+        mock.write!("lib/foo.rb", <<~RB)
+          class Foo
+            def foo(*); end
+          end
+        RB
+        context = Context.new(mock.gem, "gem.rbi")
+        visitor = Runtime::Visitor.new(context)
+        rbi_tree = RBI::Parser.parse_string(<<~RBI)
+          class Foo
+            # @shim: some description
+            def foo; end
+          end
+
+          # @shim: some description
+          class Bar
+            def bar; end
+          end
+
+          class Baz
+            def baz; end
+          end
+        RBI
+        visitor.visit(rbi_tree)
+        assert_messages(["Missing runtime constant `::Baz` (defined at `-:11:0-13:3`)",
+                         "Missing runtime constant `::Baz` (defined at `-:12:2-12:14`)",], context.run!)
+      end
+
       def test_annotated_singleton_method_missing
         mock = MockGem.new(Dir.mktmpdir, "foo")
         mock.gemspec!(mock.default_gemspec)
