@@ -19,6 +19,11 @@
   },
   "active_flag": {
   },
+  "activejob": {
+    "requires": [
+      "active_job"
+    ]
+  },
   "activemodel": {
     "requires": [
       "active_model"
