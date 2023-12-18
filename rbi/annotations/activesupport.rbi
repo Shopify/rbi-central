@@ -259,3 +259,23 @@ class Time
   sig { returns(TrueClass) }
   def present?; end
 end
+
+class Symbol
+  # @shim: alias for `#start_with?`
+  sig { params(string_or_regexp: T.any(String, Regexp)).returns(T::Boolean) }
+  def starts_with?(*string_or_regexp); end
+
+  # @shim: alias for `#end_with?`
+  sig { params(string_or_regexp: T.any(String, Regexp)).returns(T::Boolean) }
+  def ends_with?(*string_or_regexp); end
+end
+
+class String
+  # @shim: alias for `#start_with?`
+  sig { params(string_or_regexp: T.any(String, Regexp)).returns(T::Boolean) }
+  def starts_with?(*string_or_regexp); end
+
+  # @shim: alias for `#end_with?`
+  sig { params(string_or_regexp: T.any(String, Regexp)).returns(T::Boolean) }
+  def ends_with?(*string_or_regexp); end
+end
