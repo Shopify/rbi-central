@@ -1,14 +1,6 @@
 version: 2
 updates:
   - package-ecosystem: "bundler"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    reviewers:
-      - "Shopify/sorbet"
-    labels:
-      - "dependencies"
-  - package-ecosystem: "bundler"
     directory: "/gem"
     schedule:
       interval: "monthly"
