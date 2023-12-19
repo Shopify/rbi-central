@@ -30,7 +30,7 @@ GEM
     json-schema (3.0.0)
       addressable (>= 2.8)
     minitest (5.16.2)
-    minitest-reporters (1.5.0)
+    minitest-reporters (1.6.1)
       ansi
       builder
       minitest (>= 5.0)
@@ -68,12 +68,13 @@ GEM
       rubocop (~> 1.31)
     rubocop-sorbet (0.6.11)
       rubocop (>= 0.90.0)
-    ruby-progressbar (1.11.0)
+    ruby-progressbar (1.13.0)
     sorbet (0.5.10741)
       sorbet-static (= 0.5.10741)
     sorbet-runtime (0.5.10741)
     sorbet-static (0.5.10741-universal-darwin-21)
     sorbet-static (0.5.10741-universal-darwin-22)
+    sorbet-static (0.5.10741-x86_64-linux)
     sorbet-static-and-runtime (0.5.10741)
       sorbet (= 0.5.10741)
       sorbet-runtime (= 0.5.10741)
@@ -102,6 +103,7 @@ GEM
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   debug
