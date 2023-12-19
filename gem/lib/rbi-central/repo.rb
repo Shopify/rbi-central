@@ -169,7 +169,7 @@ module RBICentral
       ERROR
     end
 
-    sig { params(gem: Gem, color: T::Boolean).returns(T::Array[Static::Context::Error]) }
+    sig { params(gem: Gem, color: T::Boolean).returns(T::Array[RBICentral::Context::Error]) }
     def check_static_for(gem, color:)
       annotations_file = annotations_file_for(gem)
       context = Static::Context.new(gem, annotations_file, color: color, bundle_config: @bundle_config)

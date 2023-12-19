@@ -17,9 +17,9 @@ module RBICentral
         super(gem, annotations_file, bundle_config: bundle_config)
       end
 
-      sig { override.returns(T::Array[Error]) }
+      sig { override.returns(T::Array[RBICentral::Context::Error]) }
       def run!
-        errors = T.let(super, T::Array[Error])
+        errors = T.let(super, T::Array[RBICentral::Context::Error])
         return errors if errors.any?
 
         write_test!
