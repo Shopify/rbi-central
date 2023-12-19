@@ -69,14 +69,14 @@ GEM
     rubocop-sorbet (0.6.11)
       rubocop (>= 0.90.0)
     ruby-progressbar (1.11.0)
-    sorbet (0.5.10741)
-      sorbet-static (= 0.5.10741)
-    sorbet-runtime (0.5.10741)
-    sorbet-static (0.5.10741-universal-darwin-21)
-    sorbet-static (0.5.10741-universal-darwin-22)
-    sorbet-static-and-runtime (0.5.10741)
-      sorbet (= 0.5.10741)
-      sorbet-runtime (= 0.5.10741)
+    sorbet (0.5.11158)
+      sorbet-static (= 0.5.11158)
+    sorbet-runtime (0.5.11158)
+    sorbet-static (0.5.11158-universal-darwin)
+    sorbet-static (0.5.11158-x86_64-linux)
+    sorbet-static-and-runtime (0.5.11158)
+      sorbet (= 0.5.11158)
+      sorbet-runtime (= 0.5.11158)
     spoom (1.2.0)
       sorbet (>= 0.5.10187)
       sorbet-runtime (>= 0.5.9204)
@@ -102,6 +102,7 @@ GEM
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   debug
