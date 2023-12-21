@@ -76,6 +76,46 @@ class Hash
   def extractable_options?; end
 end
 
+class Integer
+  sig { returns(ActiveSupport::Duration) }
+  def months; end
+  sig { returns(ActiveSupport::Duration) }
+  def month; end
+  sig { returns(ActiveSupport::Duration) }
+  def years; end
+  sig { returns(ActiveSupport::Duration) }
+  def year; end
+end
+
+class Numeric
+  sig { returns(ActiveSupport::Duration) }
+  def seconds; end
+  sig { returns(ActiveSupport::Duration) }
+  def second; end
+  sig { returns(ActiveSupport::Duration) }
+  def minutes; end
+  sig { returns(ActiveSupport::Duration) }
+  def minute; end
+  sig { returns(ActiveSupport::Duration) }
+  def hours; end
+  sig { returns(ActiveSupport::Duration) }
+  def hour; end
+  sig { returns(ActiveSupport::Duration) }
+  def days; end
+  sig { returns(ActiveSupport::Duration) }
+  def day; end
+  sig { returns(ActiveSupport::Duration) }
+  def weeks; end
+  sig { returns(ActiveSupport::Duration) }
+  def week; end
+  sig { returns(ActiveSupport::Duration) }
+  def fortnight; end
+  sig { returns(ActiveSupport::Duration) }
+  def fortnights; end
+  sig { returns(Integer) }
+  def in_milliseconds; end
+end
+
 class Array
   sig { params(position: Integer).returns(T.self_type) }
   def from(position); end

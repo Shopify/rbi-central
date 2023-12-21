@@ -38,6 +38,8 @@
     "requires": [
       "active_support",
       "active_support/core_ext/array",
+      "active_support/core_ext/numeric/time",
+      "active_support/core_ext/integer/time",
       "active_support/test_case"
     ]
   },
