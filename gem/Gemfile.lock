@@ -15,8 +15,8 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.6)
+      public_suffix (>= 2.0.2, < 6.0)
     ansi (1.5.0)
     ast (2.4.2)
     builder (3.2.4)
@@ -27,7 +27,7 @@ GEM
     irb (1.6.2)
       reline (>= 0.3.0)
     json (2.6.2)
-    json-schema (3.0.0)
+    json-schema (4.1.1)
       addressable (>= 2.8)
     minitest (5.16.2)
     minitest-reporters (1.6.1)
@@ -41,7 +41,7 @@ GEM
       ast (~> 2.4.1)
       racc
     prism (0.19.0)
-    public_suffix (4.0.7)
+    public_suffix (5.0.4)
     racc (1.7.3)
     rainbow (3.1.1)
     rake (13.0.6)
