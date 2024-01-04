@@ -36,8 +36,7 @@
   },
   "activesupport": {
     "requires": [
-      "active_support",
-      "active_support/core_ext/array",
+      "active_support/all",
       "active_support/test_case"
     ]
   },
