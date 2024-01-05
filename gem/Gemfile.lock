@@ -44,7 +44,7 @@ GEM
     public_suffix (5.0.4)
     racc (1.7.3)
     rainbow (3.1.1)
-    rake (13.0.6)
+    rake (13.1.0)
     rbi (0.1.6)
       prism (>= 0.18.0, < 0.20)
       sorbet-runtime (>= 0.5.9204)
@@ -109,7 +109,7 @@ DEPENDENCIES
   debug
   minitest
   minitest-reporters
-  rake (~> 13.0)
+  rake (~> 13.1)
   rbi-central!
 
 BUNDLED WITH
