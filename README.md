@@ -22,14 +22,16 @@ In this repository, annotations are placed in the `rbi/annotations` folder.
 
 Each annotation from the `rbi/annotations` folder must be defined in the `index.json` file at the root of this repository:
 
-```json
+```jsonc
 {
     "gemA": { // gem name
-        "dependencies": [ // optional: list of gems that need to be installed to test gemA RBI
+        // optional: list of gems that need to be installed to test gemA RBI
+        "dependencies": [
             "gemB",
             "gemC"
         ],
-        "requires": [ // optional: list of files that need to be required to test gemA RBI
+        // optional: list of files that need to be required to test gemA RBI
+        "requires": [
             "file1",
             "file2",
         ]
@@ -37,12 +39,15 @@ Each annotation from the `rbi/annotations` folder must be defined in the `index.
 }
 ```
 
+If you're copying this into your own `index.json`, make sure you strip out the comments.
+
 See the index [validation schema](schema.json) for more details.
 
 ### Pulling annotations
 
 To pull relevant gem annotations into your project, run Tapioca's [`annotations` command](https://github.com/Shopify/tapioca#pulling-rbi-annotations-from-remote-sources) inside your project:
-```
+
+```shell
 $ bin/tapioca annotations
 ```
 
