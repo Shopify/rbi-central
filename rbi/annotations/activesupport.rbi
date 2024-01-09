@@ -287,6 +287,12 @@ class String
   sig { params(position: String).returns(T.nilable(String)) }
   def at(position); end
 
+  sig { returns(String) }
+  def as_json; end
+
+  sig { returns(T::Boolean) }
+  def blank?; end
+
   sig { params(first_letter: Symbol).returns(String) }
   def camelcase(first_letter = :upper); end
 
@@ -311,6 +317,9 @@ class String
   # alias for `#end_with?`
   sig { params(string_or_regexp: T.any(String, Regexp)).returns(T::Boolean) }
   def ends_with?(*string_or_regexp); end
+
+  sig { returns(String) }
+  def downcase_first; end
 
   sig { params(string: String).returns(T::Boolean) }
   def exclude?(string); end
