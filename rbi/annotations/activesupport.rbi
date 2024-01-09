@@ -271,6 +271,150 @@ class Symbol
 end
 
 class String
+  sig { returns(TrueClass) }
+  def acts_like_string?; end
+
+  sig { returns(String) }
+  def as_json; end
+
+  # Same as the sigs for `#[]`
+  # https://github.com/sorbet/sorbet/blob/40ad87b4dc7be23fa00c1369ac9f927053c68907/rbi/core/string.rbi#L270-L303
+  sig { params(arg0: Integer,  arg1: Integer).returns(T.nilable(String)) }
+  sig { params(arg0: T.any(T::Range[Integer], Regexp)).returns(T.nilable(String)) }
+  sig { params(arg0: Regexp, arg1: Integer).returns(T.nilable(String)) }
+  sig { params(arg0: Regexp, arg1: String).returns(T.nilable(String)) }
+  sig { params(arg0: String).returns(T.nilable(String)) }
+  def at(arg0, arg1 = T.unsafe(nil)); end
+
+  sig { returns(T::Boolean) }
+  def blank?; end
+
+  sig { params(first_letter: Symbol).returns(String) }
+  def camelize(first_letter = :upper); end
+
+  sig { params(first_letter: Symbol).returns(String) }
+  def camelcase(first_letter = :upper); end
+
+  sig { returns(String) }
+  def classify; end
+
+  sig { returns(T.untyped) }
+  def constantize; end
+
+  sig { returns(String) }
+  def dasherize; end
+
+  sig { returns(String) }
+  def deconstantize; end
+
+  sig { returns(String) }
+  def demodulize; end
+
+  sig { returns(String) }
+  def downcase_first; end
+
+  sig { params(string: String).returns(T::Boolean) }
+  def exclude?(string); end
+
+  sig { params(limit: Integer).returns(String) }
+  def first(limit = 1); end
+
+  sig { params(separate_class_name_and_id_with_underscore: T::Boolean).returns(String) }
+  def foreign_key(separate_class_name_and_id_with_underscore = true); end
+
+  sig { params(position: Integer).returns(String) }
+  def from(position); end
+
+  sig { returns(ActiveSupport::SafeBuffer) }
+  def html_safe; end
+
+  sig { params(capitalize: T::Boolean, keep_id_suffix: T::Boolean).returns(String) }
+  def humanize(capitalize: true, keep_id_suffix: false); end
+
+  sig { params(zone: ActiveSupport::TimeZone).returns(ActiveSupport::TimeWithZone) }
+  def in_time_zone(zone = ::Time.zone); end
+
+  sig { params(amount: Integer, indent_string: T.nilable(String), indent_empty_lines: T::Boolean).returns(String) }
+  def indent(amount, indent_string = nil, indent_empty_lines = false); end
+
+  sig { params(amount: Integer, indent_string: T.nilable(String), indent_empty_lines: T::Boolean).returns(String) }
+  def indent!(amount, indent_string = nil, indent_empty_lines = false); end
+
+  sig { returns(ActiveSupport::StringInquirer) }
+  def inquiry; end
+
+  sig { returns(T::Boolean) }
+  def is_utf8?; end
+
+  sig { params(limit: Integer).returns(String) }
+  def last(limit = 1); end
+
+  sig { returns(ActiveSupport::Multibyte::Chars) }
+  def mb_chars; end
+
+  sig { params(separator: String, preserve_case: T::Boolean, locale: T.nilable(Symbol)).returns(String) }
+  def parameterize(separator: "-", preserve_case: false, locale: nil); end
+
+  sig { params(count: Integer, locale: T.nilable(String)).returns(String) }
+  def pluralize(count = nil, locale = :en); end
+
+  sig { params(patterns: T.any(String, Regexp)).returns(String) }
+  def remove(*patterns); end
+
+  sig { params(patterns: T.any(String, Regexp)).returns(String) }
+  def remove!(*patterns); end
+
+  sig { returns(T.untyped) }
+  def safe_constantize; end
+
+  sig { params(locale: Symbol).returns(String) }
+  def singularize(locale = :en); end
+
+  sig { returns(String) }
+  def squish; end
+
+  sig { returns(String) }
+  def squish!; end
+
+  sig { returns(String) }
+  def strip_heredoc; end
+
+  sig { returns(String) }
+  def tableize; end
+
+  sig { params(keep_id_suffix: T::Boolean).returns(String) }
+  def titleize(keep_id_suffix: false); end
+
+  sig { params(keep_id_suffix: T::Boolean).returns(String) }
+  def titlecase(keep_id_suffix: false); end
+
+  sig { params(position: Integer).returns(String) }
+  def to(position); end
+
+  sig { returns(::Date) }
+  def to_date; end
+
+  sig { returns(::DateTime) }
+  def to_datetime; end
+
+  sig { params(form: Symbol).returns(::Time) }
+  def to_time(form = :local); end
+
+  sig { params(truncate_to: Integer, options: T::Hash[Symbol, T.anything]).returns(String) }
+  def truncate(truncate_to, options = {}); end
+
+  sig { params(truncate_to: Integer, omission: String).returns(String) }
+  def truncate_bytes(truncate_to, omission: "…"); end
+
+  sig { params(truncate_to: Integer, options: T::Hash[Symbol, T.anything]).returns(String) }
+  def truncate_words(truncate_to, options: "…"); end
+
+  sig { returns(String) }
+  def underscore; end
+
+  sig { returns(String) }
+  def upcase_first; end
+
   # alias for `#start_with?`
   sig { params(string_or_regexp: T.any(String, Regexp)).returns(T::Boolean) }
   def starts_with?(*string_or_regexp); end
