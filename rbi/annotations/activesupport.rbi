@@ -318,7 +318,7 @@ class String
   sig { params(limit: Integer).returns(String) }
   def first(limit = 1); end
 
-  sig { params(separate_class_name_and_id_with_underscore: T.untyped).returns(String) }
+  sig { params(separate_class_name_and_id_with_underscore: T::Boolean).returns(String) }
   def foreign_key(separate_class_name_and_id_with_underscore = true); end
 
   sig { params(position: Integer).returns(String) }
@@ -327,16 +327,16 @@ class String
   sig { returns(ActiveSupport::SafeBuffer) }
   def html_safe; end
 
-  sig { params(capitalize: T.untyped, keep_id_suffix: T.untyped).returns(String) }
+  sig { params(capitalize: T::Boolean, keep_id_suffix: T::Boolean).returns(String) }
   def humanize(capitalize: true, keep_id_suffix: false); end
 
   sig { params(zone: T.nilable(T.any(ActiveSupport::TimeZone, String))).returns(T.any(ActiveSupport::TimeWithZone, Time)) }
   def in_time_zone(zone = ::Time.zone); end
 
-  sig { params(amount: Integer, indent_string: T.nilable(String), indent_empty_lines: T.untyped).returns(String) }
+  sig { params(amount: Integer, indent_string: T.nilable(String), indent_empty_lines: T::Boolean).returns(String) }
   def indent(amount, indent_string = nil, indent_empty_lines = false); end
 
-  sig { params(amount: Integer, indent_string: T.nilable(String), indent_empty_lines: T.untyped).returns(T.nilable(String)) }
+  sig { params(amount: Integer, indent_string: T.nilable(String), indent_empty_lines: T::Boolean).returns(T.nilable(String)) }
   def indent!(amount, indent_string = nil, indent_empty_lines = false); end
 
   sig { returns(ActiveSupport::StringInquirer) }
@@ -385,10 +385,10 @@ class String
   sig { returns(String) }
   def tableize; end
 
-  sig { params(keep_id_suffix: T.untyped).returns(String) }
+  sig { params(keep_id_suffix: T::Boolean).returns(String) }
   def titlecase(keep_id_suffix: false); end
 
-  sig { params(keep_id_suffix: T.untyped).returns(String) }
+  sig { params(keep_id_suffix: T::Boolean).returns(String) }
   def titleize(keep_id_suffix: false); end
 
   sig { params(position: Integer).returns(String) }
