@@ -280,7 +280,11 @@ class String
   sig { returns(TrueClass) }
   def acts_like_string?; end
 
-  sig { params(position: T.any(Integer, Regexp, String, T::Range[Integer])).returns(T.nilable(String)) }
+  # This is the subset of `#[]` sigs that have just 1 parameter.
+  # https://github.com/sorbet/sorbet/blob/40ad87b4dc7be23fa00c1369ac9f927053c68907/rbi/core/string.rbi#L270-L303
+  sig { params(position: Integer).returns(T.nilable(String)) }
+  sig { params(position: T.any(T::Range[Integer], Regexp)).returns(T.nilable(String)) }
+  sig { params(position: String).returns(T.nilable(String)) }
   def at(position); end
 
   sig { params(first_letter: Symbol).returns(String) }
@@ -292,7 +296,7 @@ class String
   sig { returns(String) }
   def classify; end
 
-  sig { returns(Module) }
+  sig { returns(T.untyped) }
   def constantize; end
 
   sig { returns(String) }
@@ -347,22 +351,22 @@ class String
   sig { returns(ActiveSupport::Multibyte::Chars) }
   def mb_chars; end
 
-  sig { params(separator: T.nilable(String), preserve_case: T.untyped, locale: T.nilable(Symbol)).returns(String) }
+  sig { params(separator: String, preserve_case: T::Boolean, locale: T.nilable(Symbol)).returns(String) }
   def parameterize(separator: "-", preserve_case: false, locale: nil); end
 
   sig { params(count: T.nilable(T.any(Integer, Symbol)), locale: T.nilable(Symbol)).returns(String) }
   def pluralize(count = nil, locale = :en); end
 
-  sig { params(patterns: T.nilable(T.any(Regexp, String))).returns(String) }
+  sig { params(patterns: T.any(String, Regexp)).returns(String) }
   def remove(*patterns); end
 
-  sig { params(patterns: T.nilable(T.any(Regexp, String))).returns(String) }
+  sig { params(patterns: T.any(String, Regexp)).returns(String) }
   def remove!(*patterns); end
 
-  sig { returns(T.nilable(Module)) }
+  sig { returns(T.untyped) }
   def safe_constantize; end
 
-  sig { params(locale: T.nilable(Symbol)).returns(String) }
+  sig { params(locale: Symbol).returns(String) }
   def singularize(locale = :en); end
 
   sig { returns(String) }
@@ -390,22 +394,22 @@ class String
   sig { params(position: Integer).returns(String) }
   def to(position); end
 
-  sig { returns(T.nilable(Date)) }
+  sig { returns(::Date) }
   def to_date; end
 
-  sig { returns(T.nilable(DateTime)) }
+  sig { returns(::DateTime) }
   def to_datetime; end
 
   sig { params(form: T.nilable(Symbol)).returns(T.nilable(Time)) }
   def to_time(form = :local); end
 
-  sig { params(truncate_to: Integer, options: T::Hash[Symbol, T.untyped]).returns(String) }
+  sig { params(truncate_to: Integer, options: T::Hash[Symbol, T.anything]).returns(String) }
   def truncate(truncate_to, options = {}); end
 
   sig { params(truncate_to: Integer, omission: T.nilable(String)).returns(String) }
   def truncate_bytes(truncate_to, omission: "…"); end
 
-  sig { params(words_count: Integer, options: T::Hash[Symbol, T.untyped]).returns(String) }
+  sig { params(words_count: Integer, options: T::Hash[Symbol, T.anything]).returns(String) }
   def truncate_words(words_count, options = {}); end
 
   sig { returns(String) }
