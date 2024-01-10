@@ -53,7 +53,7 @@ class ActiveSupport::TimeWithZone
   def presence; end
 
   # since `blank?` is always false, `present?` always returns `true`
-  sig { returns(TrueClass) }
+  sig { override.returns(TrueClass) }
   def present?; end
 end
 
@@ -92,7 +92,7 @@ class Object
   sig { params(another_object: T.untyped).returns(T.nilable(T.self_type)) }
   def presence_in(another_object); end
 
-  sig { returns(T::Boolean) }
+  sig { overridable.returns(T::Boolean) }
   def present?; end
 
   sig { returns(String) }
@@ -219,7 +219,7 @@ class Date
   def presence; end
 
   # since `blank?` is always false, `present?` always returns `true`
-  sig { returns(TrueClass) }
+  sig { override.returns(TrueClass) }
   def present?; end
 end
 
@@ -232,7 +232,7 @@ class DateTime
   def presence; end
 
   # since `blank?` is always false, `present?` always returns `true`
-  sig { returns(TrueClass) }
+  sig { override.returns(TrueClass) }
   def present?; end
 end
 
@@ -245,7 +245,7 @@ class NilClass
   def presence; end
 
   # since `blank?` is always true, `present?` always returns `false`
-  sig { returns(FalseClass) }
+  sig { override.returns(FalseClass) }
   def present?; end
 end
 
@@ -258,7 +258,7 @@ class FalseClass
   def presence; end
 
   # since `blank?` is always true, `present?` always returns `false`
-  sig { returns(FalseClass) }
+  sig { override.returns(FalseClass) }
   def present?; end
 end
 
@@ -271,7 +271,7 @@ class TrueClass
   def presence; end
 
   # since `blank?` is always false, `present?` always returns `true`
-  sig { returns(TrueClass) }
+  sig { override.returns(TrueClass) }
   def present?; end
 end
 
@@ -287,7 +287,7 @@ class Numeric
   def presence; end
 
   # since `blank?` is always false, `present?` always returns `true`
-  sig { returns(TrueClass) }
+  sig { override.returns(TrueClass) }
   def present?; end
 end
 
@@ -300,7 +300,7 @@ class Time
   def presence; end
 
   # since `blank?` is always false, `present?` always returns `true`
-  sig { returns(TrueClass) }
+  sig { override.returns(TrueClass) }
   def present?; end
 end
 
