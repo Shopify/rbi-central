@@ -58,11 +58,33 @@ class ActiveSupport::TimeWithZone
 end
 
 class Object
+  sig { params(duck: Symbol).returns(T::Boolean) }
+  def acts_like?(duck); end
+
+  sig { overridable.params(options: T.nilable(T::Hash[Symbol, T.untyped])).returns(T.untyped) }
+  def as_json(options = nil); end
+
   sig { returns(T::Boolean) }
   def blank?; end
 
-  sig { returns(FalseClass) }
+  sig { overridable.returns(T.self_type) }
+  def deep_dup; end
+
+  sig { overridable.returns(T::Boolean) }
+
+  def duplicable?; end
+
+  sig { overridable.returns(FalseClass) } # Is FalseClass correct?
   def html_safe?; end
+
+  sig { params(another_object: T.anything).returns(T::Boolean) }
+  def in?(another_object); end
+
+  sig { returns(T::Hash[String, T.untyped]) }
+  def instance_values; end
+
+  sig { returns(T::Array[String]) }
+  def instance_variable_names; end
 
   sig { returns(T.nilable(T.self_type)) }
   def presence; end
@@ -72,6 +94,22 @@ class Object
 
   sig { returns(T::Boolean) }
   def present?; end
+
+  sig { returns(String) }
+  def to_param; end
+
+  sig { returns(String) }
+  def to_query; end
+
+  sig do
+    type_parameters(:R)
+      .params(block: T.proc.returns(T.type_parameter(:R)))
+      .returns(T.type_parameter(:R))
+  end
+  def with(&block); end
+
+  sig { params(options: T::Hash[T.anything, T.anything], block: Proc).returns(T.untyped) }
+  def with_options(options, &block); end
 end
 
 class Hash
