@@ -159,9 +159,6 @@ class Array
   end
   def split(value = nil, &block); end
 
-  sig { params(object: T.untyped).returns(T::Array[T.untyped]) }
-  def self.wrap(object); end
-
   sig do
     params(block: T.nilable(T.proc.params(element: Elem).returns(T.untyped)))
       .returns(T.any(T::Array[Elem], T::Enumerator[Elem]))
@@ -170,6 +167,9 @@ class Array
 
   sig { returns(ActiveSupport::ArrayInquirer) }
   def inquiry; end
+
+  sig { params(object: T.untyped).returns(T::Array[T.untyped]) }
+  def self.wrap(object); end
 end
 
 class Date

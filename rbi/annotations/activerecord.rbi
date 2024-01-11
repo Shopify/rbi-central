@@ -13,6 +13,16 @@ class ActiveRecord::Migration
 end
 
 class ActiveRecord::Base
+  sig { returns(FalseClass) }
+  def blank?; end
+
+  # @shim: since `present?` is always true, `presence` always returns `self`
+  sig { returns(T.self_type) }
+  def presence; end
+
+  sig { returns(TrueClass) }
+  def present?; end
+
   sig do
     params(
       args: T.untyped,
@@ -183,14 +193,4 @@ class ActiveRecord::Base
     ).void
   end
   def self.after_rollback(*args, **options, &block); end
-
-  sig { returns(FalseClass) }
-  def blank?; end
-
-  # @shim: since `present?` is always true, `presence` always returns `self`
-  sig { returns(T.self_type) }
-  def presence; end
-
-  sig { returns(TrueClass) }
-  def present?; end
 end

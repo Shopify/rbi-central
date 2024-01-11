@@ -23,7 +23,7 @@ module RBICentral
         add_gem_dependency("tapioca", version: ">= 0.9.2")
       end
 
-      sig { override.returns(T::Array[Error]) }
+      sig { override.returns(T::Array[RBICentral::Context::Error]) }
       def run!
         errors = super
         return errors if errors.any?
