@@ -61,7 +61,7 @@ module RBICentral
 
       assert_messages(
         [
-          "Unexpected RBI annotations file `rbi/annotations/dir/file4.rbi` (must be in `rbi/annotations` root directory)",
+          "Unexpected RBI annotations file `rbi/annotations/dir/file4.rbi` (must be in `rbi/annotations` root directory)", # rubocop:disable Layout/LineLength
           "Unexpected RBI annotations file `rbi/annotations/file1` (should have `.rbi` extension)",
           "Unexpected RBI annotations file `rbi/annotations/file2.rb` (should have `.rbi` extension)",
           "Unexpected RBI annotations file `rbi/annotations/file3.RBI` (should have `.rbi` extension)",

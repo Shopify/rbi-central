@@ -13,15 +13,18 @@ module RBICentral
     const :dependencies, T::Array[String], default: []
     const :requires, T::Array[String], default: []
 
-    sig { params(name: String, object: T::Hash[String, T.untyped]).returns(Gem) }
-    def self.from_object(name, object = {})
-      Gem.new(
-        name: name,
-        path: object["path"],
-        source: object["source"],
-        dependencies: object["dependencies"] || [],
-        requires: object["requires"] || [],
-      )
+    class << self
+      extend T::Sig
+      sig { params(name: String, object: T::Hash[String, T.untyped]).returns(Gem) }
+      def from_object(name, object = {})
+        Gem.new(
+          name: name,
+          path: object["path"],
+          source: object["source"],
+          dependencies: object["dependencies"] || [],
+          requires: object["requires"] || [],
+        )
+      end
     end
 
     sig { params(_args: T.untyped).returns(T::Hash[String, T.untyped]) }

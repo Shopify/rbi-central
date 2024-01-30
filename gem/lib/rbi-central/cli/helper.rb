@@ -179,16 +179,20 @@ module RBICentral
         prop :runtime, T::Boolean
         prop :static, T::Boolean
 
-        sig { params(options: T::Hash[Symbol, T.untyped]).returns(ChecksSelection) }
-        def self.from_options(options)
-          ChecksSelection.new(
-            gem_tests: options[:gem],
-            index: options[:index],
-            rubocop: options[:rubocop],
-            rubygems: options[:rubygems],
-            runtime: options[:runtime],
-            static: options[:static],
-          )
+        class << self
+          extend T::Sig
+
+          sig { params(options: T::Hash[Symbol, T.untyped]).returns(ChecksSelection) }
+          def from_options(options)
+            ChecksSelection.new(
+              gem_tests: options[:gem],
+              index: options[:index],
+              rubocop: options[:rubocop],
+              rubygems: options[:rubygems],
+              runtime: options[:runtime],
+              static: options[:static],
+            )
+          end
         end
 
         sig { returns(T::Boolean) }

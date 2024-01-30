@@ -79,11 +79,15 @@ module RBICentral
 
   class Error < StandardError; end
 
-  sig { params(string: String).returns(String) }
-  def self.filter_parser_warning(string)
-    string
-      .gsub(/warning:.*\n/, "")
-      .gsub(/Please.*\n/, "")
+  class << self
+    extend T::Sig
+
+    sig { params(string: String).returns(String) }
+    def filter_parser_warning(string)
+      string
+        .gsub(/warning:.*\n/, "")
+        .gsub(/Please.*\n/, "")
+    end
   end
 end
 

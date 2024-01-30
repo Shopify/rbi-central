@@ -41,7 +41,7 @@ module RBICentral
           LOG
         end
 
-        if checks.none?
+        unless checks.any? # rubocop:disable Style/InvertibleUnlessCondition
           log("No change detected. Run with `--all` to run all checks.")
           return
         end
@@ -168,14 +168,16 @@ module RBICentral
     end
 
     class Main < Thor
-      extend T::Sig
-
       desc "check", "Check repo validity"
       subcommand "check", RBICentral::CLI::Check
 
-      sig { returns(T::Boolean) }
-      def self.exit_on_failure?
-        true
+      class << self
+        extend T::Sig
+
+        sig { returns(T::Boolean) }
+        def exit_on_failure?
+          true
+        end
       end
     end
   end
