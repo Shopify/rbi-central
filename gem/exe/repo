@@ -41,7 +41,7 @@ module RBICentral
           LOG
         end
 
-        unless checks.any?
+        if checks.none?
           log("No change detected. Run with `--all` to run all checks.")
           return
         end
