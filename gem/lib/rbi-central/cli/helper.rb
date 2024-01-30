@@ -112,7 +112,7 @@ module RBICentral
 
       sig do
         params(
-          block: T.proc.returns(T::Array[Error])
+          block: T.proc.returns(T::Array[Error]),
         ).void
       end
       def check_errors!(&block)
@@ -133,7 +133,7 @@ module RBICentral
       sig do
         params(
           names: T::Array[String],
-          block: T.proc.params(repo: Repo, gem: Gem).returns(T::Array[Error])
+          block: T.proc.params(repo: Repo, gem: Gem).returns(T::Array[Error]),
         ).void
       end
       def check_gems!(names:, &block)

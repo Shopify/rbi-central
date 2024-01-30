@@ -21,7 +21,7 @@ module RBICentral
         after: after,
         added: after.gems.values.select { |gem| !before.gem?(gem.name) },
         removed: before.gems.values.select { |gem| !after.gem?(gem.name) },
-        updated: before.gems.values.select { |gem| after.gem?(gem.name) && after[gem.name] != gem }
+        updated: before.gems.values.select { |gem| after.gem?(gem.name) && after[gem.name] != gem },
       )
     end
 

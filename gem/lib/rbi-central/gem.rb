@@ -20,7 +20,7 @@ module RBICentral
         path: object["path"],
         source: object["source"],
         dependencies: object["dependencies"] || [],
-        requires: object["requires"] || []
+        requires: object["requires"] || [],
       )
     end
 

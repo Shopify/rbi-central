@@ -19,7 +19,7 @@ module RBICentral
         index_schema: T::Hash[String, T.untyped],
         index_path: String,
         annotations_path: String,
-        bundle_config: T::Hash[String, String]
+        bundle_config: T::Hash[String, String],
       ).void
     end
     def initialize(
@@ -76,11 +76,11 @@ module RBICentral
         next unless file?(path)
 
         errors << Index::Error.new(
-          "Unexpected RBI annotations file `#{path}` (must be in `#{@annotations_path}` root directory)"
+          "Unexpected RBI annotations file `#{path}` (must be in `#{@annotations_path}` root directory)",
         ) unless File.dirname(path) == @annotations_path
 
         errors << Index::Error.new(
-          "Unexpected RBI annotations file `#{path}` (should have `.rbi` extension)"
+          "Unexpected RBI annotations file `#{path}` (should have `.rbi` extension)",
         ) unless File.extname(path) == ".rbi"
       end
 
@@ -118,7 +118,7 @@ module RBICentral
         next if index.gems.key?(name)
 
         errors << Index::Error.new(
-          "Missing index entry for `#{path}` (key `#{name}` not found in `#{@index_path}`)"
+          "Missing index entry for `#{path}` (key `#{name}` not found in `#{@index_path}`)",
         )
       end
 
@@ -134,7 +134,7 @@ module RBICentral
         next if file?(file)
 
         errors << Gem::Error.new(
-          "Missing RBI annotations file for `#{gem_name}` (file `#{file}` not found)"
+          "Missing RBI annotations file for `#{gem_name}` (file `#{file}` not found)",
         )
       end
 
@@ -221,7 +221,7 @@ module RBICentral
 
     sig { params(ref: String).returns(T.nilable(Index::ChangeSet)) }
     def index_changes(ref: "HEAD")
-      return nil unless index_changed?(ref: ref)
+      return unless index_changed?(ref: ref)
 
       Index.compare(before: load_index(ref: ref), after: load_index)
     end

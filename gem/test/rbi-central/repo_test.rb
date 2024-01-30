@@ -59,12 +59,15 @@ module RBICentral
       @repo.write!("#{@repo.annotations_path}/file3.RBI", "<rbi>")
       @repo.write!("#{@repo.annotations_path}/dir/file4.rbi", "<rbi>")
 
-      assert_messages([
-        "Unexpected RBI annotations file `rbi/annotations/dir/file4.rbi` (must be in `rbi/annotations` root directory)",
-        "Unexpected RBI annotations file `rbi/annotations/file1` (should have `.rbi` extension)",
-        "Unexpected RBI annotations file `rbi/annotations/file2.rb` (should have `.rbi` extension)",
-        "Unexpected RBI annotations file `rbi/annotations/file3.RBI` (should have `.rbi` extension)",
-      ], @repo.check_unexpected_annotations_files)
+      assert_messages(
+        [
+          "Unexpected RBI annotations file `rbi/annotations/dir/file4.rbi` (must be in `rbi/annotations` root directory)",
+          "Unexpected RBI annotations file `rbi/annotations/file1` (should have `.rbi` extension)",
+          "Unexpected RBI annotations file `rbi/annotations/file2.rb` (should have `.rbi` extension)",
+          "Unexpected RBI annotations file `rbi/annotations/file3.RBI` (should have `.rbi` extension)",
+        ],
+        @repo.check_unexpected_annotations_files,
+      )
     end
 
     def test_check_index_format
@@ -111,10 +114,13 @@ module RBICentral
       @repo.write_annotations_file!("gem1", "<rbi>")
       @repo.write_annotations_file!("gem2", "<rbi>")
       @repo.write_annotations_file!("gem3", "<rbi>")
-      assert_messages([
-        "Missing index entry for `rbi/annotations/gem2.rbi` (key `gem2` not found in `index.json`)",
-        "Missing index entry for `rbi/annotations/gem3.rbi` (key `gem3` not found in `index.json`)",
-      ], @repo.check_missing_index_entries)
+      assert_messages(
+        [
+          "Missing index entry for `rbi/annotations/gem2.rbi` (key `gem2` not found in `index.json`)",
+          "Missing index entry for `rbi/annotations/gem3.rbi` (key `gem3` not found in `index.json`)",
+        ],
+        @repo.check_missing_index_entries,
+      )
     end
 
     def test_check_missing_annotations_files
@@ -126,10 +132,13 @@ module RBICentral
         }
       JSON
       @repo.write_annotations_file!("gem1", "<rbi>")
-      assert_messages([
-        "Missing RBI annotations file for `gem2` (file `rbi/annotations/gem2.rbi` not found)",
-        "Missing RBI annotations file for `gem3` (file `rbi/annotations/gem3.rbi` not found)",
-      ], @repo.check_missing_annotations_files)
+      assert_messages(
+        [
+          "Missing RBI annotations file for `gem2` (file `rbi/annotations/gem2.rbi` not found)",
+          "Missing RBI annotations file for `gem3` (file `rbi/annotations/gem3.rbi` not found)",
+        ],
+        @repo.check_missing_annotations_files,
+      )
     end
 
     def test_check_rubocop_for_valid
@@ -173,7 +182,7 @@ module RBICentral
       end
       assert_equal(
         "fatal: not a git repository (or any of the parent directories): .git",
-        e.message.lines.first.strip
+        e.message.lines.first.strip,
       )
     end
 
@@ -184,7 +193,7 @@ module RBICentral
       end
       assert_equal(
         "fatal: bad revision 'bad-ref'",
-        e.message.lines.first.strip
+        e.message.lines.first.strip,
       )
     end
 
@@ -217,7 +226,7 @@ module RBICentral
       @repo.write_annotations_file!("foo", "<changed>")
       assert_equal(
         ["index.json", "rbi/annotations/bar.rbi", "rbi/annotations/foo.rbi"],
-        @repo.changed_files(ref: "main")
+        @repo.changed_files(ref: "main"),
       )
     end
 

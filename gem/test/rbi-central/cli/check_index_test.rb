@@ -35,7 +35,7 @@ module RBICentral
         assert_equal(<<~ERR, res.err)
           ### Checking index...
 
-          Error: The property `#/gem1` contains additional properties [\"foo\"] outside of the schema when none are allowed
+          Error: The property `#/gem1` contains additional properties ["foo"] outside of the schema when none are allowed
 
           Some checks failed. See above for details.
         ERR
@@ -68,12 +68,12 @@ module RBICentral
           +++ index.json
           @@ -1,8 +1,7 @@
            {
-             \"gem1\": {
+             "gem1": {
              },
-          -  \"gem2\": {
+          -  "gem2": {
           -  },
-          +  \"gem2\": {},
-             \"gem3\": {
+          +  "gem2": {},
+             "gem3": {
              }
            }
 
