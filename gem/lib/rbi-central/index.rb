@@ -9,20 +9,24 @@ module RBICentral
 
     class Error < RBICentral::Error; end
 
-    sig { params(object: T::Hash[String, T.untyped]).returns(Index) }
-    def self.from_object(object)
-      Index.new(gems: object.map { |name, gem_object| [name, Gem.from_object(name, gem_object)] }.to_h)
-    end
+    class << self
+      extend T::Sig
 
-    sig { params(before: Index, after: Index).returns(ChangeSet) }
-    def self.compare(before:, after:)
-      ChangeSet.new(
-        before: before,
-        after: after,
-        added: after.gems.values.select { |gem| !before.gem?(gem.name) },
-        removed: before.gems.values.select { |gem| !after.gem?(gem.name) },
-        updated: before.gems.values.select { |gem| after.gem?(gem.name) && after[gem.name] != gem }
-      )
+      sig { params(object: T::Hash[String, T.untyped]).returns(Index) }
+      def from_object(object)
+        Index.new(gems: object.map { |name, gem_object| [name, Gem.from_object(name, gem_object)] }.to_h)
+      end
+
+      sig { params(before: Index, after: Index).returns(ChangeSet) }
+      def compare(before:, after:)
+        ChangeSet.new(
+          before: before,
+          after: after,
+          added: after.gems.values.select { |gem| !before.gem?(gem.name) },
+          removed: before.gems.values.select { |gem| !after.gem?(gem.name) },
+          updated: before.gems.values.select { |gem| after.gem?(gem.name) && after[gem.name] != gem },
+        )
+      end
     end
 
     sig { params(name: String).returns(Gem) }

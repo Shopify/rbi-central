@@ -1,4 +1,4 @@
-# typed: strict
+# typed: true
 
 # DO NOT EDIT MANUALLY
 # This file was pulled from a central RBI files repository.
@@ -19,7 +19,7 @@ module Rainbow
     sig { params(hex: String).returns([Integer, Integer, Integer]) }
     def self.parse_hex_color(hex); end
 
-    class Indexed < Color
+    class Indexed < Rainbow::Color
       sig { returns(Integer) }
       attr_reader :num
 
@@ -30,7 +30,7 @@ module Rainbow
       def codes; end
     end
 
-    class Named < Indexed
+    class Named < Rainbow::Color::Indexed
       NAMES = T.let(nil, T::Hash[Symbol, Integer])
 
       sig { params(ground: Symbol, name: Symbol).void }
@@ -43,7 +43,7 @@ module Rainbow
       def self.valid_names; end
     end
 
-    class RGB < Indexed
+    class RGB < Rainbow::Color::Indexed
       sig { returns(Integer) }
       attr_reader :r, :g, :b
 
@@ -57,17 +57,17 @@ module Rainbow
       def self.to_ansi_domain(value); end
     end
 
-    class X11Named < RGB
-      include X11ColorNames
+    class X11Named < Rainbow::Color::RGB
+      include Rainbow::X11ColorNames
+
+      sig { params(ground: Symbol, name: Symbol).void }
+      def initialize(ground, name); end
 
       sig { returns(T::Array[Symbol]) }
       def self.color_names; end
 
       sig { returns(String) }
       def self.valid_names; end
-
-      sig { params(ground: Symbol, name: Symbol).void }
-      def initialize(ground, name); end
     end
   end
 

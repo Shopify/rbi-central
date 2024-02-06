@@ -10,7 +10,7 @@ module RBICentral
         gem = Gem.new(name: "gem")
         context = Context.new(gem, "#{ANNOTATIONS_PATH}/gem.rbi", color: false)
         assert_equal(<<~GEMFILE, context.read_gemfile)
-          source \"https://rubygems.org\"
+          source "https://rubygems.org"
           gem 'gem'
           gem 'sorbet', '>= 0.5.10109'
           gem 'tapioca', '>= 0.9.2'

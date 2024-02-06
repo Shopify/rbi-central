@@ -99,7 +99,7 @@ module RBICentral
           method_name: String,
           loc: RBI::Loc,
           allow_missing: T::Boolean,
-          singleton: T::Boolean
+          singleton: T::Boolean,
         ).void
       end
       def add_method(recv_name, method_name, loc, allow_missing:, singleton: false)

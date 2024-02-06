@@ -64,7 +64,7 @@ module RBICentral
         github: T.nilable(String),
         branch: T.nilable(String),
         ref: T.nilable(String),
-        path: T.nilable(String)
+        path: T.nilable(String),
       ).void
     end
     def add_gem_dependency(name, version: nil, github: nil, branch: nil, ref: nil, path: nil)

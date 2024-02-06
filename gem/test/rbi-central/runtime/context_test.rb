@@ -57,10 +57,13 @@ module RBICentral
           end
         RBI
         visitor.visit(rbi_tree)
-        assert_messages([
-          "Missing runtime method `::Foo#bar` (defined at `-:3:2-3:14`)",
-          "Missing runtime method `::Foo::Bar.baz` (defined at `-:8:2-8:19`)",
-        ], context.run!)
+        assert_messages(
+          [
+            "Missing runtime method `::Foo#bar` (defined at `-:3:2-3:14`)",
+            "Missing runtime method `::Foo::Bar.baz` (defined at `-:8:2-8:19`)",
+          ],
+          context.run!,
+        )
       end
 
       def test_annotated_method_missing
@@ -81,11 +84,14 @@ module RBICentral
           end
         RBI
         visitor.visit(rbi_tree)
-        assert_messages([
-          "Missing runtime method `::Foo#baz` (defined at `-:4:2-4:14`)\n" \
-            "Note: `baz` could be delegated to :method_missing but the RBI " \
-            "definition isn't annotated with `@method_missing`.",
-        ], context.run!)
+        assert_messages(
+          [
+            "Missing runtime method `::Foo#baz` (defined at `-:4:2-4:14`)\n" \
+              "Note: `baz` could be delegated to :method_missing but the RBI " \
+              "definition isn't annotated with `@method_missing`.",
+          ],
+          context.run!,
+        )
       end
 
       def test_shim_annotation
@@ -114,8 +120,13 @@ module RBICentral
           end
         RBI
         visitor.visit(rbi_tree)
-        assert_messages(["Missing runtime constant `::Baz` (defined at `-:11:0-13:3`)",
-                         "Missing runtime constant `::Baz` (defined at `-:12:2-12:14`)",], context.run!)
+        assert_messages(
+          [
+            "Missing runtime constant `::Baz` (defined at `-:11:0-13:3`)",
+            "Missing runtime constant `::Baz` (defined at `-:12:2-12:14`)",
+          ],
+          context.run!,
+        )
       end
 
       def test_annotated_singleton_method_missing
@@ -140,11 +151,14 @@ module RBICentral
           end
         RBI
         visitor.visit(rbi_tree)
-        assert_messages([
-          "Missing runtime method `::Foo.baz` (defined at `-:5:4-5:16`)\n" \
-            "Note: `baz` could be delegated to :method_missing but the RBI " \
-            "definition isn't annotated with `@method_missing`.",
-        ], context.run!)
+        assert_messages(
+          [
+            "Missing runtime method `::Foo.baz` (defined at `-:5:4-5:16`)\n" \
+              "Note: `baz` could be delegated to :method_missing but the RBI " \
+              "definition isn't annotated with `@method_missing`.",
+          ],
+          context.run!,
+        )
       end
 
       def test_wrong_kind
@@ -163,10 +177,13 @@ module RBICentral
         RBI
         visitor = Runtime::Visitor.new(context)
         visitor.visit(rbi_tree)
-        assert_messages([
-          "Runtime constant `::Foo` is not a class (defined at `-:1:0-1:14`)",
-          "Runtime constant `::Bar` is not a module (defined at `-:2:0-2:15`)",
-        ], context.run!)
+        assert_messages(
+          [
+            "Runtime constant `::Foo` is not a class (defined at `-:1:0-1:14`)",
+            "Runtime constant `::Bar` is not a module (defined at `-:2:0-2:15`)",
+          ],
+          context.run!,
+        )
       end
 
       def test_wrong_class_parent
@@ -187,10 +204,13 @@ module RBICentral
         RBI
         visitor = Runtime::Visitor.new(context)
         visitor.visit(rbi_tree)
-        assert_messages([
-          "Runtime constant `::Foo` is not a subclass of `Integer` found `Object` (defined at `-:1:0-1:24`)",
-          "Runtime constant `::Bar` is not a subclass of `Integer` found `Foo` (defined at `-:4:0-4:24`)",
-        ], context.run!)
+        assert_messages(
+          [
+            "Runtime constant `::Foo` is not a subclass of `Integer` found `Object` (defined at `-:1:0-1:24`)",
+            "Runtime constant `::Bar` is not a subclass of `Integer` found `Foo` (defined at `-:4:0-4:24`)",
+          ],
+          context.run!,
+        )
       end
 
       def test_wrong_includes
@@ -221,10 +241,13 @@ module RBICentral
         RBI
         visitor = Runtime::Visitor.new(context)
         visitor.visit(rbi_tree)
-        assert_messages([
-          "Runtime constant `::Foo` does not include `Mixin2` (defined at `-:2:2-2:24`)",
-          "Runtime constant `::Foo` does not include `Kernel` (defined at `-:3:2-3:16`)",
-        ], context.run!)
+        assert_messages(
+          [
+            "Runtime constant `::Foo` does not include `Mixin2` (defined at `-:2:2-2:24`)",
+            "Runtime constant `::Foo` does not include `Kernel` (defined at `-:3:2-3:16`)",
+          ],
+          context.run!,
+        )
       end
 
       def test_wrong_extends
@@ -255,9 +278,12 @@ module RBICentral
         RBI
         visitor = Runtime::Visitor.new(context)
         visitor.visit(rbi_tree)
-        assert_messages([
-          "Runtime constant `::Foo` does not extend `Mixin2` (defined at `-:2:2-2:23`)",
-        ], context.run!)
+        assert_messages(
+          [
+            "Runtime constant `::Foo` does not extend `Mixin2` (defined at `-:2:2-2:23`)",
+          ],
+          context.run!,
+        )
       end
 
       def test_can_use_sorbet_runtime

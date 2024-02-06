@@ -17,41 +17,44 @@ module RBICentral
   INDEX_PATH = "index.json"
   ANNOTATIONS_PATH = "rbi/annotations"
 
-  INDEX_SCHEMA = T.let({
-    "type": "object",
-    "patternProperties": {
-      "^.*$": {
-        "type": "object",
-        "properties": {
-          "dependencies": {
-            "description": "List of other gems that need to be installed to test the RBI contents",
-            "type": "array",
-            "items": {
+  INDEX_SCHEMA = T.let(
+    {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "properties": {
+            "dependencies": {
+              "description": "List of other gems that need to be installed to test the RBI contents",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "uniqueItems": true,
+              },
+            },
+            "requires": {
+              "description": "List of files to require to test the RBI contents",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "uniqueItems": true,
+              },
+            },
+            "path": {
+              "description": "(Optional) Path where this gem can be installed from",
               "type": "string",
-              "uniqueItems": true,
+            },
+            "source": {
+              "description": "(Optional) Source where this gem can be installed from",
+              "type": "string",
             },
           },
-          "requires": {
-            "description": "List of files to require to test the RBI contents",
-            "type": "array",
-            "items": {
-              "type": "string",
-              "uniqueItems": true,
-            },
-          },
-          "path": {
-            "description": "(Optional) Path where this gem can be installed from",
-            "type": "string",
-          },
-          "source": {
-            "description": "(Optional) Source where this gem can be installed from",
-            "type": "string",
-          },
+          "additionalProperties": false,
         },
-        "additionalProperties": false,
       },
     },
-  }, T::Hash[String, T.untyped])
+    T::Hash[String, T.untyped],
+  )
 
   RUBOCOP_CONFIG = <<~YML
     inherit_gem:
@@ -76,11 +79,15 @@ module RBICentral
 
   class Error < StandardError; end
 
-  sig { params(string: String).returns(String) }
-  def self.filter_parser_warning(string)
-    string
-      .gsub(/warning:.*\n/, "")
-      .gsub(/Please.*\n/, "")
+  class << self
+    extend T::Sig
+
+    sig { params(string: String).returns(String) }
+    def filter_parser_warning(string)
+      string
+        .gsub(/warning:.*\n/, "")
+        .gsub(/Please.*\n/, "")
+    end
   end
 end
 

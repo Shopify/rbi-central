@@ -112,7 +112,7 @@ module RBICentral
 
       sig do
         params(
-          block: T.proc.returns(T::Array[Error])
+          block: T.proc.returns(T::Array[Error]),
         ).void
       end
       def check_errors!(&block)
@@ -133,7 +133,7 @@ module RBICentral
       sig do
         params(
           names: T::Array[String],
-          block: T.proc.params(repo: Repo, gem: Gem).returns(T::Array[Error])
+          block: T.proc.params(repo: Repo, gem: Gem).returns(T::Array[Error]),
         ).void
       end
       def check_gems!(names:, &block)
@@ -179,16 +179,20 @@ module RBICentral
         prop :runtime, T::Boolean
         prop :static, T::Boolean
 
-        sig { params(options: T::Hash[Symbol, T.untyped]).returns(ChecksSelection) }
-        def self.from_options(options)
-          ChecksSelection.new(
-            gem_tests: options[:gem],
-            index: options[:index],
-            rubocop: options[:rubocop],
-            rubygems: options[:rubygems],
-            runtime: options[:runtime],
-            static: options[:static],
-          )
+        class << self
+          extend T::Sig
+
+          sig { params(options: T::Hash[Symbol, T.untyped]).returns(ChecksSelection) }
+          def from_options(options)
+            ChecksSelection.new(
+              gem_tests: options[:gem],
+              index: options[:index],
+              rubocop: options[:rubocop],
+              rubygems: options[:rubygems],
+              runtime: options[:runtime],
+              static: options[:static],
+            )
+          end
         end
 
         sig { returns(T::Boolean) }
