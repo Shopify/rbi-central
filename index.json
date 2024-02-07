@@ -94,6 +94,8 @@
   },
   "parse-cron": {
   },
+  "phonelib": {
+  },
   "pundit": {
   },
   "railties": {
