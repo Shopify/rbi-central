@@ -427,3 +427,43 @@ class String
   sig { returns(String) }
   def upcase_first; end
 end
+
+class ActiveSupport::ErrorReporter
+  sig do
+    type_parameters(:Block, :Fallback)
+      .params(
+        error_classes: T.class_of(Exception),
+        severity: T.nilable(Symbol),
+        context: T.nilable(T::Hash[Symbol, T.untyped]),
+        fallback: T.nilable(T.proc.returns(T.type_parameter(:Fallback))),
+        source: T.nilable(String),
+        blk: T.proc.returns(T.type_parameter(:Block)),
+      )
+      .returns(T.any(T.type_parameter(:Block), T.type_parameter(:Fallback)))
+  end
+  def handle(*error_classes, severity: :warning, context: {}, fallback: nil, source: DEFAULT_SOURCE, &blk); end
+
+  sig do
+    type_parameters(:Block)
+      .params(
+        error_classes: T.class_of(Exception),
+        severity: T.nilable(Symbol),
+        context: T.nilable(T::Hash[Symbol, T.untyped]),
+        source: T.nilable(String),
+        blk: T.proc.returns(T.type_parameter(:Block)),
+      )
+      .returns(T.type_parameter(:Block))
+  end
+  def record(*error_classes, severity: :error, context: {}, source: DEFAULT_SOURCE, &blk); end
+
+  sig do
+    params(
+      error: Exception,
+      handled: T::Boolean,
+      severity: T.nilable(Symbol),
+      context: T::Hash[Symbol, T.untyped],
+      source: T.nilable(String),
+    ).void
+  end
+  def report(error, handled: true, severity: handled ? :warning : :error, context: {}, source: DEFAULT_SOURCE); end
+end
