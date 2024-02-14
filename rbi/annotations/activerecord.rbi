@@ -194,3 +194,8 @@ class ActiveRecord::Base
   end
   def self.after_rollback(*args, **options, &block); end
 end
+
+class ActiveRecord::Relation
+  sig { returns(T::Boolean) }
+  def blank?; end
+end
