@@ -14,6 +14,9 @@ module Rails
     sig { returns(ActiveSupport::EnvironmentInquirer) }
     def env; end
 
+    sig { returns(ActiveSupport::ErrorReporter) }
+    def error; end
+
     sig { returns(ActiveSupport::Logger) }
     def logger; end
 
