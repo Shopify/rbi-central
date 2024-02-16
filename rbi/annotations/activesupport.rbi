@@ -429,8 +429,6 @@ class String
 end
 
 class ActiveSupport::ErrorReporter
-  # The `source` parameter should actually point to the `DEFAULT_SOURCE` constant, but that doesn't
-  # exist for older versions of Rails, so we're inlining the string directly
   sig do
     type_parameters(:Block, :Fallback)
       .params(
@@ -443,10 +441,8 @@ class ActiveSupport::ErrorReporter
       )
       .returns(T.any(T.type_parameter(:Block), T.type_parameter(:Fallback)))
   end
-  def handle(*error_classes, severity: :warning, context: {}, fallback: nil, source: "application", &blk); end
+  def handle(*error_classes, severity: T.unsafe(nil), context: T.unsafe(nil), fallback: nil, source: T.unsafe(nil), &blk); end
 
-  # The `source` parameter should actually point to the `DEFAULT_SOURCE` constant, but that doesn't
-  # exist for older versions of Rails, so we're inlining the string directly
   sig do
     type_parameters(:Block)
       .params(
@@ -458,10 +454,8 @@ class ActiveSupport::ErrorReporter
       )
       .returns(T.type_parameter(:Block))
   end
-  def record(*error_classes, severity: :error, context: {}, source: "application", &blk); end
+  def record(*error_classes, severity: T.unsafe(nil), context: {}, source: T.unsafe(nil), &blk); end
 
-  # The `source` parameter should actually point to the `DEFAULT_SOURCE` constant, but that doesn't
-  # exist for older versions of Rails, so we're inlining the string directly
   sig do
     params(
       error: Exception,
@@ -471,5 +465,5 @@ class ActiveSupport::ErrorReporter
       source: T.nilable(String),
     ).void
   end
-  def report(error, handled: true, severity: handled ? :warning : :error, context: {}, source: "application"); end
+  def report(error, handled: true, severity: T.unsafe(nil), context: {}, source: T.unsafe(nil)); end
 end
