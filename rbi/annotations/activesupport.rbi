@@ -441,7 +441,7 @@ class ActiveSupport::ErrorReporter
       )
       .returns(T.any(T.type_parameter(:Block), T.type_parameter(:Fallback)))
   end
-  def handle(*error_classes, severity: T.unsafe(nil), context: T.unsafe(nil), fallback: nil, source: T.unsafe(nil), &blk); end
+  def handle(*error_classes, severity: T.unsafe(nil), context: T.unsafe(nil), fallback: T.unsafe(nil), source: T.unsafe(nil), &blk); end
 
   sig do
     type_parameters(:Block)
@@ -454,7 +454,7 @@ class ActiveSupport::ErrorReporter
       )
       .returns(T.type_parameter(:Block))
   end
-  def record(*error_classes, severity: T.unsafe(nil), context: {}, source: T.unsafe(nil), &blk); end
+  def record(*error_classes, severity: T.unsafe(nil), context: T.unsafe(nil), source: T.unsafe(nil), &blk); end
 
   sig do
     params(
@@ -465,5 +465,5 @@ class ActiveSupport::ErrorReporter
       source: T.nilable(String),
     ).void
   end
-  def report(error, handled: true, severity: T.unsafe(nil), context: {}, source: T.unsafe(nil)); end
+  def report(error, handled: true, severity: T.unsafe(nil), context: T.unsafe(nil), source: T.unsafe(nil)); end
 end
