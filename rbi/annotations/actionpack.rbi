@@ -111,7 +111,8 @@ class ActionController::Parameters
   sig { params(key: T.any(String, Symbol)).returns(T.untyped) }
   def [](key); end
 
-  sig { params(key: T.any(String, Symbol, T::Array[T.any(String, Symbol)])).returns(T.untyped) }
+  sig { params(key: T.any(String, Symbol)).returns(ActionController::Parameters) }
+  sig { params(key: T::Array[T.any(String, Symbol)]).returns(T::Array[ActionController::Parameters]) }
   def require(key); end
 
   # required is an alias of require
