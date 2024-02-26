@@ -463,7 +463,7 @@ class ActiveSupport::ErrorReporter
       severity: T.nilable(Symbol),
       context: T::Hash[Symbol, T.untyped],
       source: T.nilable(String),
-    ).void
+    ).returns(NilClass)
   end
   def report(error, handled: true, severity: T.unsafe(nil), context: T.unsafe(nil), source: T.unsafe(nil)); end
 end
