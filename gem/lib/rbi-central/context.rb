@@ -47,7 +47,7 @@ module RBICentral
     def run!
       res = bundle_install!
       unless res.status
-        return [Error.new("Can't install gem `#{@gem.name}` (#{T.must(res.err).strip.gsub(/\n/, " ")})")]
+        return [Error.new("Can't install gem `#{@gem.name}` (#{T.must(res.err).strip.gsub("\n", " ")})")]
       end
 
       []
