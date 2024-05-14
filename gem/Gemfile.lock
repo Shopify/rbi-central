@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     rbi-central (0.0.1)
+      bigdecimal (>= 3.0.0)
       json-schema (>= 3.0.0)
       rbi (>= 0.1.0)
       rubocop (>= 1.29.1)
@@ -19,6 +20,7 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     ansi (1.5.0)
     ast (2.4.2)
+    bigdecimal (3.1.8)
     builder (3.2.4)
     debug (1.9.2)
       irb (~> 1.10)
@@ -110,6 +112,7 @@ GEM
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-22
+  arm64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
