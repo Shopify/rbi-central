@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
+  spec.add_dependency("bigdecimal", ">= 3.0.0")
   spec.add_dependency("json-schema", ">= 3.0.0")
   spec.add_dependency("rbi", ">= 0.1.0")
   spec.add_dependency("rubocop", ">= 1.29.1")
