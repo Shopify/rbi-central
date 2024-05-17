@@ -66,6 +66,8 @@ module Sidekiq::Job
   def jid; end
 end
 
+class Sidekiq::Web; end
+
 module Sidekiq::Job::ClassMethods
   sig { params(args: T.untyped).returns(String) }
   def perform_async(*args); end
