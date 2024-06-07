@@ -1,4 +1,4 @@
-# RBI Central
+# RBI Central 🙂
 
 ![Build Status](https://github.com/Shopify/rbi-central/workflows/CI/badge.svg)
 
