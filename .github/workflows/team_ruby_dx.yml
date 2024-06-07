@@ -16,7 +16,7 @@ jobs:
         env:
           PULL_URL: ${{ github.event.pull_request.html_url }}
           PULL_NUMBER: ${{ github.event.pull_request.number }}
-          PULL_REPO: ${{ github.repository }}
+          PULL_REPO: ${{ github.event.pull_request.head.repo.full_name }}
           PULL_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
           curl -X POST -H 'Content-type: application/json' --fail ${{ secrets.SLACK_WEBHOOK_URL }} --data \
