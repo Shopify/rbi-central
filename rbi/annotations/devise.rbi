@@ -156,6 +156,8 @@ class Devise::OmniauthCallbacksController < DeviseController
   sig { returns(T.untyped) }
   def failure; end
 
+  protected
+
   sig { returns(String) }
   def failed_strategy; end
 
