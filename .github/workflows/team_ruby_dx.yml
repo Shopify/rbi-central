@@ -22,5 +22,5 @@ jobs:
           curl -X POST -H 'Content-type: application/json' --fail ${{ secrets.SLACK_WEBHOOK_URL }} --data \
           "
           {
-            \"text\": \":pr-open: New pull request on shopify/rbi-central $PULL_URL\n\n:buildkite: ${{ secrets.BUILDKITE_TRIGGER_URL }}?message=shopify/rbi-private/$PULL_NUMBER&env=RBI_REPO=$PULL_REPO%0ARBI_BRANCH=$PULL_BRANCH%0APR_NUMBER=$PULL_NUMBER#new\"
+            \"text\": \":pr-open: New pull request on shopify/rbi-central $PULL_URL\n\n:buildkite: ${{ secrets.BUILDKITE_TRIGGER_URL }}?message=shopify/rbi-private/$PULL_NUMBER&env=RBI_REPO=$PULL_REPO%0ARBI_BRANCH=$PULL_BRANCH%0APR_NUMBER=$PULL_NUMBER%0APULL_REQUEST_URL=$PULL_URL#new\"
           }"
