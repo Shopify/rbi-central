@@ -13,7 +13,7 @@ end
 
 class GraphQL::Schema
   class << self
-    sig { params(query_str: String, kwargs: T.untyped).returns(T::Hash[String, T.untyped]) }
+    sig { params(query_str: String, kwargs: T.untyped).returns(GraphQL::Query::Result) }
     def execute(query_str = T.unsafe(nil), **kwargs); end
   end
 end
