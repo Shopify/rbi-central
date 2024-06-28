@@ -255,37 +255,23 @@ class Numeric
   sig { returns(ActiveSupport::Duration) }
   def years; end
 
-  alias_method :year, :years
-
   sig { returns(ActiveSupport::Duration) }
   def months; end
-
-  alias_method :month, :months
 
   sig { returns(ActiveSupport::Duration) }
   def weeks; end
 
-  alias_method :week, :weeks
-
   sig { returns(ActiveSupport::Duration) }
   def days; end
-
-  alias_method :day, :days
 
   sig { returns(ActiveSupport::Duration) }
   def hours; end
 
-  alias_method :hour, :hours
-
   sig { returns(ActiveSupport::Duration) }
   def minutes; end
 
-  alias_method :minute, :minutes
-
   sig { returns(ActiveSupport::Duration) }
   def seconds; end
-
-  alias_method :second, :seconds
 end
 
 class Time
