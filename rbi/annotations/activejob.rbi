@@ -48,7 +48,7 @@ class ActiveJob::Base
       ).void
   end
   sig do
-    params(exceptions: String, block: T.nilable(T.proc.params(job: T.attached_class, error: T.untyped).void)).void
+    params(exceptions: T.any(Module, String), block: T.nilable(T.proc.params(job: T.attached_class, error: T.untyped).void)).void
   end
   def self.discard_on(*exceptions, &block); end
 
