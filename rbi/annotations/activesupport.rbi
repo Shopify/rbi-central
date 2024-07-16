@@ -118,20 +118,27 @@ class Hash
 end
 
 class Array
+  sig { params(options: T::Hash[Symbol, T.untyped]).returns(T.self_type) }
+  def as_json(options = nil); end
+
+  sig { void }
+  def compact_blank; end
+
+  sig { overridable.returns(T.self_type) }
+  def deep_dup; end
+
   sig { params(position: Integer).returns(T.self_type) }
   def from(position); end
 
   sig { params(position: Integer).returns(T.self_type) }
   def to(position); end
 
-  sig { params(elements: T.untyped).returns(T::Array[T.untyped]) }
+  sig do
+    type_parameters(:T)
+      .params(elements: T.type_parameter(:T))
+      .returns(T::Array[T.any(Elem, T.type_parameter(:T))])
+  end
   def including(*elements); end
-
-  sig { params(elements: T.untyped).returns(T.self_type) }
-  def excluding(*elements); end
-
-  sig { params(elements: T.untyped).returns(T.self_type) }
-  def without(*elements); end
 
   sig { returns(T.nilable(Elem)) }
   def second; end
@@ -163,8 +170,13 @@ class Array
   sig { params(format: Symbol).returns(String) }
   def to_formatted_s(format = :default); end
 
-  sig { returns(String) }
-  def to_xml; end
+  sig do
+    params(
+      options: T::Hash[T.anything, T.anything],
+      block: T.nilable(T.proc.params(builder: Builder::XmlMarkup).returns(T.anything))
+    ).returns(String)
+  end
+  def to_xml(options = {}, &block); end
 
   sig { returns(T::Hash[T.untyped, T.untyped]) }
   def extract_options!; end
@@ -185,29 +197,42 @@ class Array
       .params(
         number: Integer,
         fill_with: T.type_parameter(:FillType),
-        block: T.nilable(T.proc.params(group: T::Array[T.any(Elem, T.type_parameter(:FillType))]).void),
       )
       .returns(T::Array[T::Array[T.any(Elem, T.type_parameter(:FillType))]])
   end
+  sig do
+    type_parameters(:FillType)
+      .params(
+        number: Integer,
+        fill_with: T.type_parameter(:FillType),
+        block: T.proc.params(group: T::Array[T.any(Elem, T.type_parameter(:FillType))]).void,
+      )
+      .returns(T.self_type)
+  end
   def in_groups_of(number, fill_with = T.unsafe(nil), &block); end
 
-  sig do
-    params(value: T.untyped, block: T.nilable(T.proc.params(element: Elem).returns(T.untyped)))
-      .returns(T::Array[T::Array[Elem]])
-  end
+  sig { params(value: Elem).returns(T::Array[T::Array[Elem]]) }
+  sig { params(block: T.proc.params(element: Elem).returns(T.untyped)).returns(T::Array[T::Array[Elem]]) }
   def split(value = nil, &block); end
 
   sig { params(object: T.untyped).returns(T::Array[T.untyped]) }
   def self.wrap(object); end
 
-  sig do
-    params(block: T.nilable(T.proc.params(element: Elem).returns(T.untyped)))
-      .returns(T.any(T::Array[Elem], T::Enumerator[Elem]))
-  end
+  sig { returns(T::Enumerator[Elem]) }
+  sig { params(block: T.nilable(T.proc.params(element: Elem).returns(T.untyped))).returns(T.any(T::Array[Elem])) }
   def extract!(&block); end
 
   sig { returns(ActiveSupport::ArrayInquirer) }
   def inquiry; end
+
+  sig { returns(String) }
+  def to_param; end
+
+  sig { returns(String) }
+  def to_query; end
+
+  sig { params(options: T::Hash[Symbol, T.anything]).returns(String) }
+  def to_sentence(options = {}); end
 end
 
 class Date
@@ -464,4 +489,8 @@ class String
 
   sig { returns(String) }
   def upcase_first; end
+end
+
+module Builder
+  class XmlMarkup; end
 end
