@@ -75,10 +75,10 @@ class Object
 end
 
 class Hash
-  sig { returns(T::Boolean)}
+  sig { returns(T::Boolean) }
   def blank?; end
 
-  sig { returns(T::Boolean)}
+  sig { returns(T::Boolean) }
   def present?; end
 
   sig { returns(T::Boolean) }
@@ -86,10 +86,10 @@ class Hash
 end
 
 class Array
-  sig { returns(T::Boolean)}
+  sig { returns(T::Boolean) }
   def blank?; end
 
-  sig { returns(T::Boolean)}
+  sig { returns(T::Boolean) }
   def present?; end
 
   sig { params(position: Integer).returns(T.self_type) }
@@ -285,10 +285,10 @@ class Time
 end
 
 class Symbol
-  sig { returns(T::Boolean)}
+  sig { returns(T::Boolean) }
   def blank?; end
 
-  sig { returns(T::Boolean)}
+  sig { returns(T::Boolean) }
   def present?; end
 
   # alias for `#start_with?`
@@ -390,7 +390,7 @@ class String
   sig { params(count: T.nilable(T.any(Integer, Symbol)), locale: T.nilable(Symbol)).returns(String) }
   def pluralize(count = nil, locale = :en); end
 
-  sig { returns(T::Boolean)}
+  sig { returns(T::Boolean) }
   def present?; end
 
   sig { params(patterns: T.any(String, Regexp)).returns(String) }
