@@ -57,10 +57,10 @@ class ActiveModel::Errors
   sig { params(other: T.untyped).returns(T::Array[ActiveModel::Error]) }
   def merge!(other); end
 
-  sig { returns(T::Hash[Symbol, T::Array[String]])}
+  sig { returns(T::Hash[Symbol, T::Array[String]]) }
   def messages; end
 
-  sig { params(attribute: T.any(Symbol, String)).returns(T::Array[String])}
+  sig { params(attribute: T.any(Symbol, String)).returns(T::Array[String]) }
   def messages_for(attribute); end
 
   sig { returns(T::Array[Elem]) }
