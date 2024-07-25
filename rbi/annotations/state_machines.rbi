@@ -11,7 +11,7 @@ end
 class StateMachines::Event
   include StateMachines::MatcherHelpers
 
-  sig { params(states: T::Hash[ T.any(String, Symbol, T::Array[T.any(String, Symbol)]), T.any(String, Symbol)]).void }
+  sig { params(states: T::Hash[T.any(String, Symbol, T::Array[T.any(String, Symbol)]), T.any(String, Symbol)]).void }
   def transition(states); end
 end
 
