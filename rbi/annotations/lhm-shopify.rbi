@@ -115,7 +115,7 @@ class Lhm::Migrator
   sig do
     params(
       columns: T.any(String, Symbol, T::Array[T.any(String, Symbol)]),
-      index_name: T.nilable(String, Symbol)
+      index_name: T.nilable(T.any(String, Symbol))
     ).void
   end
   def add_index(columns, index_name = nil); end
@@ -123,7 +123,7 @@ class Lhm::Migrator
   sig do
     params(
       columns: T.any(String, Symbol, T::Array[T.any(String, Symbol)]),
-      index_name: T.nilable(String, Symbol)
+      index_name: T.nilable(T.any(String, Symbol))
     ).void
   end
   def add_unique_index(columns, index_name = nil); end
@@ -143,7 +143,7 @@ class Lhm::Migrator
   sig do
     params(
       columns: T.any(String, Symbol, T::Array[T.any(String, Symbol)]),
-      index_name: T.nilable(String, Symbol)
+      index_name: T.nilable(T.any(String, Symbol))
     ).void
   end
   def remove_index(columns, index_name = nil); end
