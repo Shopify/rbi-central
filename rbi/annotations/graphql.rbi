@@ -8,7 +8,7 @@ module GraphQL
 end
 
 class GraphQL::Backtrace
-  Elem = type_member {{fixed: T.untyped}}
+  Elem = type_member { { fixed: T.untyped } }
 end
 
 class GraphQL::Schema
