@@ -212,6 +212,10 @@ class Stripe::Charge < Stripe::APIResource
   sig { returns(T.nilable(T.any(String, Stripe::Customer))) }
   def customer; end
 
+  # @method_missing: from StripeObject
+  sig { returns(T.nilable(Stripe::PaymentMethod)) }
+  def payment_method_details; end
+
   sig { params(id: T.any(String, T::Hash[Symbol, T.untyped]), opts: T.nilable(T::Hash[T.untyped, T.untyped])).returns(Stripe::Charge) }
   def self.retrieve(id, opts = {}); end
 end
