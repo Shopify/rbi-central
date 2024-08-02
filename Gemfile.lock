@@ -39,7 +39,7 @@ GEM
       prism (>= 0.18.0, < 0.20)
       sorbet-runtime (>= 0.5.9204)
     regexp_parser (2.9.0)
-    rexml (3.3.2)
+    rexml (3.3.3)
       strscan
     rubocop (1.59.0)
       json (~> 2.3)
