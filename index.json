@@ -87,6 +87,8 @@
   },
   "lhm-shopify": {
   },
+  "minitest": {
+  },
   "mocha": {
     "requires": [
       "mocha/api"
