@@ -18,6 +18,8 @@ Annotations are hand-written RBI files for commonly used gems that tell Sorbet i
 
 In this repository, annotations are placed in the `rbi/annotations` folder.
 
+For documentation about writing annotations, see the [`rbi/documentation` folder](/rbi/documentaiton).
+
 ### Index
 
 Each annotation from the `rbi/annotations` folder must be defined in the `index.json` file at the root of this repository:
