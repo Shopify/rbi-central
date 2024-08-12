@@ -21,6 +21,9 @@ Sorbet:
 
 Sorbet/TrueSigil:
   Enabled: true
+  Exclude:
+  - "**/minitest.rbi"
+
 
 Sorbet/StrictSigil:
   Enabled: true
