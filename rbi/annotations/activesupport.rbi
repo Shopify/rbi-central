@@ -456,6 +456,21 @@ class String
 end
 
 class ActiveSupport::ErrorReporter
+  # @version ~> 7.0.0
+  sig do
+    type_parameters(:Block, :Fallback)
+      .params(
+        error_class: T.class_of(Exception),
+        severity: T.nilable(Symbol),
+        context: T.nilable(T::Hash[Symbol, T.untyped]),
+        fallback: T.nilable(T.proc.returns(T.type_parameter(:Fallback))),
+        blk: T.proc.returns(T.type_parameter(:Block)),
+      )
+      .returns(T.any(T.type_parameter(:Block), T.type_parameter(:Fallback)))
+  end
+  def handle(error_class, severity: T.unsafe(nil), context: T.unsafe(nil), fallback: T.unsafe(nil), &blk); end
+
+  # @version >= 7.1.0.beta1
   sig do
     type_parameters(:Block, :Fallback)
       .params(
@@ -470,6 +485,20 @@ class ActiveSupport::ErrorReporter
   end
   def handle(*error_classes, severity: T.unsafe(nil), context: T.unsafe(nil), fallback: T.unsafe(nil), source: T.unsafe(nil), &blk); end
 
+  # @version ~> 7.0.0
+  sig do
+    type_parameters(:Block)
+      .params(
+        error_class: T.class_of(Exception),
+        severity: T.nilable(Symbol),
+        context: T.nilable(T::Hash[Symbol, T.untyped]),
+        blk: T.proc.returns(T.type_parameter(:Block)),
+      )
+      .returns(T.type_parameter(:Block))
+  end
+  def record(error_class, severity: T.unsafe(nil), context: T.unsafe(nil), &blk); end
+
+  # @version >= 7.1.0.beta1
   sig do
     type_parameters(:Block)
       .params(
@@ -483,6 +512,18 @@ class ActiveSupport::ErrorReporter
   end
   def record(*error_classes, severity: T.unsafe(nil), context: T.unsafe(nil), source: T.unsafe(nil), &blk); end
 
+  # @version ~> 7.0.0
+  sig do
+    params(
+      error: Exception,
+      handled: T::Boolean,
+      severity: T.nilable(Symbol),
+      context: T::Hash[Symbol, T.untyped],
+    ).void
+  end
+  def report(error, handled:, severity: T.unsafe(nil), context: T.unsafe(nil)); end
+
+  # @version >= 7.1.0.beta1
   sig do
     params(
       error: Exception,
