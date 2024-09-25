@@ -505,3 +505,23 @@ class ActiveSupport::ErrorReporter
   end
   def unexpected(error, severity: T.unsafe(nil), context: T.unsafe(nil), source: T.unsafe(nil)); end
 end
+
+module ActiveSupport::Rescuable::ClassMethods
+   has_attached_class!
+
+   sig do
+     type_parameters(:Klass)
+       .params(
+         klasses: T.class_of(Exception)[T.all(Exception, T.type_parameter(:Klass))],
+         with: T.nilable(Symbol),
+         block: T.nilable(
+           T.proc.params(exception: T.type_parameter(:Klass))
+             .bind(T.attached_class)
+             .void
+         )
+       )
+         .void
+   end
+   def rescue_from(*klasses, with: T.unsafe(nil), &block)
+   end
+end
