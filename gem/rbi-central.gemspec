@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency("bigdecimal", ">= 3.0.0")
   spec.add_dependency("json-schema", ">= 3.0.0")
-  spec.add_dependency("rbi", ">= 0.1.0")
+  spec.add_dependency("rbi", ">= 0.1.9")
   spec.add_dependency("rubocop", ">= 1.29.1")
   spec.add_dependency("rubocop-shopify", ">= 2.5.0")
   spec.add_dependency("rubocop-sorbet", ">= 0.6.11")

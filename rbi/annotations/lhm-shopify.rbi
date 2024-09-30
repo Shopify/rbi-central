@@ -109,8 +109,13 @@ class Lhm::Migrator
   sig { params(table: Lhm::Table, connection: T.nilable(Lhm::Connection)).void }
   def initialize(table, connection = nil); end
 
+  # @version <= 4.2.1
   sig { params(name: T.any(String, Symbol), definition: T.any(String, Symbol)).void }
   def add_column(name, definition); end
+
+  # @version >= 4.2.2
+  sig { params(name: T.any(String, Symbol), definition: T.any(String, Symbol), algorithm: T.nilable(String)).void }
+  def add_column(name, definition, algorithm: T.unsafe(nil)); end
 
   sig do
     params(
@@ -131,14 +136,24 @@ class Lhm::Migrator
   sig { params(name: T.any(String, Symbol), definition: T.any(String, Symbol)).void }
   def change_column(name, definition); end
 
+  # @version <= 4.2.1
   sig { params(statement: String).void }
   def ddl(statement); end
+
+  # @version >= 4.2.2
+  sig { params(statement: String, algorithm: T.nilable(String)).void }
+  def ddl(statement, algorithm: T.unsafe(nil)); end
 
   sig { params(sql: String).returns(String) }
   def filter(sql); end
 
+  # @version <= 4.2.1
   sig { params(name: T.any(String, Symbol)).void }
   def remove_column(name); end
+
+  # @version >= 4.2.2
+  sig { params(name: T.any(String, Symbol), algorithm: T.nilable(String)).void }
+  def remove_column(name, algorithm: T.unsafe(nil)); end
 
   sig do
     params(
@@ -148,8 +163,13 @@ class Lhm::Migrator
   end
   def remove_index(columns, index_name = nil); end
 
+  # @version <= 4.2.1
   sig { params(old: T.any(String, Symbol), nu: T.any(String, Symbol)).void }
   def rename_column(old, nu); end
+
+  # @version >= 4.2.2
+  sig { params(old: T.any(String, Symbol), nu: T.any(String, Symbol), algorithm: T.nilable(String)).void }
+  def rename_column(old, nu, algorithm: T.unsafe(nil)); end
 end
 
 module Lhm::Throttler

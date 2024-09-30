@@ -4,7 +4,7 @@ PATH
     rbi-central (0.0.1)
       bigdecimal (>= 3.0.0)
       json-schema (>= 3.0.0)
-      rbi (>= 0.1.0)
+      rbi (>= 0.1.9)
       rubocop (>= 1.29.1)
       rubocop-shopify (>= 2.5.0)
       rubocop-sorbet (>= 0.6.11)

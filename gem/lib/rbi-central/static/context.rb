@@ -28,15 +28,16 @@ module RBICentral
         errors = super
         return errors if errors.any?
 
+        filtered_rbi = filter_versions_from_annotation(@gem.name, @annotations_file)
+
+        # Write the filtered annotation to the context folder
+        write!(@annotations_file, filtered_rbi)
+
         res = bundle_exec("tapioca gem --no-doc --post requires.rb")
         unless res.status
           errors << Error.new(T.must(res.err).lstrip)
           return errors
         end
-
-        # Copy annotations file inside the context so path look relative
-        FileUtils.mkdir_p("#{absolute_path}/rbi/annotations")
-        FileUtils.cp(@annotations_file, "#{absolute_path}/#{@annotations_file}")
 
         res = bundle_exec("tapioca check-shims --no-payload " \
           "--gem-rbi-dir=sorbet/rbi/gems " \
