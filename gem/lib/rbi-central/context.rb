@@ -84,7 +84,9 @@ module RBICentral
 
     sig { params(gem_name: String, annotations_file: String).returns(String) }
     def filter_versions_from_annotation(gem_name, annotations_file)
-      gem_version = ::Gem::Version.new(gem_version_from_gemfile_lock(gem_name))
+      gem_version = gem_version_from_gemfile_lock(gem_name)
+      raise Error, "Can't find version for gem `#{gem_name}`" unless gem_version
+
       rbi = RBI::Parser.parse_file(annotations_file)
       rbi.filter_versions!(gem_version)
 
