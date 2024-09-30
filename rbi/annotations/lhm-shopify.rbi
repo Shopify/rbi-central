@@ -147,7 +147,7 @@ class Lhm::Migrator
   sig { params(sql: String).returns(String) }
   def filter(sql); end
 
-   # @version <= 4.2.1
+  # @version <= 4.2.1
   sig { params(name: T.any(String, Symbol)).void }
   def remove_column(name); end
 
@@ -163,7 +163,7 @@ class Lhm::Migrator
   end
   def remove_index(columns, index_name = nil); end
 
-   # @version <= 4.2.1
+  # @version <= 4.2.1
   sig { params(old: T.any(String, Symbol), nu: T.any(String, Symbol)).void }
   def rename_column(old, nu); end
 
