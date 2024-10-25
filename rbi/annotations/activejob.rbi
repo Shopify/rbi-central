@@ -72,7 +72,7 @@ class ActiveJob::Base
       block: T.nilable(T.proc.params(job: T.attached_class, error: T.untyped).void)
     ).void
   end
-  def self.retry_on(*exceptions, wait: 3.seconds, attempts: 5, queue: nil, priority: nil, jitter: JITTER_DEFAULT, &block); end
+  def self.retry_on(*exceptions, wait: 3.seconds, attempts: 5, queue: nil, priority: nil, jitter: ActiveJob::Exceptions::JITTER_DEFAULT, &block); end
 
   sig { params(part_name: T.nilable(T.any(String, Symbol)), block: T.nilable(T.proc.bind(T.attached_class).returns(T.untyped))).void }
   def self.queue_as(part_name = nil, &block); end
