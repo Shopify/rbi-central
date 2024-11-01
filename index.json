@@ -14,7 +14,9 @@
   },
   "actionview": {
     "requires": [
-      "action_view"
+      "action_view",
+      "uri",
+      "action_view/helpers"
     ]
   },
   "active_flag": {
