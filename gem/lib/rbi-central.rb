@@ -75,9 +75,6 @@ module RBICentral
 
     Sorbet/EnforceSignatures:
       Enabled: true
-
-    Lint/DuplicateMethods:
-      Enabled: false
   YML
 
   class Error < StandardError; end
