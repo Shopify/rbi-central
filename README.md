@@ -43,6 +43,15 @@ If you're copying this into your own `index.json`, make sure you strip out the c
 
 See the index [validation schema](schema.json) for more details.
 
+### Writing Annotations
+
+#### Missing methods and shims
+
+It is possible to allow necessary shims for non-existing runtime definitions by using comment tags:
+
+* `@missing_method` to indicate that a method is delegated to another receiver using `method_missing`
+* `@shim` to indicate that a definition doesn't actually exist at runtime but is needed to allow type checking
+
 ### Pulling annotations
 
 To pull relevant gem annotations into your project, run Tapioca's [`annotations` command](https://github.com/Shopify/tapioca#pulling-rbi-annotations-from-remote-sources) inside your project:
@@ -83,11 +92,6 @@ For each gem the test works as follows:
    1. Requires the gem (and possible other requirements, listed in index key `requires`)
    2. Tries to `const_get` each constant defined in the RBI file
    3. Tries to call `instance_method` for each method and attribute accessor (or `method` for singleton methods) in the RBI file
-
-It is possible to allow necessary shims for non-existing runtime definitions by using comment tags:
-
-* `@missing_method` to indicate that a method is delegated to another receiver using `method_missing`
-* `@shim` to indicate that a definition doesn't actually exist at runtime but is needed to allow type checking
 
 ### Static checks
 
