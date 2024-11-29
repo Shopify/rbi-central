@@ -1,7 +1,8 @@
 PATH
-  remote: gem
+  
   specs:
-    rbi-central (0.0.1)
+    
+ami- (0.0.1)
       bigdecimal (>= 3.0.0)
       json-schema (>= 3.0.0)
       rbi (>= 0.1.9)
