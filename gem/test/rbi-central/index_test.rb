@@ -85,8 +85,7 @@ module RBICentral
       })
       assert_equal(<<~JSON, index.to_formatted_json)
         {
-          "gem1": {
-          },
+          "gem1": {},
           "gem2": {
             "dependencies": [
               "a",

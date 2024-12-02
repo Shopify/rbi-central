@@ -206,10 +206,8 @@ module RBICentral
         @repo.git_commit!
         @repo.write_index!(<<~JSON)
           {
-            "gem1": {
-            },
-            "gem2": {
-            }
+            "gem1": {},
+            "gem2": {}
           }
         JSON
         res = @repo.repo("check --no-rubocop --no-runtime --no-static")
@@ -238,8 +236,7 @@ module RBICentral
         ERR
         refute(res.status)
         @repo.write_index!(<<~JSON)
-          {
-          }
+          {}
         JSON
         res = @repo.repo("check --no-rubocop --no-runtime --no-static")
         assert_equal(<<~ERR, RBICentral.filter_parser_warning(T.must(res.err)))

@@ -85,11 +85,9 @@ module RBICentral
         Formatting errors found in `index.json`:
         --- expected
         +++ index.json
-        @@ -1,13 +1,7 @@
+        @@ -1,12 +1,7 @@
          {
-        -  "gem1": {
-        -  },
-        +  "gem1": {},
+           "gem1": {},
            "gem2": {
         -    "dependencies": [
         -      "a",

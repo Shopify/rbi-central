@@ -9,8 +9,7 @@ module RBICentral
       def test_index_valid
         @repo.write_index!(<<~JSON)
           {
-            "gem1": {
-            }
+            "gem1": {}
           }
         JSON
         @repo.write_annotations_file!("gem1", "<rbi>")
@@ -66,15 +65,15 @@ module RBICentral
           Error: Formatting errors found in `index.json`:
           --- expected
           +++ index.json
-          @@ -1,8 +1,7 @@
+          @@ -1,5 +1,7 @@
            {
-             "gem1": {
-             },
-          -  "gem2": {
-          -  },
-          +  "gem2": {},
-             "gem3": {
-             }
+          -  "gem1": {},
+          +  "gem1": {
+          +  },
+             "gem2": {},
+          -  "gem3": {}
+          +  "gem3": {
+          +  }
            }
 
           Some checks failed. See above for details.
