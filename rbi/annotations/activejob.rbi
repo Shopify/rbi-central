@@ -1,7 +1,7 @@
 # typed: true
 
 class ActiveJob::Base
-  sig { params(blk: T.proc.bind(T.attached_class).params(job: T.attached_class).void).void }
+  sig { params(blk: T.proc.bind(T.attached_class).params(job: T.attached_class, exception: Exception).void).void }
   def self.after_discard(&blk); end
 
   sig do
