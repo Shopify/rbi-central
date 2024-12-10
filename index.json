@@ -96,6 +96,8 @@
       "mocha/api"
     ]
   },
+  "opentelemetry-sdk": {
+  },
   "parse-cron": {
   },
   "phonelib": {
