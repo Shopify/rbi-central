@@ -46,6 +46,7 @@
     ]
   },
   "bencode": {},
+  "cmath": {},
   "colorize": {},
   "configs": {},
   "delayed_job": {},
