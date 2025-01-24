@@ -1,6 +1,5 @@
 {
-  "aasm": {
-  },
+  "aasm": {},
   "actionmailer": {
     "requires": [
       "action_mailer"
@@ -19,8 +18,7 @@
       "action_view/helpers"
     ]
   },
-  "active_flag": {
-  },
+  "active_flag": {},
   "activejob": {
     "requires": [
       "active_job"
@@ -47,23 +45,17 @@
       "nokogiri"
     ]
   },
-  "bencode": {
-  },
-  "colorize": {
-  },
-  "configs": {
-  },
-  "delayed_job": {
-  },
-  "devise": {
-  },
+  "bencode": {},
+  "colorize": {},
+  "configs": {},
+  "delayed_job": {},
+  "devise": {},
   "elasticsearch-dsl": {
     "requires": [
       "elasticsearch/dsl"
     ]
   },
-  "faraday": {
-  },
+  "faraday": {},
   "globalid": {
     "dependencies": [
       "activerecord"
@@ -73,8 +65,7 @@
       "global_id/identification"
     ]
   },
-  "graphql": {
-  },
+  "graphql": {},
   "kredis": {
     "dependencies": [
       "activemodel",
@@ -85,23 +76,17 @@
       "kredis"
     ]
   },
-  "lhm": {
-  },
-  "lhm-shopify": {
-  },
-  "minitest": {
-  },
+  "lhm": {},
+  "lhm-shopify": {},
+  "minitest": {},
   "mocha": {
     "requires": [
       "mocha/api"
     ]
   },
-  "parse-cron": {
-  },
-  "phonelib": {
-  },
-  "pundit": {
-  },
+  "parse-cron": {},
+  "phonelib": {},
+  "pundit": {},
   "railties": {
     "requires": [
       "rake",
@@ -135,12 +120,9 @@
       "sidekiq/web"
     ]
   },
-  "sidekiq-scheduler": {
-  },
-  "state_machines": {
-  },
-  "stripe": {
-  },
+  "sidekiq-scheduler": {},
+  "state_machines": {},
+  "stripe": {},
   "webmock": {
     "dependencies": [
       "minitest"
