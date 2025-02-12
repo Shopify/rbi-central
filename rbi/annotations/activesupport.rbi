@@ -39,22 +39,420 @@ class ActiveSupport::TestCase
   def self.test(name, &block); end
 end
 
+class ActiveSupport::Duration
+  sig { returns(T::Hash[Symbol, Numeric]) }
+  def parts; end
+
+  sig { params(other: Numeric).returns(T::Boolean) }
+  sig { params(other: ::ActiveSupport::Duration).returns(T::Boolean) }
+  def <=>(other); end
+
+  sig { params(other: Numeric).returns(::ActiveSupport::Duration) }
+  sig { params(other: ::ActiveSupport::Duration).returns(::ActiveSupport::Duration) }
+  def +(other); end
+
+  sig { params(other: Numeric).returns(::ActiveSupport::Duration) }
+  sig { params(other: ::ActiveSupport::Duration).returns(::ActiveSupport::Duration) }
+  def -(other); end
+
+  sig { returns(String) }
+  def to_s; end
+
+  sig { returns(Integer) }
+  def to_i; end
+
+  sig { returns(Integer) }
+  def in_seconds; end
+
+  sig { returns(Float) }
+  def in_minutes; end
+
+  sig { returns(Float) }
+  def in_hours; end
+
+  sig { returns(Float) }
+  def in_days; end
+
+  sig { returns(Float) }
+  def in_weeks; end
+
+  sig { returns(Float) }
+  def in_months; end
+
+  sig { returns(Float) }
+  def in_years; end
+
+  sig { params(other: T.untyped).returns(T::Boolean) }
+  def eql?(other); end
+
+  sig { returns(Integer) }
+  def hash; end
+
+  sig { params(time: ::ActiveSupport::TimeWithZone).returns(::ActiveSupport::TimeWithZone) }
+  def since(time = ::Time.current); end
+
+  sig { params(time: ::ActiveSupport::TimeWithZone).returns(::ActiveSupport::TimeWithZone) }
+  def from_now(time = ::Time.current); end
+
+  sig { params(time: ::ActiveSupport::TimeWithZone).returns(::ActiveSupport::TimeWithZone) }
+  def after(time = ::Time.current); end
+
+  sig { params(time: ::ActiveSupport::TimeWithZone).returns(::ActiveSupport::TimeWithZone) }
+  def ago(time = ::Time.current); end
+
+  sig { params(time: ::ActiveSupport::TimeWithZone).returns(::ActiveSupport::TimeWithZone) }
+  def until(time = ::Time.current); end
+
+  sig { params(time: ::ActiveSupport::TimeWithZone).returns(::ActiveSupport::TimeWithZone) }
+  def before(time = ::Time.current); end
+
+  sig { returns(String) }
+  def inspect; end
+
+  sig { params(options: T.untyped).returns(Integer) }
+  def as_json(options = nil); end
+
+  sig { params(precision: T.untyped).returns(String) }
+  def iso8601(precision: nil); end
+
+  sig { params(iso8601duration: String).returns(T.attached_class) }
+  def self.parse(iso8601duration); end
+
+  sig { params(other: T.untyped).returns(T::Boolean) }
+  def self.===(other); end
+
+  sig { params(value: Numeric).returns(T.attached_class) }
+  def self.seconds(value); end
+
+  sig { params(value: Numeric).returns(T.attached_class) }
+  def self.minutes(value); end
+
+  sig { params(value: Numeric).returns(T.attached_class) }
+  def self.hours(value); end
+
+  sig { params(value: Numeric).returns(T.attached_class) }
+  def self.days(value); end
+
+  sig { params(value: Numeric).returns(T.attached_class) }
+  def self.weeks(value); end
+
+  sig { params(value: Numeric).returns(T.attached_class) }
+  def self.months(value); end
+
+  sig { params(value: Numeric).returns(T.attached_class) }
+  def self.years(value); end
+
+  sig { params(value: Numeric).returns(T.attached_class) }
+  def self.build(value); end
+end
+
 class ActiveSupport::TimeWithZone
   # @shim: Methods on ActiveSupport::TimeWithZone are delegated to `Time` using `method_missing
   include ::DateAndTime::Zones
   # @shim: Methods on ActiveSupport::TimeWithZone are delegated to `Time` using `method_missing
   include ::DateAndTime::Calculations
 
-  sig { returns(FalseClass) }
-  def blank?; end
-
   # @shim: since `present?` is always true, `presence` always returns `self`
   sig { returns(T.self_type) }
   def presence; end
 
-  # @shim: since `blank?` is always false, `present?` always returns `true`
+  sig { returns(::ActiveSupport::TimeZone) }
+  def time_zone; end
+
+  sig { returns(Time) }
+  def time; end
+
+  sig { returns(Time) }
+  def utc; end
+
+  sig { returns(::TZInfo::TimezonePeriod) }
+  def period; end
+
+  sig { returns(Time) }
+  def comparable_time; end
+
+  sig { returns(Time) }
+  def getgm; end
+
+  sig { returns(Time) }
+  def getutc; end
+
+  sig { returns(Time) }
+  def gmtime; end
+
+  sig { params(new_zone: ::ActiveSupport::TimeZone).returns(::ActiveSupport::TimeWithZone) }
+  def in_time_zone(new_zone = ::Time.zone); end
+
+  sig { returns(T::Boolean) }
+  def dst?; end
+
+  sig { returns(T::Boolean) }
+  def isdst; end
+
+  sig { returns(T::Boolean) }
+  def utc?; end
+
+  sig { returns(T::Boolean) }
+  def gmt?; end
+
+  sig { returns(String) }
+  def zone; end
+
+  sig { returns(String) }
+  def inspect; end
+
+  sig { params(fraction_digits: Integer).returns(String) }
+  def xmlschema(fraction_digits = 0); end
+
+  sig { params(fraction_digits: Integer).returns(String) }
+  def iso8601(fraction_digits = 0); end
+
+  sig { params(fraction_digits: Integer).returns(String) }
+  def rfc3339(fraction_digits = 0); end
+
+  sig { returns(String) }
+  def httpdate; end
+
+  sig { returns(String) }
+  def rfc2822; end
+
+  sig { returns(String) }
+  def rfc822; end
+
+  sig { returns(String) }
+  def to_s; end
+
+  sig { params(format: Symbol).returns(String) }
+  def to_fs(format = :default); end
+
+  sig { params(format: Symbol).returns(String) }
+  def to_formatted_s(format = :default); end
+
+  sig { params(format: String).returns(String) }
+  def strftime(format); end
+
+  sig { params(other: T.untyped).returns(Integer) }
+  def <=>(other); end
+
+  sig { returns(T::Boolean) }
+  def past?; end
+
+  sig { returns(T::Boolean) }
+  def today?; end
+
+  sig { returns(T::Boolean) }
+  def tomorrow?; end
+
+  sig { returns(T::Boolean) }
+  def next_day?; end
+
+  sig { returns(T::Boolean) }
+  def yesterday?; end
+
+  sig { returns(T::Boolean) }
+  def prev_day?; end
+
+  sig { returns(T::Boolean) }
+  def future?; end
+
+  sig { params(other: T.untyped).returns(T::Boolean) }
+  def eql?(other); end
+
+  sig { returns(Integer) }
+  def hash; end
+
+  sig { params(other: Numeric).returns(::ActiveSupport::TimeWithZone) }
+  sig { params(other: ::ActiveSupport::Duration).returns(::ActiveSupport::TimeWithZone) }
+  def +(other); end
+
+  sig { params(other: Numeric).returns(::ActiveSupport::TimeWithZone) }
+  sig { params(other: ::ActiveSupport::Duration).returns(::ActiveSupport::TimeWithZone) }
+  def since(other); end
+
+  sig { params(other: Numeric).returns(::ActiveSupport::TimeWithZone) }
+  sig { params(other: ::ActiveSupport::Duration).returns(::ActiveSupport::TimeWithZone) }
+  def in(other); end
+
+  sig { params(other: Time).returns(Float) }
+  sig { params(other: ::ActiveSupport::TimeWithZone).returns(Float) }
+  sig { params(other: Numeric).returns(::ActiveSupport::TimeWithZone) }
+  sig { params(other: ::ActiveSupport::Duration).returns(::ActiveSupport::TimeWithZone) }
+  def -(other); end
+
+  sig { params(other: Numeric).returns(::ActiveSupport::TimeWithZone) }
+  sig { params(other: ::ActiveSupport::Duration).returns(::ActiveSupport::TimeWithZone) }
+  def ago(other); end
+
+  sig { returns(Integer) }
+  def year; end
+
+  sig { returns(Integer) }
+  def mon; end
+
+  sig { returns(Integer) }
+  def month; end
+
+  sig { returns(Integer) }
+  def day; end
+
+  sig { returns(Integer) }
+  def mday; end
+
+  sig { returns(Integer) }
+  def wday; end
+
+  sig { returns(Integer) }
+  def yday; end
+
+  sig { returns(Integer) }
+  def hour; end
+
+  sig { returns(Integer) }
+  def min; end
+
+  sig { returns(Integer) }
+  def sec; end
+
+  sig { returns(Numeric) }
+  def usec; end
+
+  sig { returns(Integer) }
+  def nsec; end
+
+  sig { returns(Date) }
+  def to_date; end
+
+  sig { returns(T::Array[T.untyped]) }
+  def to_a; end
+
+  sig { returns(Float) }
+  def to_f; end
+
+  sig { returns(Integer) }
+  def to_i; end
+
+  sig { returns(Integer) }
+  def tv_sec; end
+
+  sig { returns(Rational) }
+  def to_r; end
+
+  sig { returns(DateTime) }
+  def to_datetime; end
+
+  sig { returns(Time) }
+  def to_time; end
+
+  sig { returns(TrueClass) }
+  def acts_like_time?; end
+
+  sig { returns(FalseClass) }
+  def blank?; end
+
   sig { returns(TrueClass) }
   def present?; end
+
+  sig { returns(T.self_type) }
+  def freeze; end
+
+  # @method_missing: delegated to Time
+  sig { returns(T.self_type) }
+  def beginning_of_day; end
+
+  # @method_missing: delegated to Time
+  sig { returns(T.self_type) }
+  def end_of_day; end
+
+  # @method_missing: delegated to Time
+  sig { params(days: Integer).returns(T.self_type) }
+  def prev_day(days = 1); end
+
+  # @method_missing: delegated to Time
+  sig { params(days: Integer).returns(T.self_type) }
+  def next_day(days = 1); end
+
+  # @method_missing: delegated to Time
+  sig { params(months: Integer).returns(T.self_type) }
+  def prev_month(months = 1); end
+
+  # @method_missing: delegated to Time
+  sig { params(months: Integer).returns(T.self_type) }
+  def next_month(months = 1); end
+
+  # @method_missing: delegated to Time
+  sig { params(years: Integer).returns(T.self_type) }
+  def prev_year(years = 1); end
+
+  # @method_missing: delegated to Time
+  sig { params(years: Integer).returns(T.self_type) }
+  def next_year(years = 1); end
+end
+
+class ActiveSupport::TimeZone
+  sig { returns(::ActiveSupport::TimeWithZone) }
+  def now; end
+
+  sig { returns(Date) }
+  def today; end
+
+  sig { returns(Date) }
+  def tomorrow; end
+
+  sig { returns(Date) }
+  def yesterday; end
+
+  sig { params(str: String, now: ::ActiveSupport::TimeWithZone).returns(T.nilable(::ActiveSupport::TimeWithZone)) }
+  def parse(str, now = now()); end
+end
+
+module DateAndTime::Calculations
+  sig { returns(T.self_type) }
+  def yesterday; end
+
+  sig { returns(T.self_type) }
+  def tomorrow; end
+
+  sig { returns(T.self_type) }
+  def beginning_of_month; end
+
+  sig { returns(T.self_type) }
+  def at_beginning_of_month; end
+
+  sig { returns(T.self_type) }
+  def beginning_of_quarter; end
+
+  sig { returns(T.self_type) }
+  def at_beginning_of_quarter; end
+
+  sig { returns(T.self_type) }
+  def end_of_quarter; end
+
+  sig { returns(T.self_type) }
+  def at_end_of_quarter; end
+
+  sig { returns(T.self_type) }
+  def beginning_of_year; end
+
+  sig { returns(T.self_type) }
+  def at_beginning_of_year; end
+
+  sig { params(start_day: Symbol).returns(T.self_type) }
+  def beginning_of_week(start_day = Date.beginning_of_week); end
+
+  sig { params(start_day: Symbol).returns(T.self_type) }
+  def at_beginning_of_week(start_day = Date.beginning_of_week); end
+
+  sig { returns(T.self_type) }
+  def end_of_month; end
+
+  sig { returns(T.self_type) }
+  def at_end_of_month; end
+
+  sig { returns(T.self_type) }
+  def end_of_year; end
+
+  sig { returns(T.self_type) }
+  def at_end_of_year; end
 end
 
 class Object
@@ -195,6 +593,33 @@ class Date
   # @shim: since `blank?` is always false, `present?` always returns `true`
   sig { returns(TrueClass) }
   def present?; end
+
+  sig { returns(::ActiveSupport::TimeWithZone) }
+  def beginning_of_day; end
+
+  sig { returns(::ActiveSupport::TimeWithZone) }
+  def at_beginning_of_day; end
+
+  sig { returns(::ActiveSupport::TimeWithZone) }
+  def end_of_day; end
+
+  sig { returns(::ActiveSupport::TimeWithZone) }
+  def at_end_of_day; end
+
+  sig { params(other: Numeric).returns(T.self_type) }
+  sig { params(other: Date).returns(Rational) }
+  sig { params(other: DateTime).returns(Rational) }
+  sig { params(other: ::ActiveSupport::Duration).returns(T.self_type) }
+  def -(other); end
+
+  sig { params(other: Numeric).returns(T.self_type) }
+  sig { params(other: Date).returns(Rational) }
+  sig { params(other: DateTime).returns(Rational) }
+  sig { params(other: ::ActiveSupport::Duration).returns(T.self_type) }
+  def +(other); end
+
+  sig { returns(Date) }
+  def self.current; end
 end
 
 class DateTime
@@ -263,6 +688,56 @@ class Numeric
   # @shim: since `blank?` is always false, `present?` always returns `true`
   sig { returns(TrueClass) }
   def present?; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def seconds; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def second; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def minutes; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def minute; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def hours; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def hour; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def days; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def day; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def weeks; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def week; end
+end
+
+class Float
+  sig { params(other: T.any(Integer, Float, Rational, BigDecimal)).returns(T::Boolean) }
+  sig { params(other: ::ActiveSupport::Duration).returns(T::Boolean) }
+  def <(other); end
+end
+
+class Integer
+  sig { returns(::ActiveSupport::Duration) }
+  def months; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def month; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def years; end
+
+  sig { returns(::ActiveSupport::Duration) }
+  def year; end
 end
 
 class Time
@@ -277,11 +752,50 @@ class Time
   sig { returns(TrueClass) }
   def present?; end
 
-  sig { returns(ActiveSupport::TimeZone) }
+  sig { params(other: Numeric).returns(Time) }
+  sig { params(other: ::ActiveSupport::Duration).returns(Time) }
+  def +(other); end
+
+  sig { params(other: Time).returns(Float) }
+  sig { params(other: Numeric).returns(Time) }
+  sig { params(other: ::ActiveSupport::Duration).returns(Time) }
+  def -(other); end
+
+  sig { returns(T.self_type) }
+  def beginning_of_day; end
+
+  sig { returns(T.self_type) }
+  def end_of_day; end
+
+  sig { params(days: Integer).returns(T.self_type) }
+  def prev_day(days = 1); end
+
+  sig { params(days: Integer).returns(T.self_type) }
+  def next_day(days = 1); end
+
+  sig { params(months: Integer).returns(T.self_type) }
+  def prev_month(months = 1); end
+
+  sig { params(months: Integer).returns(T.self_type) }
+  def next_month(months = 1); end
+
+  sig { params(years: Integer).returns(T.self_type) }
+  def prev_year(years = 1); end
+
+  sig { params(years: Integer).returns(T.self_type) }
+  def next_year(years = 1); end
+
+  sig { returns(::ActiveSupport::TimeWithZone) }
+  def self.current; end
+
+  sig { returns(::ActiveSupport::TimeZone) }
   def self.zone; end
 
-  sig { returns(T.any(ActiveSupport::TimeWithZone, ::Time)) }
-  def self.current; end
+  sig { params(month: Integer, year: Integer).returns(Integer) }
+  def self.days_in_month(month, year = current.year); end
+
+  sig { params(year: Integer).returns(Integer) }
+  def self.days_in_year(year = current.year); end
 end
 
 class Symbol
