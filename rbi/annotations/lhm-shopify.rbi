@@ -106,8 +106,8 @@ class Lhm::Migrator
   sig { returns(Lhm::Table) }
   attr_reader :origin
 
-  sig { params(table: Lhm::Table, connection: T.nilable(Lhm::Connection)).void }
-  def initialize(table, connection = nil); end
+  sig { params(table: Lhm::Table, connection: T.nilable(Lhm::Connection), options: T::Hash[Symbol, T.untyped]).void }
+  def initialize(table, connection = nil, options = {}); end
 
   # @version <= 4.2.1
   sig { params(name: T.any(String, Symbol), definition: T.any(String, Symbol)).void }
