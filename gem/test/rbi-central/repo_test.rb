@@ -17,7 +17,7 @@ module RBICentral
       e = assert_raises(RBICentral::Index::Error) do
         @repo.index
       end
-      assert_equal("Invalid JSON in `index.json`: unexpected token at ''", e.message)
+      assert_equal("Invalid JSON in `index.json`: unexpected end of input", e.message)
     end
 
     def test_index_bad_schema
