@@ -8,7 +8,7 @@ PATH
       rubocop (>= 1.29.1)
       rubocop-shopify (>= 2.5.0)
       rubocop-sorbet (>= 0.6.11)
-      sorbet-static-and-runtime (>= 0.5.10225)
+      sorbet-static-and-runtime (>= 0.5.11922)
       spoom (>= 1.2.0)
       tapioca (>= 0.9.2)
       thor (>= 1.2.1)
@@ -57,14 +57,14 @@ GEM
     rubocop-sorbet (0.8.7)
       rubocop (>= 1)
     ruby-progressbar (1.13.0)
-    sorbet (0.5.11766)
-      sorbet-static (= 0.5.11766)
-    sorbet-runtime (0.5.11766)
-    sorbet-static (0.5.11766-universal-darwin)
-    sorbet-static (0.5.11766-x86_64-linux)
-    sorbet-static-and-runtime (0.5.11766)
-      sorbet (= 0.5.11766)
-      sorbet-runtime (= 0.5.11766)
+    sorbet (0.5.11942)
+      sorbet-static (= 0.5.11942)
+    sorbet-runtime (0.5.11942)
+    sorbet-static (0.5.11942-universal-darwin)
+    sorbet-static (0.5.11942-x86_64-linux)
+    sorbet-static-and-runtime (0.5.11942)
+      sorbet (= 0.5.11942)
+      sorbet-runtime (= 0.5.11942)
     spoom (1.5.1)
       erubi (>= 1.10.0)
       prism (>= 0.28.0)
@@ -92,6 +92,7 @@ GEM
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-23
+  arm64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
