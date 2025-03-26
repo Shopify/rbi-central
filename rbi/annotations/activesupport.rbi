@@ -210,6 +210,12 @@ class DateTime
   def present?; end
 end
 
+module Enumerable
+  # @version >= 7.0.0
+  sig { returns(Elem) }
+  def sole; end
+end
+
 class NilClass
   sig { returns(TrueClass) }
   def blank?; end
