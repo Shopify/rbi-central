@@ -3,8 +3,8 @@
 inherit_gem:
   rubocop-shopify: rubocop.yml
 
-require:
- - rubocop-sorbet
+plugins:
+  - rubocop-sorbet
 
 AllCops:
   NewCops: disable

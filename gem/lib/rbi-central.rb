@@ -57,6 +57,9 @@ module RBICentral
   )
 
   RUBOCOP_CONFIG = <<~YML
+    plugins:
+    - rubocop-sorbet
+
     inherit_gem:
       rubocop-sorbet: config/rbi.yml
 
