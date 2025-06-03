@@ -601,6 +601,10 @@ class Stripe::PaymentIntent < Stripe::APIResource
   def charges; end
 
   # @method_missing: from StripeObject
+  sig { returns(T.nilable(Stripe::Charge)) }
+  def latest_charge; end
+
+  # @method_missing: from StripeObject
   sig { returns(Stripe::ListObject) }
   def line_items; end
 
