@@ -225,11 +225,11 @@ module ActionController::StrongParameters
 end
 
 module ActionDispatch::Http::Parameters
-  sig { returns(ActionController::Parameters) }
+  sig { returns(T::Hash[Symbol, String]) }
   def parameters; end
 
   # params is an alias of parameters
-  sig { returns(ActionController::Parameters) }
+  sig { returns(T::Hash[Symbol, String]) }
   def params; end
 end
 
