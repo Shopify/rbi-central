@@ -19,8 +19,8 @@ module RBICentral
       def init!
         super
 
-        add_gem_dependency("sorbet", version: ">= 0.5.10109")
-        add_gem_dependency("tapioca", version: ">= 0.9.2")
+        add_gem_dependency("sorbet",  version: "= #{::Gem.loaded_specs["sorbet"].version}")
+        add_gem_dependency("tapioca", version: "= #{::Gem.loaded_specs["tapioca"].version}")
       end
 
       sig { override.returns(T::Array[RBICentral::Context::Error]) }
