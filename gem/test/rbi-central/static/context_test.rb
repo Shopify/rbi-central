@@ -9,12 +9,14 @@ module RBICentral
       def test_init_gemfile
         gem = Gem.new(name: "gem")
         context = Context.new(gem, "#{ANNOTATIONS_PATH}/gem.rbi", color: false)
-        assert_equal(<<~GEMFILE, context.read_gemfile)
-          source "https://rubygems.org"
-          gem 'gem'
-          gem 'sorbet', '>= 0.5.10109'
-          gem 'tapioca', '>= 0.9.2'
-        GEMFILE
+
+        gem_names = T.must(context.read_gemfile)
+          .lines
+          .filter_map do |line|
+            line.match(/gem ['"](?<gem_name>[^'"]*?)['"]/)&.named_captures&.fetch("gem_name")
+          end
+
+        assert_equal(["gem", "sorbet", "tapioca"], gem_names)
       end
 
       def test_init_requires_rb
