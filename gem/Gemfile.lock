@@ -57,7 +57,7 @@ GEM
     public_suffix (6.0.1)
     racc (1.8.1)
     rainbow (3.1.1)
-    rake (13.2.1)
+    rake (13.3.0)
     rbi (0.3.6)
       prism (~> 1.0)
       rbs (>= 3.4.4)
@@ -137,7 +137,7 @@ DEPENDENCIES
   debug
   minitest
   minitest-reporters
-  rake (~> 13.2)
+  rake (~> 13.3)
   rbi-central!
 
 BUNDLED WITH
