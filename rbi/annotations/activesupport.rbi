@@ -552,3 +552,10 @@ class ActiveSupport::ErrorReporter
   end
   def unexpected(error, severity: T.unsafe(nil), context: T.unsafe(nil), source: T.unsafe(nil)); end
 end
+
+module ActiveSupport::Testing::Assertions
+  sig do
+    type_parameters(:Block).params(block: T.proc.returns(T.type_parameter(:Block))).returns(T.type_parameter(:Block))
+  end
+  def assert_nothing_raised(&block); end
+end
