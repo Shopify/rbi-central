@@ -113,6 +113,22 @@
       "rainbow/version"
     ]
   },
+  "rspec-core": {
+    "dependencies": [
+      "rspec"
+    ],
+    "requires": [
+      "rspec"
+    ]
+  },
+  "rspec-expectations": {
+    "dependencies": [
+      "rspec"
+    ],
+    "requires": [
+      "rspec"
+    ]
+  },
   "shopify-money": {
     "requires": [
       "money"
