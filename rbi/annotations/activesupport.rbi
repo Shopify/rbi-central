@@ -83,6 +83,10 @@ class Hash
 
   sig { returns(T::Boolean) }
   def extractable_options?; end
+
+  # @version >= 6.1.0
+  sig { returns(T::Hash[K, V]) }
+  def compact_blank; end
 end
 
 class Array
@@ -211,6 +215,38 @@ class DateTime
 end
 
 module Enumerable
+  sig do
+    type_parameters(:Block)
+      .params(block: T.proc.params(arg0: Elem).returns(T.type_parameter(:Block)))
+      .returns(T::Hash[T.type_parameter(:Block), Elem])
+  end
+  sig { returns(T::Enumerable[T.untyped]) }
+  def index_by(&block); end
+
+  sig do
+    type_parameters(:Block)
+      .params(block: T.proc.params(arg0: Elem).returns(T.type_parameter(:Block)))
+      .returns(T::Hash[Elem, T.type_parameter(:Block)])
+  end
+  sig { returns(T::Enumerable[T.untyped]) }
+  sig do
+    type_parameters(:Default)
+      .params(default: T.type_parameter(:Default))
+      .returns(T::Hash[Elem, T.type_parameter(:Default)])
+  end
+  def index_with(default = nil, &block); end
+
+  sig { params(block: T.proc.params(arg0: Elem).returns(BasicObject)).returns(T::Boolean) }
+  sig { returns(T::Boolean) }
+  def many?(&block); end
+
+  sig { params(object: BasicObject).returns(T::Boolean) }
+  def exclude?(object); end
+
+  # @version >= 6.1.0
+  sig { returns(T::Array[Elem]) }
+  def compact_blank; end
+
   # @version >= 7.0.0
   sig { returns(Elem) }
   def sole; end
