@@ -49,7 +49,7 @@ See the index [validation schema](schema.json) for more details.
 
 It is possible to allow necessary shims for non-existing runtime definitions by using comment tags:
 
-* `@missing_method` to indicate that a method is delegated to another receiver using `method_missing`
+* `@method_missing` to indicate that a method is delegated to another receiver using `method_missing`
 * `@shim` to indicate that a definition doesn't actually exist at runtime but is needed to allow type checking
 
 #### Versioned annotations
