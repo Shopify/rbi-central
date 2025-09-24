@@ -34,5 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency("tapioca", ">= 0.17.7")
   spec.add_dependency("thor", ">= 1.2.1")
 
-  spec.required_ruby_version = ">= 3.1"
+  spec.required_ruby_version = ">= 3.2"
 end
