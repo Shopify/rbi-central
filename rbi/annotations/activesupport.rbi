@@ -598,10 +598,10 @@ module ActiveSupport::Testing::Assertions
   sig do
     type_parameters(:TResult)
       .params(
-        expression: T.untyped,
-        message: T.nilable(String),
-        from: T.untyped,
-        to: T.untyped,
+        expression: T.any(Proc, String),
+        message: T.anything,
+        from: T.anything,
+        to: T.anything,
         block: T.proc.returns(T.type_parameter(:TResult)),
       )
       .returns(T.type_parameter(:TResult))
