@@ -598,8 +598,8 @@ module ActiveSupport::Testing::Assertions
   sig do
     type_parameters(:TResult)
       .params(
-        expression: T.any(Proc, String),
-        message: T.anything,
+        expression: T.any(Proc, Kernel),
+        message: Kernel,
         from: T.anything,
         to: T.anything,
         block: T.proc.returns(T.type_parameter(:TResult)),
