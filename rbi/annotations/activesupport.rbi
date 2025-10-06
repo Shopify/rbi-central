@@ -594,4 +594,17 @@ module ActiveSupport::Testing::Assertions
     type_parameters(:Block).params(block: T.proc.returns(T.type_parameter(:Block))).returns(T.type_parameter(:Block))
   end
   def assert_nothing_raised(&block); end
+
+  sig do
+    type_parameters(:TResult)
+      .params(
+        expression: T.any(Proc, Kernel),
+        message: Kernel,
+        from: T.anything,
+        to: T.anything,
+        block: T.proc.returns(T.type_parameter(:TResult)),
+      )
+      .returns(T.type_parameter(:TResult))
+  end
+  def assert_changes(expression, message = T.unsafe(nil), from: T.unsafe(nil), to: T.unsafe(nil), &block); end
 end
