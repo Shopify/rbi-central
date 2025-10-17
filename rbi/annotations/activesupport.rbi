@@ -85,7 +85,7 @@ class Hash
   def extractable_options?; end
 
   # @version >= 6.1.0
-  sig { returns(T::Hash[K, V]) }
+  sig { returns(T.self_type) }
   def compact_blank; end
 end
 
