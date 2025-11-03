@@ -33,7 +33,10 @@ module RBICentral
         # Write the filtered annotation to the context folder
         write!(@annotations_file, filtered_rbi)
 
-        res = bundle_exec("tapioca gem --no-doc --post requires.rb")
+        flags = "--no-doc --post requires.rb"
+        flags += " --no-exported-gem-rbis" if @gem.skip_exported_rbis
+
+        res = bundle_exec("tapioca gem #{flags}")
         unless res.status
           errors << Error.new(T.must(res.err).lstrip)
           return errors
