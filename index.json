@@ -131,7 +131,9 @@
   },
   "sidekiq-scheduler": {},
   "state_machines": {},
-  "stripe": {},
+  "stripe": {
+    "skip_exported_rbis": true
+  },
   "webmock": {
     "dependencies": [
       "minitest"
