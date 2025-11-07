@@ -12,6 +12,7 @@ module RBICentral
     const :source, T.nilable(String), default: nil
     const :dependencies, T::Array[String], default: []
     const :requires, T::Array[String], default: []
+    const :skip_exported_rbis, T::Boolean, default: false
 
     class << self
       extend T::Sig
@@ -23,6 +24,7 @@ module RBICentral
           source: object["source"],
           dependencies: object["dependencies"] || [],
           requires: object["requires"] || [],
+          skip_exported_rbis: object["skip_exported_rbis"] || false,
         )
       end
     end
@@ -34,6 +36,7 @@ module RBICentral
       object["source"] = source if source
       object["dependencies"] = dependencies if dependencies.any?
       object["requires"] = requires if requires.any?
+      object["skip_exported_rbis"] = skip_exported_rbis if skip_exported_rbis
       object
     end
 
@@ -51,7 +54,8 @@ module RBICentral
       name == other.name &&
         source == other.source &&
         dependencies == other.dependencies &&
-        requires == other.requires
+        requires == other.requires &&
+        skip_exported_rbis == other.skip_exported_rbis
     end
 
     sig { returns(String) }

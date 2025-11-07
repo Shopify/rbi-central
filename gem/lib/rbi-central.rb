@@ -48,6 +48,10 @@ module RBICentral
               "description": "(Optional) Source where this gem can be installed from",
               "type": "string",
             },
+            "skip_exported_rbis": {
+              "description": "(Optional) Skip importing gem's exported RBIs during testing with tapioca",
+              "type": "boolean",
+            },
           },
           "additionalProperties": false,
         },
