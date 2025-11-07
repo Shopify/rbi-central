@@ -44,7 +44,7 @@ module RBICentral
     def belongs_to_rubygems?
       uri = URI("https://rubygems.org/api/v1/versions/#{@name}/latest.json")
       content = Net::HTTP.get(uri)
-      version = JSON.parse(content)["version"]
+      version = JSON.parse(T.must(content))["version"]
 
       version && version != "9001.0" && version != "unknown"
     end
