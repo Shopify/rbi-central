@@ -12,7 +12,7 @@
     ]
   },
   "actionview": {
-    "requires": [
+    "requires": [ 
       "action_view",
       "uri",
       "action_view/helpers"
