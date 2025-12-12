@@ -204,6 +204,56 @@ class ActiveRecord::Relation
   sig { abstract.params(blk: T.proc.params(arg0: Elem).returns(BasicObject)).returns(T.untyped) }
   sig { abstract.returns(T::Enumerator[Elem]) }
   def each(&blk); end
+
+  sig do
+    params(
+      attributes: T::Array[T::Hash[T.any(Symbol, String), T.untyped]],
+      returning: T.nilable(T.any(T::Array[T.any(Symbol, String)], String, FalseClass)),
+      unique_by: T.nilable(T.any(T::Array[T.any(Symbol, String)], Symbol, String)),
+      record_timestamps: T.nilable(T::Boolean)
+    ).returns(ActiveRecord::Result)
+  end
+  def insert_all(attributes, returning: nil, unique_by: nil, record_timestamps: nil); end
+
+  sig do
+    params(
+      attributes: T::Array[T::Hash[T.any(Symbol, String), T.untyped]],
+      returning: T.nilable(T.any(T::Array[T.any(Symbol, String)], String, FalseClass)),
+      record_timestamps: T.nilable(T::Boolean)
+    ).returns(ActiveRecord::Result)
+  end
+  def insert_all!(attributes, returning: nil, record_timestamps: nil); end
+
+  sig do
+    params(
+      attributes: T::Hash[T.any(Symbol, String), T.untyped],
+      returning: T.nilable(T.any(T::Array[T.any(Symbol, String)], String, FalseClass)),
+      unique_by: T.nilable(T.any(T::Array[T.any(Symbol, String)], Symbol, String)),
+      record_timestamps: T.nilable(T::Boolean)
+    ).returns(ActiveRecord::Result)
+  end
+  def insert(attributes, returning: nil, unique_by: nil, record_timestamps: nil); end
+
+  sig do
+    params(
+      attributes: T::Hash[T.any(Symbol, String), T.untyped],
+      returning: T.nilable(T.any(T::Array[T.any(Symbol, String)], String, FalseClass)),
+      record_timestamps: T.nilable(T::Boolean)
+    ).returns(ActiveRecord::Result)
+  end
+  def insert!(attributes, returning: nil, record_timestamps: nil); end
+
+  sig do
+    params(
+      attributes: T::Array[T::Hash[T.any(Symbol, String), T.untyped]],
+      on_duplicate: T.any(Symbol, Arel::Nodes::SqlLiteral),
+      update_only: T.nilable(T::Array[T.any(Symbol, String)]),
+      returning: T.nilable(T.any(T::Array[T.any(Symbol, String)], String, FalseClass)),
+      unique_by: T.nilable(T.any(T::Array[T.any(Symbol, String)], Symbol, String)),
+      record_timestamps: T.nilable(T::Boolean)
+    ).returns(ActiveRecord::Result)
+  end
+  def upsert_all(attributes, on_duplicate: :update, update_only: nil, returning: nil, unique_by: nil, record_timestamps: nil); end
 end
 
 module ActiveRecord::Core
