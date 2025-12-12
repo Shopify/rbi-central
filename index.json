@@ -3,7 +3,7 @@
   "actionmailer": {
     "requires": [
       "action_mailer"
-    ]
+    ] 
   },
   "actionpack": {
     "requires": [
