@@ -9,7 +9,7 @@
     "requires": [
       "action_controller",
       "action_dispatch/testing/integration"
-    ]
+    ] 
   },
   "actionview": {
     "requires": [
