@@ -180,8 +180,17 @@ module RBICentral
     def check_runtime_for(gem)
       annotations_file = annotations_file_for(gem)
       rbi_tree = RBI::Parser.parse_file(annotations_file)
+
       context = Runtime::Context.new(gem, annotations_file, bundle_config: @bundle_config)
       visitor = Runtime::Visitor.new(context)
+
+      # Filter annotation file to only include annotations relevant to gem version
+      context.bundle_install!
+      gem_version = context.gem_version_from_gemfile_lock(gem.name)
+      raise Error, "Can't find version for gem `#{gem.name}`" unless gem_version
+
+      rbi_tree.filter_versions!(gem_version)
+
       visitor.visit(rbi_tree)
       errors = T.let([], T::Array[Runtime::Context::Error])
       errors.concat(visitor.errors)
