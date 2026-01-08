@@ -8,16 +8,16 @@
 # This is a hack that I don't want to ever use anywhere else or repeat EVER, but we need enums to be
 # an Array to pass schema validation. But we also want fast lookup!
 #
-# source://json-schema//lib/json-schema/util/array_set.rb#6
+# source://json-schema//lib/json-schema/util/array_set.rb#4
 class ArraySet < ::Array
   # @return [Boolean]
   #
-  # source://json-schema//lib/json-schema/util/array_set.rb#7
+  # source://json-schema//lib/json-schema/util/array_set.rb#5
   def include?(obj); end
 
   private
 
-  # source://json-schema//lib/json-schema/util/array_set.rb#17
+  # source://json-schema//lib/json-schema/util/array_set.rb#15
   def convert_to_float_if_numeric(value); end
 end
 
@@ -136,7 +136,7 @@ class JSON::Schema::Attribute
     def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
 
     # source://json-schema//lib/json-schema/attribute.rb#12
-    def validation_error(processor, message, fragments, current_schema, failed_attribute, record_errors); end
+    def validation_error(processor, message, fragments, current_schema, failed_attribute, record_errors, properties = T.unsafe(nil)); end
 
     # source://json-schema//lib/json-schema/attribute.rb#21
     def validation_errors(validator); end
@@ -150,7 +150,7 @@ JSON::Schema::Attribute::TYPE_CLASS_MAPPINGS = T.let(T.unsafe(nil), Hash)
 class JSON::Schema::ConstAttribute < ::JSON::Schema::Attribute
   class << self
     # source://json-schema//lib/json-schema/attributes/const.rb#6
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -162,7 +162,7 @@ class JSON::Schema::CustomFormat < ::JSON::Schema::FormatAttribute
   def initialize(validation_proc); end
 
   # source://json-schema//lib/json-schema/attributes/formats/custom.rb#11
-  def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+  def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
 end
 
 # source://json-schema//lib/json-schema/errors/custom_format_error.rb#3
@@ -172,7 +172,7 @@ class JSON::Schema::CustomFormatError < ::StandardError; end
 class JSON::Schema::DateFormat < ::JSON::Schema::FormatAttribute
   class << self
     # source://json-schema//lib/json-schema/attributes/formats/date.rb#8
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -183,7 +183,7 @@ JSON::Schema::DateFormat::REGEXP = T.let(T.unsafe(nil), Regexp)
 class JSON::Schema::DateTimeFormat < ::JSON::Schema::FormatAttribute
   class << self
     # source://json-schema//lib/json-schema/attributes/formats/date_time.rb#8
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -194,7 +194,7 @@ JSON::Schema::DateTimeFormat::REGEXP = T.let(T.unsafe(nil), Regexp)
 class JSON::Schema::DateTimeV4Format < ::JSON::Schema::FormatAttribute
   class << self
     # source://json-schema//lib/json-schema/attributes/formats/date_time_v4.rb#6
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -239,7 +239,7 @@ class JSON::Schema::DivisibleByAttribute < ::JSON::Schema::Attribute
     def keyword; end
 
     # source://json-schema//lib/json-schema/attributes/divisibleby.rb#10
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -287,7 +287,7 @@ end
 class JSON::Schema::EnumAttribute < ::JSON::Schema::Attribute
   class << self
     # source://json-schema//lib/json-schema/attributes/enum.rb#6
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -375,7 +375,7 @@ class JSON::Schema::IPFormat < ::JSON::Schema::FormatAttribute
     def ip_version; end
 
     # source://json-schema//lib/json-schema/attributes/formats/ip.rb#8
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -431,7 +431,7 @@ class JSON::Schema::LimitAttribute < ::JSON::Schema::Attribute
     # @return [Boolean]
     #
     # source://json-schema//lib/json-schema/attributes/limit.rb#31
-    def exclusive?(schema); end
+    def exclusive?(_schema); end
 
     # @return [Boolean]
     #
@@ -447,7 +447,7 @@ class JSON::Schema::LimitAttribute < ::JSON::Schema::Attribute
     def limit_name; end
 
     # source://json-schema//lib/json-schema/attributes/limit.rb#6
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
 
     # source://json-schema//lib/json-schema/attributes/limit.rb#35
     def value(data); end
@@ -458,7 +458,7 @@ end
 class JSON::Schema::MaxDecimalAttribute < ::JSON::Schema::Attribute
   class << self
     # source://json-schema//lib/json-schema/attributes/maxdecimal.rb#6
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -613,7 +613,7 @@ end
 class JSON::Schema::PatternAttribute < ::JSON::Schema::Attribute
   class << self
     # source://json-schema//lib/json-schema/attributes/pattern.rb#6
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -666,7 +666,7 @@ class JSON::Schema::PropertiesV4Attribute < ::JSON::Schema::PropertiesAttribute
     # @return [Boolean]
     #
     # source://json-schema//lib/json-schema/attributes/properties_v4.rb#8
-    def required?(schema, options); end
+    def required?(_schema, options); end
   end
 end
 
@@ -740,15 +740,15 @@ class JSON::Schema::Reader
   # URIs using the +file+ scheme will be normalized into +Pathname+ objects
   # and passed to the +accept_file+ callback.
   #
-  # @example Reject all unregistered schemas
-  #   JSON::Validator.schema_reader = JSON::Schema::Reader.new(
-  #   :accept_uri => false,
-  #   :accept_file => false
-  #   )
   # @example Only permit URIs from certain hosts
   #   JSON::Validator.schema_reader = JSON::Schema::Reader.new(
   #   :accept_file => false,
   #   :accept_uri => proc { |uri| ['mycompany.com', 'json-schema.org'].include?(uri.host) }
+  #   )
+  # @example Reject all unregistered schemas
+  #   JSON::Validator.schema_reader = JSON::Schema::Reader.new(
+  #   :accept_uri => false,
+  #   :accept_file => false
   #   )
   # @option options
   # @option options
@@ -805,7 +805,7 @@ end
 class JSON::Schema::RequiredAttribute < ::JSON::Schema::Attribute
   class << self
     # source://json-schema//lib/json-schema/attributes/required.rb#6
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -819,7 +819,7 @@ class JSON::Schema::SchemaParseError < ::JSON::ParserError; end
 class JSON::Schema::TimeFormat < ::JSON::Schema::FormatAttribute
   class << self
     # source://json-schema//lib/json-schema/attributes/formats/time.rb#8
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -841,7 +841,7 @@ end
 class JSON::Schema::TypeV4Attribute < ::JSON::Schema::Attribute
   class << self
     # source://json-schema//lib/json-schema/attributes/type_v4.rb#6
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -849,7 +849,7 @@ end
 class JSON::Schema::UniqueItemsAttribute < ::JSON::Schema::Attribute
   class << self
     # source://json-schema//lib/json-schema/attributes/uniqueitems.rb#6
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -860,7 +860,7 @@ class JSON::Schema::UriError < ::StandardError; end
 class JSON::Schema::UriFormat < ::JSON::Schema::FormatAttribute
   class << self
     # source://json-schema//lib/json-schema/attributes/formats/uri.rb#7
-    def validate(current_schema, data, fragments, processor, validator, options = T.unsafe(nil)); end
+    def validate(current_schema, data, fragments, processor, _validator, options = T.unsafe(nil)); end
   end
 end
 
@@ -869,7 +869,7 @@ class JSON::Schema::ValidationError < ::StandardError
   # @return [ValidationError] a new instance of ValidationError
   #
   # source://json-schema//lib/json-schema/errors/validation_error.rb#7
-  def initialize(message, fragments, failed_attribute, schema); end
+  def initialize(message, fragments, failed_attribute, schema, properties = T.unsafe(nil)); end
 
   # Returns the value of attribute failed_attribute.
   #
@@ -907,8 +907,20 @@ class JSON::Schema::ValidationError < ::StandardError
   # source://json-schema//lib/json-schema/errors/validation_error.rb#5
   def message=(_arg0); end
 
-  # source://json-schema//lib/json-schema/errors/validation_error.rb#40
+  # source://json-schema//lib/json-schema/errors/validation_error.rb#41
   def message_with_schema; end
+
+  # Returns the value of attribute properties.
+  #
+  # source://json-schema//lib/json-schema/errors/validation_error.rb#5
+  def properties; end
+
+  # Sets the attribute properties
+  #
+  # @param value the value to set the attribute properties to.
+  #
+  # source://json-schema//lib/json-schema/errors/validation_error.rb#5
+  def properties=(_arg0); end
 
   # Returns the value of attribute schema.
   #
@@ -934,10 +946,10 @@ class JSON::Schema::ValidationError < ::StandardError
   # source://json-schema//lib/json-schema/errors/validation_error.rb#5
   def sub_errors=(_arg0); end
 
-  # source://json-schema//lib/json-schema/errors/validation_error.rb#29
+  # source://json-schema//lib/json-schema/errors/validation_error.rb#30
   def to_hash; end
 
-  # source://json-schema//lib/json-schema/errors/validation_error.rb#16
+  # source://json-schema//lib/json-schema/errors/validation_error.rb#17
   def to_string(subschema_level = T.unsafe(nil)); end
 end
 
@@ -1076,8 +1088,8 @@ class JSON::Util::URI < ::Addressable::URI
     # Normalizes the reference URI based on the provided base URI
     #
     # @api private
-    # @param ref [String, Addressable::URI]
     # @param base [String, Addressable::URI]
+    # @param ref [String, Addressable::URI]
     # @return [Addressable::URI]
     #
     # source://json-schema//lib/json-schema/util/uri.rb#52
@@ -1108,7 +1120,7 @@ class JSON::Util::URI < ::Addressable::URI
 
     # @api private
     #
-    # source://addressable/2.8.7/lib/addressable/uri.rb#472
+    # source://json-schema//lib/json-schema/util/uri.rb#12
     def unescape_uri(uri, return_type = T.unsafe(nil), leave_encoded = T.unsafe(nil)); end
 
     # @api private
@@ -1133,7 +1145,7 @@ class JSON::Util::UUID < ::Struct
 
   # UUIDs are comparable (don't know what benefits are there, though).
   #
-  # source://json-schema//lib/json-schema/util/uuid.rb#247
+  # source://json-schema//lib/json-schema/util/uuid.rb#248
   def <=>(other); end
 
   # Two  UUIDs  are  said  to  be  equal if  and  only  if  their  (byte-order
@@ -1145,23 +1157,27 @@ class JSON::Util::UUID < ::Struct
 
   # Generate the string representation (a.k.a GUID) of this UUID
   #
-  # source://json-schema//lib/json-schema/util/uuid.rb#205
+  # source://json-schema//lib/json-schema/util/uuid.rb#211
   def guid; end
 
   # Returns the value of attribute raw_bytes
   #
   # @return [Object] the current value of raw_bytes
+  #
+  # source://json-schema//lib/json-schema/util/uuid.rb#33
   def raw_bytes; end
 
   # Sets the attribute raw_bytes
   #
   # @param value [Object] the value to set the attribute raw_bytes to.
   # @return [Object] the newly set value
+  #
+  # source://json-schema//lib/json-schema/util/uuid.rb#33
   def raw_bytes=(_); end
 
   # Convert into 128-bit unsigned integer
   #
-  # source://json-schema//lib/json-schema/util/uuid.rb#220
+  # source://json-schema//lib/json-schema/util/uuid.rb#226
   def to_i; end
 
   # Convert into 128-bit unsigned integer
@@ -1187,7 +1203,7 @@ class JSON::Util::UUID < ::Struct
 
   # Convert into a RFC4122-comforming URN representation
   #
-  # source://json-schema//lib/json-schema/util/uuid.rb#214
+  # source://json-schema//lib/json-schema/util/uuid.rb#217
   def urn; end
 
   # Gets the version of this UUID
@@ -1197,6 +1213,7 @@ class JSON::Util::UUID < ::Struct
   def version; end
 
   class << self
+    # source://json-schema//lib/json-schema/util/uuid.rb#33
     def [](*_arg0); end
 
     # create  the "version  1" UUID  with current  system clock,  current UTC
@@ -1236,29 +1253,34 @@ class JSON::Util::UUID < ::Struct
     # memory based filesystem  (such as tmpfs).  STILL slow?  then no way but
     # rewrite it with c :)
     #
-    # source://json-schema//lib/json-schema/util/uuid.rb#120
+    # source://json-schema//lib/json-schema/util/uuid.rb#175
     def create_v1(clock = T.unsafe(nil), time = T.unsafe(nil), mac_addr = T.unsafe(nil)); end
 
     # UUID generation using MD5 (for backward compat.)
     #
-    # source://json-schema//lib/json-schema/util/uuid.rb#70
+    # source://json-schema//lib/json-schema/util/uuid.rb#80
     def create_v3(str, namespace); end
 
     # UUID  generation  using  random-number  generator.   From  it's  random
     # nature, there's  no warranty that  the created ID is  really universaly
     # unique.
     #
-    # source://json-schema//lib/json-schema/util/uuid.rb#85
+    # source://json-schema//lib/json-schema/util/uuid.rb#97
     def create_v4; end
 
     # UUID generation using SHA1. Recommended over create_md5.
     # Namespace object is another UUID, some of them are pre-defined below.
     #
-    # source://json-schema//lib/json-schema/util/uuid.rb#57
+    # source://json-schema//lib/json-schema/util/uuid.rb#67
     def create_v5(str, namespace); end
 
+    # source://json-schema//lib/json-schema/util/uuid.rb#33
     def inspect; end
+
+    # source://json-schema//lib/json-schema/util/uuid.rb#33
     def keyword_init?; end
+
+    # source://json-schema//lib/json-schema/util/uuid.rb#33
     def members; end
 
     # The 'primitive constructor' of this class
@@ -1278,6 +1300,7 @@ class JSON::Util::UUID < ::Struct
     # source://json-schema//lib/json-schema/util/uuid.rb#39
     def mask(v, str); end
 
+    # source://json-schema//lib/json-schema/util/uuid.rb#33
     def new(*_arg0); end
 
     # source://json-schema//lib/json-schema/util/uuid.rb#99
@@ -1290,21 +1313,21 @@ end
 
 # Pre-defined UUID Namespaces described in RFC4122 Appendix C.
 #
-# source://json-schema//lib/json-schema/util/uuid.rb#252
+# source://json-schema//lib/json-schema/util/uuid.rb#253
 JSON::Util::UUID::NameSpace_DNS = T.let(T.unsafe(nil), JSON::Util::UUID)
 
-# source://json-schema//lib/json-schema/util/uuid.rb#254
+# source://json-schema//lib/json-schema/util/uuid.rb#255
 JSON::Util::UUID::NameSpace_OID = T.let(T.unsafe(nil), JSON::Util::UUID)
 
-# source://json-schema//lib/json-schema/util/uuid.rb#253
+# source://json-schema//lib/json-schema/util/uuid.rb#254
 JSON::Util::UUID::NameSpace_URL = T.let(T.unsafe(nil), JSON::Util::UUID)
 
-# source://json-schema//lib/json-schema/util/uuid.rb#255
+# source://json-schema//lib/json-schema/util/uuid.rb#256
 JSON::Util::UUID::NameSpace_X500 = T.let(T.unsafe(nil), JSON::Util::UUID)
 
 # The Nil UUID in RFC4122 Section 4.1.7
 #
-# source://json-schema//lib/json-schema/util/uuid.rb#258
+# source://json-schema//lib/json-schema/util/uuid.rb#259
 JSON::Util::UUID::Nil = T.let(T.unsafe(nil), JSON::Util::UUID)
 
 # source://json-schema//lib/json-schema/validator.rb#19
@@ -1316,151 +1339,165 @@ class JSON::Validator
 
   # Build all schemas with IDs, mapping out the namespace
   #
-  # source://json-schema//lib/json-schema/validator.rb#150
+  # source://json-schema//lib/json-schema/validator.rb#172
   def build_schemas(parent_schema); end
 
   # Either load a reference schema or create a new schema
   #
-  # source://json-schema//lib/json-schema/validator.rb#221
+  # source://json-schema//lib/json-schema/validator.rb#243
   def handle_schema(parent_schema, obj); end
 
-  # source://json-schema//lib/json-schema/validator.rb#137
+  # source://json-schema//lib/json-schema/validator.rb#159
   def load_ref_schema(parent_schema, ref); end
 
-  # source://json-schema//lib/json-schema/validator.rb#77
+  # source://json-schema//lib/json-schema/validator.rb#76
   def schema_from_fragment(base_schema, fragment); end
 
   # Run a simple true/false validation of data against a schema
   #
-  # source://json-schema//lib/json-schema/validator.rb#112
+  # source://json-schema//lib/json-schema/validator.rb#135
   def validate(data); end
 
-  # source://json-schema//lib/json-schema/validator.rb#232
-  def validation_error(error); end
-
-  # source://json-schema//lib/json-schema/validator.rb#236
-  def validation_errors; end
+  # source://json-schema//lib/json-schema/validator.rb#130
+  def with_errors; end
 
   private
 
-  # source://json-schema//lib/json-schema/validator.rb#597
+  # source://json-schema//lib/json-schema/validator.rb#609
   def custom_open(uri); end
 
-  # source://json-schema//lib/json-schema/validator.rb#521
+  # source://json-schema//lib/json-schema/validator.rb#533
   def fake_uuid(schema); end
 
-  # source://json-schema//lib/json-schema/validator.rb#572
+  # source://json-schema//lib/json-schema/validator.rb#584
   def initialize_data(data); end
 
-  # source://json-schema//lib/json-schema/validator.rb#525
+  # source://json-schema//lib/json-schema/validator.rb#537
   def initialize_schema(schema, default_validator); end
 
-  # source://json-schema//lib/json-schema/validator.rb#513
+  # source://json-schema//lib/json-schema/validator.rb#525
   def serialize(schema); end
 
   class << self
-    # source://json-schema//lib/json-schema/validator.rb#309
+    # source://json-schema//lib/json-schema/validator.rb#321
     def add_schema(schema); end
 
-    # source://json-schema//lib/json-schema/validator.rb#328
+    # source://json-schema//lib/json-schema/validator.rb#340
     def cache_schemas=(val); end
 
-    # source://json-schema//lib/json-schema/validator.rb#301
+    # source://json-schema//lib/json-schema/validator.rb#313
     def clear_cache; end
 
-    # source://json-schema//lib/json-schema/validator.rb#337
+    # source://json-schema//lib/json-schema/validator.rb#349
     def default_validator; end
 
-    # source://json-schema//lib/json-schema/validator.rb#388
+    # source://json-schema//lib/json-schema/validator.rb#400
     def deregister_format_validator(format, versions = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#275
+    # source://json-schema//lib/json-schema/validator.rb#287
     def fully_validate(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#285
+    # source://json-schema//lib/json-schema/validator.rb#297
     def fully_validate_json(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#279
+    # source://json-schema//lib/json-schema/validator.rb#291
     def fully_validate_schema(schema, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#289
+    # source://json-schema//lib/json-schema/validator.rb#301
     def fully_validate_uri(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#402
+    # source://json-schema//lib/json-schema/validator.rb#414
     def json_backend; end
 
-    # source://json-schema//lib/json-schema/validator.rb#410
+    # source://json-schema//lib/json-schema/validator.rb#422
     def json_backend=(backend); end
 
-    # source://json-schema//lib/json-schema/validator.rb#453
+    # source://json-schema//lib/json-schema/validator.rb#465
     def merge_missing_values(source, destination); end
 
-    # source://json-schema//lib/json-schema/validator.rb#424
+    # source://json-schema//lib/json-schema/validator.rb#436
     def parse(s); end
 
-    # source://json-schema//lib/json-schema/validator.rb#376
+    # source://json-schema//lib/json-schema/validator.rb#388
     def register_default_validator(v); end
 
-    # source://json-schema//lib/json-schema/validator.rb#380
+    # source://json-schema//lib/json-schema/validator.rb#392
     def register_format_validator(format, validation_proc, versions = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#372
+    # source://json-schema//lib/json-schema/validator.rb#384
     def register_validator(v); end
 
-    # source://json-schema//lib/json-schema/validator.rb#395
+    # source://json-schema//lib/json-schema/validator.rb#407
     def restore_default_formats(versions = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#313
+    # source://json-schema//lib/json-schema/validator.rb#325
     def schema_for_uri(uri); end
 
-    # source://json-schema//lib/json-schema/validator.rb#323
+    # source://json-schema//lib/json-schema/validator.rb#335
     def schema_key_for(uri); end
 
     # @return [Boolean]
     #
-    # source://json-schema//lib/json-schema/validator.rb#319
+    # source://json-schema//lib/json-schema/validator.rb#331
     def schema_loaded?(schema_uri); end
 
-    # source://json-schema//lib/json-schema/validator.rb#293
+    # source://json-schema//lib/json-schema/validator.rb#305
     def schema_reader; end
 
-    # source://json-schema//lib/json-schema/validator.rb#297
+    # source://json-schema//lib/json-schema/validator.rb#309
     def schema_reader=(reader); end
 
-    # source://json-schema//lib/json-schema/validator.rb#305
+    # source://json-schema//lib/json-schema/validator.rb#317
     def schemas; end
 
-    # source://json-schema//lib/json-schema/validator.rb#241
+    # source://json-schema//lib/json-schema/validator.rb#255
     def validate(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#257
+    # source://json-schema//lib/json-schema/validator.rb#269
     def validate!(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#262
+    # source://json-schema//lib/json-schema/validator.rb#274
     def validate2(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#249
+    # source://json-schema//lib/json-schema/validator.rb#261
     def validate_json(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#267
+    # source://json-schema//lib/json-schema/validator.rb#279
     def validate_json!(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#253
+    # source://json-schema//lib/json-schema/validator.rb#265
     def validate_uri(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#271
+    # source://json-schema//lib/json-schema/validator.rb#283
     def validate_uri!(schema, data, opts = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#367
+    # source://json-schema//lib/json-schema/validator.rb#379
     def validator_for(schema_uri); end
 
-    # source://json-schema//lib/json-schema/validator.rb#353
+    # source://json-schema//lib/json-schema/validator.rb#365
     def validator_for_name(schema_name, raise_not_found = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#341
+    # source://json-schema//lib/json-schema/validator.rb#353
     def validator_for_uri(schema_uri, raise_not_found = T.unsafe(nil)); end
 
-    # source://json-schema//lib/json-schema/validator.rb#333
+    # source://json-schema//lib/json-schema/validator.rb#345
     def validators; end
   end
+end
+
+# source://json-schema//lib/json-schema/validator.rb#110
+class JSON::Validator::ErrorRecorder < ::SimpleDelegator
+  # @return [ErrorRecorder] a new instance of ErrorRecorder
+  #
+  # source://json-schema//lib/json-schema/validator.rb#111
+  def initialize(sub); end
+
+  # source://json-schema//lib/json-schema/validator.rb#117
+  def validation_error(error); end
+
+  # source://json-schema//lib/json-schema/validator.rb#121
+  def validation_errors; end
+
+  # source://json-schema//lib/json-schema/validator.rb#125
+  def with_errors; end
 end
