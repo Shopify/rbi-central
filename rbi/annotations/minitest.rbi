@@ -56,6 +56,7 @@ module Minitest::Assertions
   sig { params(exp: T.anything, act: T.anything, msg: T.anything).returns(TrueClass) }
   def assert_same(exp, act, msg = nil); end
 
+  # @version < 6.0.0
   sig { params(send_ary: T::Array[T.anything], m: T.anything).returns(T::Boolean) }
   def assert_send(send_ary, m = nil); end
 
