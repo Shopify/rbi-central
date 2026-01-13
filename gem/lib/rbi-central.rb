@@ -85,6 +85,9 @@ module RBICentral
 
     Lint/DuplicateMethods:
       Enabled: false
+
+    Layout/RedundantLineBreak:
+      Enabled: false
   YML
 
   class Error < StandardError; end
