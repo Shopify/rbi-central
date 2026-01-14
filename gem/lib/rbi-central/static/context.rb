@@ -66,7 +66,8 @@ module RBICentral
         res = bundle_exec("srb tc . " \
           "--no-error-sections --color=#{@color ? "always" : "never"} " \
           "--ignore vendor/bundle --no-config --no-error-count " \
-          "--suppress-payload-superclass-redefinition-for=Reline::ANSI")
+          "--suppress-payload-superclass-redefinition-for=Reline::ANSI " \
+          "--suppress-payload-superclass-redefinition-for=RDoc::Markup::Heading")
         unless res.status
           errors << Error.new(res.err)
         end
