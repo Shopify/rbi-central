@@ -5,8 +5,13 @@
 # Please instead update this file by running `bin/tapioca gem racc`.
 
 
+# source://racc//lib/racc/parser.rb#19
+ParseError = Racc::ParseError
+
 # source://racc//lib/racc/info.rb#17
 Racc::Copyright = T.let(T.unsafe(nil), String)
+
+class Racc::CparseParams; end
 
 # source://racc//lib/racc/parser.rb#184
 class Racc::Parser
@@ -30,7 +35,7 @@ class Racc::Parser
   # source://racc//lib/racc/parser.rb#329
   def _racc_yyparse_rb(recv, mid, arg, c_debug); end
 
-  # source://racc//lib/racc/parser.rb#262
+  # source://racc//lib/racc/parser.rb#261
   def do_parse; end
 
   # The method to fetch next token.
@@ -118,8 +123,16 @@ class Racc::Parser
   # source://racc//lib/racc/parser.rb#542
   def yyerror; end
 
-  # source://racc//lib/racc/parser.rb#324
+  # source://racc//lib/racc/parser.rb#323
   def yyparse(recv, mid); end
+
+  private
+
+  # source://racc//lib/racc/parser.rb#195
+  def _racc_do_parse_c(_arg0, _arg1); end
+
+  # source://racc//lib/racc/parser.rb#195
+  def _racc_yyparse_c(_arg0, _arg1, _arg2, _arg3); end
 
   class << self
     # source://racc//lib/racc/parser.rb#216
@@ -130,12 +143,8 @@ end
 # source://racc//lib/racc/parser.rb#205
 Racc::Parser::Racc_Main_Parsing_Routine = T.let(T.unsafe(nil), Symbol)
 
-Racc::Parser::Racc_Runtime_Core_Id_C = T.let(T.unsafe(nil), String)
-
 # source://racc//lib/racc/parser.rb#207
 Racc::Parser::Racc_Runtime_Core_Version = T.let(T.unsafe(nil), String)
-
-Racc::Parser::Racc_Runtime_Core_Version_C = T.let(T.unsafe(nil), String)
 
 # source://racc//lib/racc/parser.rb#187
 Racc::Parser::Racc_Runtime_Core_Version_R = T.let(T.unsafe(nil), String)
@@ -148,6 +157,9 @@ Racc::Parser::Racc_Runtime_Version = T.let(T.unsafe(nil), String)
 
 # source://racc//lib/racc/parser.rb#206
 Racc::Parser::Racc_YY_Parse_Method = T.let(T.unsafe(nil), Symbol)
+
+# source://racc//lib/racc/parser.rb#181
+Racc::Racc_No_Extensions = T.let(T.unsafe(nil), FalseClass)
 
 # source://racc//lib/racc/info.rb#15
 Racc::VERSION = T.let(T.unsafe(nil), String)
