@@ -38,6 +38,7 @@ class GraphQL::Schema::Resolver
 end
 
 module GraphQL::Schema::Member::HasFields
+  # @version < 2.5.17
   sig do
     params(
       args: T.untyped,
@@ -46,6 +47,17 @@ module GraphQL::Schema::Member::HasFields
     ).returns(T.untyped)
   end
   def field(*args, **kwargs, &block); end
+  # @version >= 2.5.17
+  sig do
+    params(
+      name_positional: T.untyped,
+      type_positional: T.untyped,
+      desc_positional: T.untyped,
+      kwargs: T.untyped,
+      block: T.nilable(T.proc.params(field: GraphQL::Schema::Field).bind(GraphQL::Schema::Field).void)
+    ).returns(T.untyped)
+  end
+  def field(name_positional = T.unsafe(nil), type_positional = T.unsafe(nil), desc_positional = T.unsafe(nil), **kwargs, &block); end
 end
 
 module GraphQL::Schema::Member::BaseDSLMethods
