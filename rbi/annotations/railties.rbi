@@ -17,7 +17,12 @@ module Rails
     sig { returns(ActiveSupport::ErrorReporter) }
     def error; end
 
+    # @version < 7.1.0.rc1
     sig { returns(ActiveSupport::Logger) }
+    def logger; end
+
+    # @version >= 7.1.0.rc1
+    sig { returns(ActiveSupport::BroadcastLogger) }
     def logger; end
 
     sig { returns(Pathname) }
