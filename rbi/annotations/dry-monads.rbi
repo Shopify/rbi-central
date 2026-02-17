@@ -116,7 +116,7 @@ class Dry::Monads::Result
             .params(arg0: SuccessType)
             .returns(Dry::Monads::Result[T.type_parameter(:U), T.type_parameter(:V)])
       )
-      .returns(Dry::Monads::Result[T.type_parameter(:U), T.type_parameter(:V)])
+      .returns(Dry::Monads::Result[T.any(FailureType, T.type_parameter(:U)), T.type_parameter(:V)])
   end
   def bind(*_arg0, **_arg1, &_arg2)
   end
