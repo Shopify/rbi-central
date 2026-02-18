@@ -47,6 +47,12 @@ class Rails::Application < ::Rails::Engine
 end
 
 class Rails::Engine < ::Rails::Railtie
+  class << self
+    # @shim: delegated to the instance using `method_missing`
+    sig { params(block: T.untyped).returns(ActionDispatch::Routing::RouteSet) }
+    def routes(&block); end
+  end
+
   sig { params(block: T.untyped).returns(ActionDispatch::Routing::RouteSet) }
   def routes(&block); end
 end
