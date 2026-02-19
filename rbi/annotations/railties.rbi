@@ -47,8 +47,16 @@ class Rails::Application < ::Rails::Engine
 end
 
 class Rails::Engine < ::Rails::Railtie
-  sig { params(block: T.untyped).returns(ActionDispatch::Routing::RouteSet) }
+  sig { params(block: T.nilable(T.proc.bind(ActionDispatch::Routing::Mapper).void)).returns(ActionDispatch::Routing::RouteSet) }
   def routes(&block); end
+
+  class << self
+    sig { returns(Pathname) }
+    def root; end
+  end
+
+  sig { returns(Pathname) }
+  def root; end
 end
 
 class Rails::Railtie
