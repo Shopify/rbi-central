@@ -12,7 +12,7 @@ class Stripe::APIResource < Stripe::StripeObject
 
   # not all objects, at all times have metadata (deleted customers for instance)
   # @method_missing: from StripeObject
-  sig { returns(T::Hash[T.any(String, Symbol), T.untyped]) }
+  sig { returns(T::Hash[T.any(String, Symbol), String]) }
   def metadata; end
 
   # @method_missing: from StripeObject
