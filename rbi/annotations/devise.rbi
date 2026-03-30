@@ -64,16 +64,16 @@ end
 # @shim: Devise controllers are loaded by rails
 class Devise::ConfirmationsController < DeviseController
   # GET /resource/confirmation/new
-  sig { returns(T.untyped) }
-  def new; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def new(&block); end
 
   # POST /resource/confirmation
-  sig { returns(T.untyped) }
-  def create; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def create(&block); end
 
   # GET /resource/confirmation?confirmation_token=abcdef
-  sig { returns(T.untyped) }
-  def show; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def show(&block); end
 
   protected
 
@@ -113,16 +113,16 @@ class Devise::PasswordsController < DeviseController
   def new; end
 
   # POST /resource/password
-  sig { returns(T.untyped) }
-  def create; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def create(&block); end
 
   # GET /resource/password/edit?reset_password_token=abcdef
   sig { returns(T.untyped) }
   def edit; end
 
   # PUT /resource/password
-  sig { returns(T.untyped) }
-  def update; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def update(&block); end
 
   protected
 
@@ -146,12 +146,12 @@ end
 # @shim: Devise controllers are loaded by rails
 class Devise::RegistrationsController < DeviseController
   # GET /resource/sign_up
-  sig { returns(T.untyped) }
-  def new; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def new(&block); end
 
   # POST /resource
-  sig { returns(T.untyped) }
-  def create; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def create(&block); end
 
   # GET /resource/edit
   sig { returns(T.untyped) }
@@ -160,12 +160,12 @@ class Devise::RegistrationsController < DeviseController
   # PUT /resource
   # We need to use a copy of the resource because we don't want to change
   # the current user in place.
-  sig { returns(T.untyped) }
-  def update; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def update(&block); end
 
   # DELETE /resource
-  sig { returns(T.untyped) }
-  def destroy; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def destroy(&block); end
 
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign
@@ -224,16 +224,16 @@ end
 # @shim: Devise controllers are loaded by rails
 class Devise::SessionsController < DeviseController
   # GET /resource/sign_in
-  sig { returns(T.untyped) }
-  def new; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def new(&block); end
 
   # POST /resource/sign_in
-  sig { returns(T.untyped) }
-  def create; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def create(&block); end
 
   # DELETE /resource/sign_out
-  sig { returns(T.untyped) }
-  def destroy; end
+  sig { params(block: T.nilable(T.proc.void)).returns(T.untyped) }
+  def destroy(&block); end
 
   protected
 
@@ -254,12 +254,12 @@ class Devise::UnlocksController < DeviseController
   def new; end
 
   # POST /resource/unlock
-  sig { returns(T.untyped) }
-  def create; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def create(&block); end
 
   # GET /resource/unlock?unlock_token=abcdef
-  sig { returns(T.untyped) }
-  def show; end
+  sig { params(block: T.nilable(T.proc.params(resource: T.untyped).void)).returns(T.untyped) }
+  def show(&block); end
 
   protected
 
