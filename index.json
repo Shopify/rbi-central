@@ -51,6 +51,7 @@
   "configs": {},
   "delayed_job": {},
   "devise": {},
+  "discard": {},
   "elasticsearch-dsl": {
     "requires": [
       "elasticsearch/dsl"
