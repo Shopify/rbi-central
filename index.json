@@ -131,6 +131,7 @@
     ]
   },
   "sidekiq-scheduler": {},
+  "simplecov": {},
   "state_machines": {},
   "stripe": {
     "skip_exported_rbis": true
