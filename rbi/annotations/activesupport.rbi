@@ -20,6 +20,42 @@ class ActiveSupport::EnvironmentInquirer
   def local?; end
 end
 
+class ActiveSupport::HashWithIndifferentAccess < Hash
+  sig { returns(ActiveSupport::HashWithIndifferentAccess) }
+  def with_indifferent_access; end
+
+  sig do
+    type_parameters(:V2, :ConflictRes).params(
+      other_hash: T::Hash[T.untyped, T.type_parameter(:V2)],
+      block: T.nilable(
+        T.proc.params(
+          key: String,
+          old_val: V,
+          new_val: T.type_parameter(:V2),
+        ).returns(T.type_parameter(:ConflictRes))
+      ),
+    ).returns(ActiveSupport::HashWithIndifferentAccess)
+  end
+  def deep_merge(other_hash, &block); end
+
+  sig do
+    type_parameters(:V2, :ConflictRes).params(
+      other_hash: T::Hash[T.untyped, T.type_parameter(:V2)],
+      block: T.nilable(
+        T.proc.params(
+          key: String,
+          old_val: V,
+          new_val: T.type_parameter(:V2),
+        ).returns(T.type_parameter(:ConflictRes))
+      ),
+    ).returns(ActiveSupport::HashWithIndifferentAccess)
+  end
+  def deep_merge!(other_hash, &block); end
+
+  sig { params(other: T.untyped).returns(T::Boolean) }
+  def deep_merge?(other); end
+end
+
 module ActiveSupport::Testing::SetupAndTeardown::ClassMethods
   sig { params(args: T.untyped, block: T.nilable(T.proc.bind(T.untyped).void)).void }
   def setup(*args, &block); end
@@ -87,6 +123,37 @@ class Hash
   # @version >= 6.1.0
   sig { returns(T.self_type) }
   def compact_blank; end
+
+  sig do
+    type_parameters(:K2, :V2, :ConflictRes).params(
+      other_hash: T::Hash[T.type_parameter(:K2), T.type_parameter(:V2)],
+      block: T.nilable(
+        T.proc.params(
+          key: T.any(K, T.type_parameter(:K2)),
+          old_val: V,
+          new_val: T.type_parameter(:V2),
+        ).returns(T.type_parameter(:ConflictRes))
+      ),
+    ).returns(T::Hash[T.any(K, T.type_parameter(:K2)), T.any(V, T.type_parameter(:ConflictRes))])
+  end
+  def deep_merge(other_hash, &block); end
+
+  sig do
+    type_parameters(:K2, :V2, :ConflictRes).params(
+      other_hash: T::Hash[T.type_parameter(:K2), T.type_parameter(:V2)],
+      block: T.nilable(
+        T.proc.params(
+          key: T.any(K, T.type_parameter(:K2)),
+          old_val: V,
+          new_val: T.type_parameter(:V2),
+        ).returns(T.type_parameter(:ConflictRes))
+      ),
+    ).returns(T::Hash[T.any(K, T.type_parameter(:K2)), T.any(V, T.type_parameter(:ConflictRes))])
+  end
+  def deep_merge!(other_hash, &block); end
+
+  sig { params(other: T.untyped).returns(T::Boolean) }
+  def deep_merge?(other); end
 end
 
 class Array
