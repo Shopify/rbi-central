@@ -52,6 +52,7 @@ class ActiveSupport::HashWithIndifferentAccess < Hash
   end
   def deep_merge!(other_hash, &block); end
 
+  # @version >= 7.2
   sig { params(other: T.untyped).returns(T::Boolean) }
   def deep_merge?(other); end
 end
@@ -124,6 +125,9 @@ class Hash
   sig { returns(T.self_type) }
   def compact_blank; end
 
+  sig { returns(ActiveSupport::HashWithIndifferentAccess) }
+  def with_indifferent_access; end
+
   sig do
     type_parameters(:K2, :V2, :ConflictRes).params(
       other_hash: T::Hash[T.type_parameter(:K2), T.type_parameter(:V2)],
@@ -152,6 +156,7 @@ class Hash
   end
   def deep_merge!(other_hash, &block); end
 
+  # @version >= 7.2
   sig { params(other: T.untyped).returns(T::Boolean) }
   def deep_merge?(other); end
 end
