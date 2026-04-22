@@ -21,6 +21,12 @@ class ActiveSupport::EnvironmentInquirer
 end
 
 class ActiveSupport::HashWithIndifferentAccess < Hash
+  extend T::Generic
+
+  K = type_member {{fixed: T.any(String, Symbol)}}
+  V = type_member {{fixed: T.untyped}}
+  Elem = type_member {{fixed: T.untyped}}
+
   sig { returns(ActiveSupport::HashWithIndifferentAccess) }
   def with_indifferent_access; end
 
