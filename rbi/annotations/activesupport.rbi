@@ -36,7 +36,7 @@ class ActiveSupport::HashWithIndifferentAccess < Hash
       block: T.nilable(
         T.proc.params(
           key: String,
-          old_val: V,
+          old_val: T.untyped,
           new_val: T.type_parameter(:V2),
         ).returns(T.type_parameter(:ConflictRes))
       ),
@@ -50,7 +50,7 @@ class ActiveSupport::HashWithIndifferentAccess < Hash
       block: T.nilable(
         T.proc.params(
           key: String,
-          old_val: V,
+          old_val: T.untyped,
           new_val: T.type_parameter(:V2),
         ).returns(T.type_parameter(:ConflictRes))
       ),
@@ -144,7 +144,7 @@ class Hash
           new_val: T.type_parameter(:V2),
         ).returns(T.type_parameter(:ConflictRes))
       ),
-    ).returns(T::Hash[T.any(K, T.type_parameter(:K2)), T.any(V, T.type_parameter(:ConflictRes))])
+    ).returns(T::Hash[T.any(K, T.type_parameter(:K2)), T.any(V, T.type_parameter(:V2), T.type_parameter(:ConflictRes))])
   end
   def deep_merge(other_hash, &block); end
 
@@ -158,7 +158,7 @@ class Hash
           new_val: T.type_parameter(:V2),
         ).returns(T.type_parameter(:ConflictRes))
       ),
-    ).returns(T::Hash[T.any(K, T.type_parameter(:K2)), T.any(V, T.type_parameter(:ConflictRes))])
+    ).returns(T::Hash[T.any(K, T.type_parameter(:K2)), T.any(V, T.type_parameter(:V2), T.type_parameter(:ConflictRes))])
   end
   def deep_merge!(other_hash, &block); end
 
