@@ -67,7 +67,8 @@ module RBICentral
           "--no-error-sections --color=#{@color ? "always" : "never"} " \
           "--ignore vendor/bundle --no-config --no-error-count " \
           "--suppress-payload-superclass-redefinition-for=Reline::ANSI " \
-          "--suppress-payload-superclass-redefinition-for=RDoc::Markup::Heading")
+          "--suppress-payload-superclass-redefinition-for=RDoc::Markup::Heading " \
+          "--suppress-payload-superclass-redefinition-for=Net::IMAP::Literal")
         unless res.status
           errors << Error.new(res.err)
         end
