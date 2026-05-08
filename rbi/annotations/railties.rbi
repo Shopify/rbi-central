@@ -64,6 +64,11 @@ end
 class Rails::Railtie
   sig { params(block: T.proc.bind(Rails::Railtie).void).void }
   def configure(&block); end
+
+  class << self
+    sig { params(block: T.proc.bind(Rake::DSL).params(app: Rails::Application).void).void }
+    def rake_tasks(&block); end
+  end
 end
 
 class Rails::Railtie::Configuration
