@@ -210,3 +210,11 @@ module ActiveRecord::Core
   sig { params(comparison_object: T.anything).returns(T::Boolean) }
   def ==(comparison_object); end
 end
+
+module ActiveRecord::Persistence
+  sig { type_parameters(:Klass).params(klass: T::Class[T.type_parameter(:Klass)]).returns(T.type_parameter(:Klass)) }
+  def becomes(klass); end
+
+  sig { type_parameters(:Klass).params(klass: T::Class[T.type_parameter(:Klass)]).returns(T.type_parameter(:Klass)) }
+  def becomes!(klass); end
+end
