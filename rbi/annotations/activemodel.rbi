@@ -1,5 +1,35 @@
 # typed: true
 
+module ActiveModel::Attributes
+  sig { returns(T::Array[String]) }
+  def attribute_names; end
+
+  sig { returns(T::Hash[String, T.untyped]) }
+  def attributes; end
+end
+
+module ActiveModel::Attributes::ClassMethods
+  sig { returns(T::Array[String]) }
+  def attribute_names; end
+end
+
+module ActiveModel::Dirty
+  sig { returns(T::Array[String]) }
+  def changed; end
+
+  sig { returns(T::Boolean) }
+  def changed?; end
+
+  sig { returns(T::Hash[String, T.untyped]) }
+  def changed_attributes; end
+
+  sig { returns(T::Hash[String, [T.untyped, T.untyped]]) }
+  def changes; end
+
+  sig { returns(T::Hash[String, [T.untyped, T.untyped]]) }
+  def previous_changes; end
+end
+
 class ActiveModel::Errors
   Elem = type_member { { fixed: ActiveModel::Error } }
 

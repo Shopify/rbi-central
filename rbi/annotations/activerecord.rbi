@@ -1,5 +1,30 @@
 # typed: true
 
+module ActiveRecord::AttributeMethods::ClassMethods
+  sig { returns(T::Array[String]) }
+  def attribute_names; end
+end
+
+module ActiveRecord::AttributeMethods::Dirty
+  sig { returns(T::Hash[String, T.untyped]) }
+  def attributes_in_database; end
+
+  sig { returns(T::Array[String]) }
+  def changed_attribute_names_to_save; end
+
+  sig { returns(T::Hash[String, [T.untyped, T.untyped]]) }
+  def changes_to_save; end
+
+  sig { returns(T::Boolean) }
+  def has_changes_to_save?; end
+
+  sig { returns(T::Hash[String, [T.untyped, T.untyped]]) }
+  def saved_changes; end
+
+  sig { returns(T::Boolean) }
+  def saved_changes?; end
+end
+
 class ActiveRecord::Schema
   sig { params(info: T::Hash[T.untyped, T.untyped], blk: T.proc.bind(ActiveRecord::Schema).void).void }
   def self.define(info = nil, &blk); end
