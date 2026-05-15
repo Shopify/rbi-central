@@ -20,13 +20,13 @@ module ActiveModel::Dirty
   sig { returns(T::Boolean) }
   def changed?; end
 
-  sig { returns(T::Hash[String, T.untyped]) }
+  sig { returns(ActiveSupport::HashWithIndifferentAccess) }
   def changed_attributes; end
 
-  sig { returns(T::Hash[String, [T.untyped, T.untyped]]) }
+  sig { returns(ActiveSupport::HashWithIndifferentAccess) }
   def changes; end
 
-  sig { returns(T::Hash[String, [T.untyped, T.untyped]]) }
+  sig { returns(ActiveSupport::HashWithIndifferentAccess) }
   def previous_changes; end
 end
 
