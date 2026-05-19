@@ -242,4 +242,19 @@ module ActiveRecord::Persistence
 
   sig { type_parameters(:Klass).params(klass: T::Class[T.type_parameter(:Klass)]).returns(T.type_parameter(:Klass)) }
   def becomes!(klass); end
+
+  sig { returns(T::Boolean) }
+  def destroyed?; end
+
+  sig { returns(T::Boolean) }
+  def new_record?; end
+
+  sig { returns(T::Boolean) }
+  def persisted?; end
+
+  sig { returns(T::Boolean) }
+  def previously_new_record?; end
+
+  sig { returns(T::Boolean) }
+  def previously_persisted?; end
 end
