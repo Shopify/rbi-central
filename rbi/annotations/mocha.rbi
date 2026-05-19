@@ -1,5 +1,32 @@
 # typed: true
 
+class Mocha::Mock
+  sig do
+    params(
+      method_name_or_hash: T.any(Symbol, String, T::Hash[Symbol, T.untyped]),
+      backtrace: T.nilable(T::Array[String])
+    ).returns(Mocha::Expectation)
+  end
+  def expects(method_name_or_hash, backtrace = nil); end
+
+  sig do
+    params(
+      method_name_or_hash: T.any(Symbol, String, T::Hash[Symbol, T.untyped]),
+      backtrace: T.nilable(T::Array[String])
+    ).returns(Mocha::Expectation)
+  end
+  def stubs(method_name_or_hash, backtrace = nil); end
+
+  sig { params(method_names: Symbol).void }
+  def unstub(*method_names); end
+
+  sig { params(responder: Object).returns(T.self_type) }
+  def responds_like(responder); end
+
+  sig { params(responder_class: T::Class[T.untyped]).returns(T.self_type) }
+  def responds_like_instance_of(responder_class); end
+end
+
 module Mocha::API
   sig { params(arguments: T.untyped).returns(Mocha::Mock) }
   def mock(*arguments); end
