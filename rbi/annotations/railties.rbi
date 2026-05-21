@@ -5,6 +5,9 @@ module Rails
     sig { returns(Rails::Application) }
     def application; end
 
+    sig { returns(Rails::Autoloaders) }
+    def autoloaders; end
+
     sig { returns(ActiveSupport::BacktraceCleaner) }
     def backtrace_cleaner; end
 
@@ -48,6 +51,19 @@ class Rails::Application < ::Rails::Engine
 
   sig { returns(T.untyped) }
   def config; end
+end
+
+class Rails::Autoloaders
+  Elem = type_member(:out) { { fixed: Zeitwerk::Loader } }
+
+  sig { params(block: T.proc.params(arg0: Elem).returns(T.untyped)).returns(T.untyped) }
+  def each(&block); end
+
+  sig { returns(Zeitwerk::Loader) }
+  def main; end
+
+  sig { returns(Zeitwerk::Loader) }
+  def once; end
 end
 
 class Rails::Engine < ::Rails::Railtie
