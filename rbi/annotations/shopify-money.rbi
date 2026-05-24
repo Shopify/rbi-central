@@ -21,7 +21,7 @@ class Money
   def zero?(*args, **_arg1, &block); end
 
   # @method_missing: delegated to BigDecimal
-  sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(T::Boolean) }
+  sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(T.nilable(BigDecimal)) }
   def nonzero?(*args, **_arg1, &block); end
 
   # @method_missing: delegated to BigDecimal
