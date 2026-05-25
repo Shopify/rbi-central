@@ -105,7 +105,8 @@
       "rails/railtie",
       "rails/generators",
       "rails/generators/model_helpers",
-      "rails/generators/generated_attribute"
+      "rails/generators/generated_attribute",
+      "zeitwerk"
     ]
   },
   "rainbow": {
