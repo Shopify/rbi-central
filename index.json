@@ -31,7 +31,8 @@
   },
   "activerecord": {
     "requires": [
-      "active_record"
+      "active_record",
+      "active_record/testing/query_assertions"
     ]
   },
   "activesupport": {

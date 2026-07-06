@@ -37,6 +37,53 @@ class ActiveRecord::Migration
   include ActiveRecord::ConnectionAdapters::DatabaseStatements
 end
 
+# @version >= 7.2.0
+module ActiveRecord::Assertions::QueryAssertions
+  sig do
+    type_parameters(:R)
+      .params(
+        count: T.nilable(Integer),
+        include_schema: T::Boolean,
+        block: T.proc.returns(T.type_parameter(:R)),
+      )
+      .returns(T.type_parameter(:R))
+  end
+  def assert_queries_count(count = nil, include_schema: false, &block); end
+
+  sig do
+    type_parameters(:R)
+      .params(
+        include_schema: T::Boolean,
+        block: T.proc.returns(T.type_parameter(:R)),
+      )
+      .returns(T.type_parameter(:R))
+  end
+  def assert_no_queries(include_schema: false, &block); end
+
+  sig do
+    type_parameters(:R)
+      .params(
+        match: T.any(String, Regexp),
+        count: T.nilable(Integer),
+        include_schema: T::Boolean,
+        block: T.proc.returns(T.type_parameter(:R)),
+      )
+      .returns(T.type_parameter(:R))
+  end
+  def assert_queries_match(match, count: nil, include_schema: false, &block); end
+
+  sig do
+    type_parameters(:R)
+      .params(
+        match: T.any(String, Regexp),
+        include_schema: T::Boolean,
+        block: T.proc.returns(T.type_parameter(:R)),
+      )
+      .returns(T.type_parameter(:R))
+  end
+  def assert_no_queries_match(match, include_schema: false, &block); end
+end
+
 class ActiveRecord::Base
   sig { returns(FalseClass) }
   def blank?; end
