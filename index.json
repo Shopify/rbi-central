@@ -32,7 +32,8 @@
   "activerecord": {
     "requires": [
       "active_record",
-      "active_record/testing/query_assertions"
+      "active_record/testing/query_assertions",
+      "active_support/test_case"
     ]
   },
   "activesupport": {

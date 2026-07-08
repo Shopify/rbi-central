@@ -84,6 +84,12 @@ module ActiveRecord::Assertions::QueryAssertions
   def assert_no_queries_match(match, include_schema: false, &block); end
 end
 
+# @version >= 7.2.0
+class ActiveSupport::TestCase
+  # @shim: Rails includes query assertions into ActiveSupport::TestCase from rails/test_help when ActiveRecord is loaded.
+  include ActiveRecord::Assertions::QueryAssertions
+end
+
 class ActiveRecord::Base
   sig { returns(FalseClass) }
   def blank?; end
