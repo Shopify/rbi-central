@@ -36,6 +36,16 @@
       "active_support/test_case"
     ]
   },
+  "activestorage": {
+    "dependencies": [
+      "rails"
+    ],
+    "requires": [
+      "rails",
+      "active_storage/engine",
+      "active_storage"
+    ]
+  },
   "activesupport": {
     "requires": [
       "active_support/all",
