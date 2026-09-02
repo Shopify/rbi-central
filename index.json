@@ -74,6 +74,7 @@
     ]
   },
   "graphql": {},
+  "i18n": {},
   "kredis": {
     "dependencies": [
       "activemodel",
