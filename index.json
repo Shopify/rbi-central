@@ -1,5 +1,9 @@
 {
-  "aasm": {},
+  "aasm": {
+    "dependencies": [
+      "logger"
+    ]
+  },
   "actionmailer": {
     "requires": [
       "action_mailer"
@@ -80,8 +84,16 @@
       "kredis"
     ]
   },
-  "lhm": {},
-  "lhm-shopify": {},
+  "lhm": {
+    "dependencies": [
+      "logger"
+    ]
+  },
+  "lhm-shopify": {
+    "dependencies": [
+      "logger"
+    ]
+  },
   "minitest": {},
   "minitest-hooks": {
     "dependencies": [
