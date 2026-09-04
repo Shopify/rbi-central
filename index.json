@@ -108,6 +108,7 @@
       "mocha/api"
     ]
   },
+  "pagy": {},
   "parse-cron": {},
   "phonelib": {},
   "pundit": {},
