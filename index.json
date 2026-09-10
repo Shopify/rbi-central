@@ -131,6 +131,12 @@
       "rainbow/version"
     ]
   },
+  "ransack": {
+    "requires": [
+      "active_record",
+      "ransack"
+    ]
+  },
   "shopify-money": {
     "requires": [
       "money"
