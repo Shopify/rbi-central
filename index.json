@@ -46,6 +46,7 @@
       "active_support/test_case"
     ]
   },
+  "alba": {},
   "aws-sdk-acm": {
     "dependencies": [
       "nokogiri"
