@@ -5,6 +5,19 @@ module ActiveSupport::Testing::Declarative
   def test(name, &block); end
 end
 
+module ActiveSupport::Concern
+  sig { params(base: T.untyped, block: T.nilable(T.proc.bind(T.untyped).void)).void }
+  def included(base = nil, &block); end
+
+  # @version >= 6.1.0
+  sig { params(base: T.untyped, block: T.nilable(T.proc.bind(T.untyped).void)).void }
+  def prepended(base = nil, &block); end
+
+  # @version >= 4.2.0
+  sig { params(class_methods_module_definition: T.nilable(T.proc.bind(T.untyped).void)).void }
+  def class_methods(&class_methods_module_definition); end
+end
+
 class ActiveSupport::EnvironmentInquirer
   sig { returns(T::Boolean) }
   def development?; end
