@@ -105,7 +105,7 @@ module Alba::Resource::ClassMethods
     params(
       name: T.any(String, Symbol),
       options: T.untyped,
-      block: T.proc.bind(T.untyped).void,
+      block: T.proc.bind(T.self_type).void,
     ).void
   end
   def nested(name, **options, &block); end
@@ -114,7 +114,7 @@ module Alba::Resource::ClassMethods
     params(
       name: T.any(String, Symbol),
       options: T.untyped,
-      block: T.proc.bind(T.untyped).void,
+      block: T.proc.bind(T.self_type).void,
     ).void
   end
   def nested_attribute(name, **options, &block); end
@@ -165,7 +165,7 @@ module Alba::Resource::ClassMethods
   sig { params(key: T.any(String, Symbol)).void }
   def root_key_for_collection(key); end
 
-  sig { params(name: T.any(String, Symbol), block: T.proc.bind(T.untyped).void).void }
+  sig { params(name: T.any(String, Symbol), block: T.proc.bind(T.self_type).void).void }
   def trait(name, &block); end
 
   sig { params(type: T.any(String, Symbol), root: T::Boolean, cascade: T::Boolean).void }
