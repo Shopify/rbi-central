@@ -1,7 +1,10 @@
 # typed: true
 
 module I18n::Base
-  sig { returns(T::Array[Symbol]) }
+  # A list set through `#available_locales=` is symbolized on the way in, but the
+  # fallback to `backend.available_locales` is returned as the backend built it,
+  # and a custom backend is free to hand back strings.
+  sig { returns(T::Array[T.any(String, Symbol)]) }
   def available_locales; end
 
   sig do
