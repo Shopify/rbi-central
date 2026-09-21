@@ -13,9 +13,6 @@ module I18n::Base
   end
   def available_locales=(value); end
 
-  sig { returns(I18n::Config) }
-  def config; end
-
   sig { returns(Symbol) }
   def default_locale; end
 
@@ -34,12 +31,12 @@ module I18n::Base
   sig { params(value: T::Boolean).returns(T::Boolean) }
   def enforce_available_locales=(value); end
 
-  sig { returns(Symbol) }
+  sig { returns(T.any(Symbol, FalseClass)) }
   def locale; end
 
-  sig { params(value: T.nilable(T.any(String, Symbol))).returns(T.nilable(T.any(String, Symbol))) }
+  sig do
+    params(value: T.nilable(T.any(String, Symbol, FalseClass)))
+      .returns(T.nilable(T.any(String, Symbol, FalseClass)))
+  end
   def locale=(value); end
-
-  sig { returns(I18n::Config) }
-  def writable_config; end
 end
