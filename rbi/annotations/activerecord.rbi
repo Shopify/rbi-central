@@ -159,7 +159,7 @@ class ActiveRecord::Base
     params(
       args: T.untyped,
       options: T.untyped,
-      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class, block: T.proc.void).void)
     ).void
   end
   def self.around_save(*args, **options, &block); end
@@ -186,7 +186,7 @@ class ActiveRecord::Base
     params(
       args: T.untyped,
       options: T.untyped,
-      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class, block: T.proc.void).void)
     ).void
   end
   def self.around_create(*args, **options, &block); end
@@ -213,7 +213,7 @@ class ActiveRecord::Base
     params(
       args: T.untyped,
       options: T.untyped,
-      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class, block: T.proc.void).void)
     ).void
   end
   def self.around_update(*args, **options, &block); end
@@ -240,7 +240,7 @@ class ActiveRecord::Base
     params(
       args: T.untyped,
       options: T.untyped,
-      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class, block: T.proc.void).void)
     ).void
   end
   def self.around_destroy(*args, **options, &block); end
@@ -271,6 +271,42 @@ class ActiveRecord::Base
     ).void
   end
   def self.after_rollback(*args, **options, &block); end
+
+  sig do
+    params(
+      args: T.untyped,
+      options: T.untyped,
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+    ).void
+  end
+  def self.after_create_commit(*args, **options, &block); end
+
+  sig do
+    params(
+      args: T.untyped,
+      options: T.untyped,
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+    ).void
+  end
+  def self.after_update_commit(*args, **options, &block); end
+
+  sig do
+    params(
+      args: T.untyped,
+      options: T.untyped,
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+    ).void
+  end
+  def self.after_save_commit(*args, **options, &block); end
+
+  sig do
+    params(
+      args: T.untyped,
+      options: T.untyped,
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+    ).void
+  end
+  def self.after_destroy_commit(*args, **options, &block); end
 end
 
 class ActiveRecord::Relation
