@@ -12,6 +12,69 @@ class ActiveRecord::Migration
   include ActiveRecord::ConnectionAdapters::DatabaseStatements
 end
 
+module ActiveRecord::ConnectionHandling
+  # @version >= 7.0.0
+  sig do
+    type_parameters(:R)
+      .params(
+        role: T.nilable(Symbol),
+        shard: T.nilable(Symbol),
+        prevent_writes: T::Boolean,
+        blk: T.proc.returns(T.type_parameter(:R)),
+      )
+      .returns(T.type_parameter(:R))
+  end
+  def connected_to(role: nil, shard: nil, prevent_writes: false, &blk); end
+
+  # @version >= 7.0.0
+  sig do
+    type_parameters(:R)
+      .params(
+        classes: T.any(T.class_of(ActiveRecord::Base), T::Array[T.class_of(ActiveRecord::Base)]),
+        role: Symbol,
+        shard: T.nilable(Symbol),
+        prevent_writes: T::Boolean,
+        blk: T.proc.returns(T.type_parameter(:R)),
+      )
+      .returns(T.type_parameter(:R))
+  end
+  def connected_to_many(*classes, role:, shard: nil, prevent_writes: false, &blk); end
+
+  # @version >= 8.0.0
+  sig do
+    type_parameters(:R)
+      .params(
+        role: T.nilable(Symbol),
+        prevent_writes: T::Boolean,
+        blk: T.proc.returns(T.type_parameter(:R)),
+      )
+      .returns(T::Array[T.type_parameter(:R)])
+  end
+  def connected_to_all_shards(role: nil, prevent_writes: false, &blk); end
+
+  # @version >= 7.0.0
+  sig do
+    type_parameters(:R)
+      .params(
+        enabled: T::Boolean,
+        block: T.proc.returns(T.type_parameter(:R)),
+      )
+      .returns(T.type_parameter(:R))
+  end
+  def prohibit_shard_swapping(enabled = true, &block); end
+
+  # @version >= 7.0.0
+  sig do
+    type_parameters(:R)
+      .params(
+        enabled: T::Boolean,
+        block: T.proc.returns(T.type_parameter(:R)),
+      )
+      .returns(T.type_parameter(:R))
+  end
+  def while_preventing_writes(enabled = true, &block); end
+end
+
 class ActiveRecord::Base
   sig { returns(FalseClass) }
   def blank?; end
