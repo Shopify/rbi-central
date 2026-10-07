@@ -113,6 +113,11 @@
       "rainbow/version"
     ]
   },
+  "rubyzip": {
+    "requires": [
+      "zip"
+    ]
+  },
   "shopify-money": {
     "requires": [
       "money"
