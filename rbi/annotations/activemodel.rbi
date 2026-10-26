@@ -83,3 +83,23 @@ module ActiveModel::Validations
   sig { returns(ActiveModel::Errors) }
   def errors; end
 end
+
+module ActiveModel::Validations::Callbacks::ClassMethods
+  has_attached_class!(:out)
+
+  sig do
+    params(
+      args: T.untyped,
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+    ).void
+  end
+  def before_validation(*args, &block); end
+
+  sig do
+    params(
+      args: T.untyped,
+      block: T.nilable(T.proc.bind(T.attached_class).params(record: T.attached_class).void)
+    ).void
+  end
+  def after_validation(*args, &block); end
+end
