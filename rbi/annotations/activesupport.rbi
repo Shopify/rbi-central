@@ -5,6 +5,19 @@ module ActiveSupport::Testing::Declarative
   def test(name, &block); end
 end
 
+module ActiveSupport::Concern
+  sig { params(base: T.untyped, block: T.nilable(T.proc.bind(T.untyped).void)).void }
+  def included(base = nil, &block); end
+
+  # @version >= 6.1.0
+  sig { params(base: T.untyped, block: T.nilable(T.proc.bind(T.untyped).void)).void }
+  def prepended(base = nil, &block); end
+
+  # @version >= 4.2.0
+  sig { params(class_methods_module_definition: T.nilable(T.proc.bind(T.untyped).void)).void }
+  def class_methods(&class_methods_module_definition); end
+end
+
 class ActiveSupport::EnvironmentInquirer
   sig { returns(T::Boolean) }
   def development?; end
@@ -683,4 +696,18 @@ module ActiveSupport::Testing::Assertions
       .returns(T.type_parameter(:TResult))
   end
   def assert_changes(expression, message = T.unsafe(nil), from: T.unsafe(nil), to: T.unsafe(nil), &block); end
+end
+
+module ActiveSupport::Testing::ErrorReporterAssertions
+  # @version >= 7.1.0.rc1
+  sig do
+    params(error_class: T.class_of(Exception), block: T.proc.void).returns(ActiveSupport::Testing::ErrorReporterAssertions::ErrorCollector::Report)
+  end
+  def assert_error_reported(error_class = T.unsafe(nil), &block); end
+
+  # @version >= 8.1.0.beta1
+  sig do
+    params(error_class: T.class_of(Exception), block: T.proc.void).returns(T::Array[ActiveSupport::Testing::ErrorReporterAssertions::ErrorCollector::Report])
+  end
+  def capture_error_reports(error_class = T.unsafe(nil), &block); end
 end

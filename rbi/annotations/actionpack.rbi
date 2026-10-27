@@ -4,6 +4,23 @@ class ActionController::API
   MODULES = T.let(T.unsafe(nil), T::Array[T.untyped])
 end
 
+# @version >= 5.2.0
+module ActionController::ContentSecurityPolicy::ClassMethods
+  # @shim: required to declare T.attached_class
+  extend T::Generic
+
+  has_attached_class!(:out)
+
+  sig do
+    params(
+      enabled: T.untyped,
+      options: T.untyped,
+      block: T.nilable(T.proc.bind(T.attached_class).params(policy: ActionDispatch::ContentSecurityPolicy).void)
+    ).void
+  end
+  def content_security_policy(enabled = true, **options, &block); end
+end
+
 module ActionController::Flash::ClassMethods
   sig { params(types: Symbol).void }
   def add_flash_types(*types); end
@@ -202,6 +219,22 @@ class ActionController::Parameters
 
   sig { params(obj: T::Boolean).void }
   def self.permit_all_parameters=(obj); end
+end
+
+# @version >= 6.1.0
+module ActionController::PermissionsPolicy::ClassMethods
+  # @shim: required to declare T.attached_class
+  extend T::Generic
+
+  has_attached_class!(:out)
+
+  sig do
+    params(
+      options: T.untyped,
+      block: T.nilable(T.proc.bind(T.attached_class).params(policy: ActionDispatch::PermissionsPolicy).void)
+    ).void
+  end
+  def permissions_policy(**options, &block); end
 end
 
 module ActionController::RequestForgeryProtection

@@ -1,0 +1,8 @@
+name: rbi-central
+
+nix: true
+type: ruby
+
+up:
+  - ruby
+  - bundler

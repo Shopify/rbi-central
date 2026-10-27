@@ -162,6 +162,22 @@ module RBICentral
       ERR
     end
 
+    def test_check_rubocop_for_escapes_gem_name
+      gem_name = "gem1;touch PWNED;#"
+      @repo.write_annotations_file!(gem_name, <<~RBI)
+        # typed: strict
+
+        module Spoom; end
+      RBI
+      errors = @repo.check_rubocop_for(Gem.new(name: gem_name))
+      refute(@repo.file?("PWNED"))
+      assert_equal(<<~ERR, errors.first&.message)
+        rbi/annotations/gem1;touch PWNED;#.rbi:1:1: C: Sorbet/ValidSigil: Sorbet sigil should be true got strict.
+        # typed: strict
+        ^^^^^^^^^^^^^^^
+      ERR
+    end
+
     def test_check_rubygems_for_valid
       assert_empty(@repo.check_rubygems_for(Gem.new(name: "rbi")))
     end

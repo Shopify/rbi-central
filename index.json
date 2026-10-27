@@ -1,5 +1,9 @@
 {
-  "aasm": {},
+  "aasm": {
+    "dependencies": [
+      "logger"
+    ]
+  },
   "actionmailer": {
     "requires": [
       "action_mailer"
@@ -31,7 +35,9 @@
   },
   "activerecord": {
     "requires": [
-      "active_record"
+      "active_record",
+      "active_record/testing/query_assertions",
+      "active_support/test_case"
     ]
   },
   "activesupport": {
@@ -40,6 +46,7 @@
       "active_support/test_case"
     ]
   },
+  "alba": {},
   "aws-sdk-acm": {
     "dependencies": [
       "nokogiri"
@@ -68,6 +75,7 @@
     ]
   },
   "graphql": {},
+  "i18n": {},
   "kredis": {
     "dependencies": [
       "activemodel",
@@ -78,8 +86,16 @@
       "kredis"
     ]
   },
-  "lhm": {},
-  "lhm-shopify": {},
+  "lhm": {
+    "dependencies": [
+      "logger"
+    ]
+  },
+  "lhm-shopify": {
+    "dependencies": [
+      "logger"
+    ]
+  },
   "minitest": {},
   "minitest-hooks": {
     "dependencies": [
@@ -94,6 +110,7 @@
       "mocha/api"
     ]
   },
+  "pagy": {},
   "parse-cron": {},
   "phonelib": {},
   "pundit": {},
@@ -105,7 +122,8 @@
       "rails/railtie",
       "rails/generators",
       "rails/generators/model_helpers",
-      "rails/generators/generated_attribute"
+      "rails/generators/generated_attribute",
+      "zeitwerk"
     ]
   },
   "rainbow": {

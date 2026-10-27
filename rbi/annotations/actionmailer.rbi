@@ -9,3 +9,8 @@ class ActionMailer::Base
   end
   def mail(headers = nil, &block); end
 end
+
+module ActionMailer::TestHelper
+  sig { params(block: T.proc.void).returns(T::Array[Mail::Message]) }
+  def capture_emails(&block); end
+end
