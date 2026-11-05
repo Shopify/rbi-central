@@ -153,6 +153,7 @@
   "stripe": {
     "skip_exported_rbis": true
   },
+  "typelizer": {},
   "webmock": {
     "dependencies": [
       "minitest"
