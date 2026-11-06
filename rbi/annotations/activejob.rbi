@@ -95,6 +95,7 @@ module ActiveJob::Continuable
 end
 
 module ActiveJob::TestHelper
+  # @version < 8.2.0
   sig do
     params(
       number: Integer,
@@ -106,6 +107,21 @@ module ActiveJob::TestHelper
   end
   def assert_enqueued_jobs(number, only: nil, except: nil, queue: nil, &block); end
 
+  # @version >= 8.2.0
+  sig do
+    type_parameters(:Block)
+      .params(
+        number: Integer,
+        only: T.untyped,
+        except: T.untyped,
+        queue: T.nilable(T.any(String, Symbol)),
+        block: T.proc.returns(T.type_parameter(:Block))
+      ).returns(T.type_parameter(:Block))
+  end
+  sig { params(number: Integer, only: T.untyped, except: T.untyped, queue: T.nilable(T.any(String, Symbol))).returns(TrueClass) }
+  def assert_enqueued_jobs(number, only: nil, except: nil, queue: nil, &block); end
+
+  # @version < 8.2.0
   sig do
     params(
       only: T.untyped,
@@ -116,6 +132,20 @@ module ActiveJob::TestHelper
   end
   def assert_no_enqueued_jobs(only: nil, except: nil, queue: nil, &block); end
 
+  # @version >= 8.2.0
+  sig do
+    type_parameters(:Block)
+      .params(
+        only: T.untyped,
+        except: T.untyped,
+        queue: T.nilable(T.any(String, Symbol)),
+        block: T.proc.returns(T.type_parameter(:Block))
+      ).returns(T.type_parameter(:Block))
+  end
+  sig { params(only: T.untyped, except: T.untyped, queue: T.nilable(T.any(String, Symbol))).returns(TrueClass) }
+  def assert_no_enqueued_jobs(only: nil, except: nil, queue: nil, &block); end
+
+  # @version < 8.2.0
   sig do
     params(
       number: Integer,
@@ -127,6 +157,21 @@ module ActiveJob::TestHelper
   end
   def assert_performed_jobs(number, only: nil, except: nil, queue: nil, &block); end
 
+  # @version >= 8.2.0
+  sig do
+    type_parameters(:Block)
+      .params(
+        number: Integer,
+        only: T.untyped,
+        except: T.untyped,
+        queue: T.nilable(T.any(String, Symbol)),
+        block: T.proc.returns(T.type_parameter(:Block))
+      ).returns(T.type_parameter(:Block))
+  end
+  sig { params(number: Integer, only: T.untyped, except: T.untyped, queue: T.nilable(T.any(String, Symbol))).returns(TrueClass) }
+  def assert_performed_jobs(number, only: nil, except: nil, queue: nil, &block); end
+
+  # @version < 8.2.0
   sig do
     params(
       only: T.untyped,
@@ -137,6 +182,29 @@ module ActiveJob::TestHelper
   end
   def assert_no_performed_jobs(only: nil, except: nil, queue: nil, &block); end
 
+  # @version >= 8.2.0
+  sig do
+    type_parameters(:Block)
+      .params(
+        only: T.untyped,
+        except: T.untyped,
+        queue: T.nilable(T.any(String, Symbol)),
+        block: T.proc.returns(T.type_parameter(:Block))
+      ).returns(T.type_parameter(:Block))
+  end
+  sig { params(only: T.untyped, except: T.untyped, queue: T.nilable(T.any(String, Symbol))).returns(TrueClass) }
+  def assert_no_performed_jobs(only: nil, except: nil, queue: nil, &block); end
+
+  sig do
+    type_parameters(:Block)
+      .params(
+        only: T.untyped,
+        except: T.untyped,
+        queue: T.nilable(T.any(String, Symbol)),
+        at: T.untyped,
+        block: T.proc.returns(T.type_parameter(:Block))
+      ).returns(T.type_parameter(:Block))
+  end
   sig { params(only: T.untyped, except: T.untyped, queue: T.nilable(T.any(String, Symbol)), at: T.untyped).returns(Integer) }
   sig do
     type_parameters(:Block)
