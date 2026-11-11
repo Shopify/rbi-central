@@ -16,33 +16,61 @@ class Money
   end
   def initialize(value, currency); end
 
+  # @version < 4.2.0
   # @method_missing: delegated to BigDecimal
   sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(T::Boolean) }
   def zero?(*args, **_arg1, &block); end
+  # @version >= 4.2.0
+  sig { returns(T::Boolean) }
+  def zero?; end
 
+  # @version < 4.2.0
   # @method_missing: delegated to BigDecimal
   sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(T::Boolean) }
   def nonzero?(*args, **_arg1, &block); end
+  # @version >= 4.2.0
+  sig { returns(T::Boolean) }
+  def nonzero?; end
 
+  # @version < 4.2.0
   # @method_missing: delegated to BigDecimal
   sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(T::Boolean) }
   def positive?(*args, **_arg1, &block); end
+  # @version >= 4.2.0
+  sig { returns(T::Boolean) }
+  def positive?; end
 
+  # @version < 4.2.0
   # @method_missing: delegated to BigDecimal
   sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(T::Boolean) }
   def negative?(*args, **_arg1, &block); end
+  # @version >= 4.2.0
+  sig { returns(T::Boolean) }
+  def negative?; end
 
+  # @version < 4.2.0
   # @method_missing: delegated to BigDecimal
   sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(Integer) }
   def to_i(*args, **_arg1, &block); end
+  # @version >= 4.2.0
+  sig { returns(Integer) }
+  def to_i; end
 
+  # @version < 4.2.0
   # @method_missing: delegated to BigDecimal
   sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(Float) }
   def to_f(*args, **_arg1, &block); end
+  # @version >= 4.2.0
+  sig { returns(Float) }
+  def to_f; end
 
+  # @version < 4.2.0
   # @method_missing: delegated to BigDecimal
   sig { params(args: T.untyped, _arg1: T.untyped, block: T.nilable(T.proc.void)).returns(Integer) }
   def hash(*args, **_arg1, &block); end
+  # @version >= 4.2.0
+  sig { returns(Integer) }
+  def hash; end
 
   class << self
     sig { params(block: T.nilable(T.proc.params(config: Money::Config).void)).void }
@@ -159,8 +187,18 @@ class Money
   sig { params(num: Numeric).returns(T::Hash[Money, Numeric]) }
   def calculate_splits(num); end
 
+  # @version < 4.2.0
   sig { params(min: T.any(Numeric, Money), max: T.any(Numeric, Money)).returns(Money) }
   def clamp(min, max); end
+  # @version >= 4.2.0
+  sig do
+    params(
+      args: T.nilable(T.any(Numeric, Money, T::Range[T.nilable(T.any(Numeric, Money))])),
+      kwargs: T.untyped,
+      block: T.nilable(T.proc.void),
+    ).returns(Money)
+  end
+  def clamp(*args, **kwargs, &block); end
 end
 
 class Numeric
