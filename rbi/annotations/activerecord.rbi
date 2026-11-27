@@ -284,6 +284,26 @@ class ActiveRecord::Relation
   def each(&blk); end
 end
 
+module ActiveRecord::ConnectionHandling
+  sig { returns(ActiveRecord::ConnectionAdapters::AbstractAdapter) }
+  def connection; end
+
+  # @version >= 7.2.0
+  sig { returns(ActiveRecord::ConnectionAdapters::AbstractAdapter) }
+  def lease_connection; end
+
+  # @version >= 7.2.0
+  sig do
+    type_parameters(:R)
+      .params(
+        prevent_permanent_checkout: T::Boolean,
+        block: T.proc.params(connection: ActiveRecord::ConnectionAdapters::AbstractAdapter).returns(T.type_parameter(:R)),
+      )
+      .returns(T.type_parameter(:R))
+  end
+  def with_connection(prevent_permanent_checkout: false, &block); end
+end
+
 module ActiveRecord::Core
   sig { params(comparison_object: T.anything).returns(T::Boolean) }
   def ==(comparison_object); end
